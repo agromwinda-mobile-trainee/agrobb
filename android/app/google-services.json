@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "302230492775",
+    "project_id": "agrobeba-2b2a0",
+    "storage_bucket": "agrobeba-2b2a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302230492775:android:0f0378b280dc184a3aa6c2",
+        "android_client_info": {
+          "package_name": "com.example.agrobeba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302230492775-en007feih07tveuk26ek4i204hb2cdpr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDec6DePIKAA3F_iOKwgH-zposn80IK3wg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302230492775-en007feih07tveuk26ek4i204hb2cdpr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "302230492775-i2fgqfjjq77721q2vrqhq3nuc8ij933a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.agrobeba"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
