@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:agrobeba/widgets/textFieldWidget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 import '../../widgets/setterButton.dart';
 
@@ -26,7 +27,7 @@ class ProfileSreen extends StatefulWidget {
 
 class _ProfileSreenState extends State<ProfileSreen> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController homeController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
 
   // ImagePicker _picker = ImagePicker();
@@ -39,20 +40,29 @@ class _ProfileSreenState extends State<ProfileSreen> {
   //   }
   // }
   storeUserInfo() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'name': nameController.text,
-      'home_address': homeController.text,
-      'telephone': numberController.text,
-    }).then((value) {
-      nameController.clear();
-      homeController.clear();
-      numberController.clear();
-      setState(() {
-        isLoading = false;
-      });
-      Get.to(() => HomeScreen());
-    });
+    try {
+      var url = Uri.parse('http://api.agrobeba.com/api/users');
+      var response = await http.post(
+        url,
+        body: {
+          'phoneNumber': '',
+          'firstname': nameController.text,
+          'lastname': lastNameController.text,
+        },
+      );
+      print('response status: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        nameController.clear();
+        lastNameController.clear();
+        setState(() {
+          isLoading = false;
+        });
+        Get.to(() => HomeScreen());
+      }
+    } catch (e) {
+      print('$e');
+      isLoading = false;
+    }
   }
 
   bool isLoading = false;
@@ -77,7 +87,7 @@ class _ProfileSreenState extends State<ProfileSreen> {
                     height: Get.height * 0.05,
                     child: Center(
                       child: Text(
-                        'Parametre compte',
+                        'completer le profil',
                         textAlign: TextAlign.start,
                         style: GoogleFonts.poppins(
                             fontSize: 24,
@@ -122,8 +132,7 @@ class _ProfileSreenState extends State<ProfileSreen> {
               const SizedBox(
                 height: 10,
               ),
-              TextFieldWidget(
-                  'adresse domicile', Icons.home_outlined, homeController),
+              TextFieldWidget('prenom', Icons.person, lastNameController),
               const SizedBox(
                 height: 10,
               ),

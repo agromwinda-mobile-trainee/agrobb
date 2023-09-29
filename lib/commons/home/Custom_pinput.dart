@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
 
+import 'api_contents/functions/getfunctions.dart';
+
 class BoxPinput extends StatefulWidget {
   const BoxPinput({super.key});
 
@@ -56,7 +58,7 @@ class _BoxPinputState extends State<BoxPinput> {
       controller: controller,
       focusNode: focusNode,
       onCompleted: (String input) {
-        authController.verifyOtp(input);
+        otpVerify(input);
       },
       defaultPinTheme: DefaultpinTheme.copyWith(
           decoration: BoxDecoration(

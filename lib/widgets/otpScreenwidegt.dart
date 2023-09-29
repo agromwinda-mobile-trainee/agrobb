@@ -15,11 +15,11 @@ Widget otpScreenwidget() {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          textWidget(text: AppConstants.phoneVerif),
+          textWidget(text: AppConstants.phoneVerif, color: Colors.black),
           textWidget(
               text: AppConstants.otpSending,
               fontSize: 20,
-              fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.bold, color: Colors.black),
           const SizedBox(
             height: 15,
           ),

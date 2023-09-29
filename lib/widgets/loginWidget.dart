@@ -7,17 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../commons/home/api_contents/functions/getfunctions.dart';
+
 Widget loginWidget(Function onSubmit) {
   return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          textWidget(text: AppConstants.hello),
+          textWidget(text: AppConstants.hello, color: Colors.black),
           textWidget(
               text: AppConstants.slog,
               fontSize: 20,
-              fontWeight: FontWeight.bold),
+              fontWeight: FontWeight.bold, color: Colors.black),
           const SizedBox(
             height: 30,
           ),
@@ -45,7 +47,7 @@ Widget loginWidget(Function onSubmit) {
                           child: Row(
                         children: [
                           Expanded(child: Container()),
-                          textWidget(text: '+243'),
+                          textWidget(text: '+243', color: Colors.black),
                           const Icon(Icons.arrow_downward_rounded),
                         ],
                       )),
@@ -53,7 +55,7 @@ Widget loginWidget(Function onSubmit) {
                 Expanded(
                     flex: 3,
                     child: TextField(
-                      onSubmitted: (String? input) => onSubmit(input),
+                      onSubmitted: (String? input) => sendCode(input!),
                       decoration: InputDecoration(
                           helperStyle: GoogleFonts.poppins(
                               fontSize: 12, fontWeight: FontWeight.normal),
