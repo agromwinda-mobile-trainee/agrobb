@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/commons/home/splashScreen.dart';
+import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider<LoginProcessCubit>(
               create: (BuildContext context) => LoginProcessCubit(),
+            ),
+            BlocProvider<DestinationCubit>(
+              create: (BuildContext context) => DestinationCubit(),
             ),
           ],
           child: Welcome(),

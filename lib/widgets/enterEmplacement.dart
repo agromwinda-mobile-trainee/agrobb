@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 //import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_webservice/places.dart';
+//import 'package:google_maps_webservice/places.dart';
 //import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/colors.dart';
-import 'enterdestination_widget.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 import 'package:agrobeba/commons/home/home.dart';
 
@@ -129,12 +128,11 @@ class _BuildSourcepartState extends State<BuildSourcepart> {
     return InkWell(
       onTap: () async {
         Get.back();
-        String place = await showGoogleAutoComplete(context);
+        // String place = await showGoogleAutoComplete(context);
 
-        sourceController.text = place;
-        List<geoCoding.Location> location =
-            await geoCoding.locationFromAddress(place);
-           
+        // sourceController.text = place;
+        // List<geoCoding.Location> location =
+        //     await geoCoding.locationFromAddress(place);
 
         // source = await authController.buildLatLngFromAddress(place);
 

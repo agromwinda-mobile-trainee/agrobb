@@ -15,7 +15,6 @@ import '../../widgets/currentlocationicon.dart';
 import '../../widgets/enterEmplacement.dart';
 import '../../widgets/widget_build_Tile.dart';
 import 'drawer.dart';
-import 'package:searchfield/searchfield.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -73,30 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-Widget destinationInputField(context) {
-  return Container(
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      child: SearchField(
-        suggestions: places
-            .map(
-              (e) => SearchFieldListItem(
-                e["name"],
-                item: e,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(e["name"]),
-                    ],
-                  ),
-                ),
-              ),
-            )
-            .toList(),
-      ));
 }
 
 List<Map> places = [

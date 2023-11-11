@@ -8,7 +8,6 @@ class DestinationState {
 
 Map initialState() {
   return {
-    'id_place': '',
     'places': [],
   };
 }
