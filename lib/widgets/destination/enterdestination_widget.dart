@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
 class enterDestination extends StatefulWidget {
   const enterDestination({super.key});
@@ -40,7 +40,11 @@ class _enterDestinationState extends State<enterDestination> {
             borderRadius: BorderRadius.circular(8)),
         child: TextField(
           controller: destinationController,
-          readOnly: true,
+          // readOnly: true,
+          onChanged: (String value) {
+            // getPlaces();
+            //
+          },
           onTap: (() async {
             String selectedPlace = await showGoogleAutoComplete(context);
             destinationController.text = selectedPlace;

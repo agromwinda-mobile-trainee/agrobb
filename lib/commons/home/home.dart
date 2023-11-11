@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:agrobeba/widgets/enterdestination_widget.dart';
+import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/widgets/notificationicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -15,6 +15,7 @@ import '../../widgets/currentlocationicon.dart';
 import '../../widgets/enterEmplacement.dart';
 import '../../widgets/widget_build_Tile.dart';
 import 'drawer.dart';
+import 'package:searchfield/searchfield.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           buildProfileTile(),
           enterDestination(),
+          // destinationInputField(context),
           showSourceField ? enterEmplacement() : Container(),
           currentLocationIcon(),
           noficationIcon(),
@@ -72,3 +74,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+Widget destinationInputField(context) {
+  return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: SearchField(
+        suggestions: places
+            .map(
+              (e) => SearchFieldListItem(
+                e["name"],
+                item: e,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(e["name"]),
+                    ],
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      ));
+}
+
+List<Map> places = [
+  {
+    "id": "jdkskdf",
+    "name": "ngaliema",
+  },
+  {
+    "id": "jdkskdf",
+    "name": "ngaliema",
+  },
+  {
+    "id": "jdkskdf",
+    "name": "ngaliema",
+  },
+  {
+    "id": "jdkskdf",
+    "name": "ngaliema",
+  },
+];
