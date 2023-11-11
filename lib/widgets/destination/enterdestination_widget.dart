@@ -8,7 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 
-import '../utils/colors.dart';
+import '../../utils/colors.dart';
 
 class enterDestination extends StatefulWidget {
   const enterDestination({super.key});
@@ -57,6 +57,23 @@ class _enterDestinationState extends State<enterDestination> {
           //   //   position: destination,
           //   //  // icon: BitmapDescriptor.fromBytes(markIcons),
           //   // ));
+          // readOnly: true,
+          
+          // onTap: (() async {
+          //   String selectedPlace = await showGoogleAutoComplete(context);
+          //   destinationController.text = selectedPlace;
+          //   List<geoCoding.Location> location =
+          //       await geoCoding.locationFromAddress(selectedPlace);
+            // destination =
+            //     LatLng(locations.first.latitude, locations.first.longitude);
+            // markers.add(Marker(
+            //   markerId: MarkerId(selectedPlace),
+            //   infoWindow: InfoWindow(
+            //     title: 'Destination: $selectedPlace',
+            //   ),
+            //   position: destination,
+            //  // icon: BitmapDescriptor.fromBytes(markIcons),
+            // ));
 
           //   myMapController!.animateCamera(CameraUpdate.newCameraPosition(
           //       CameraPosition(target: destination, zoom: 14)
