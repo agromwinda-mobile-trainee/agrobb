@@ -1,5 +1,6 @@
 import 'package:agrobeba/commons/home/otpscreen.dart';
 import 'package:agrobeba/utils/app_constants.dart';
+import 'package:agrobeba/utils/colors.dart';
 import 'package:agrobeba/widgets/textWidget.dart';
 //import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,8 @@ Widget loginWidget(Function onSubmit) {
           textWidget(
               text: AppConstants.slog,
               fontSize: 20,
-              fontWeight: FontWeight.bold, color: Colors.black),
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
           const SizedBox(
             height: 30,
           ),
@@ -38,21 +40,6 @@ Widget loginWidget(Function onSubmit) {
             child: Row(
               children: [
                 Expanded(
-                    flex: 1,
-                    child: Container(
-                      width: 1,
-                      height: 55,
-                      color: Colors.black.withOpacity(0.1),
-                      child: Container(
-                          child: Row(
-                        children: [
-                          Expanded(child: Container()),
-                          textWidget(text: '+243', color: Colors.black),
-                          const Icon(Icons.arrow_downward_rounded),
-                        ],
-                      )),
-                    )),
-                Expanded(
                     flex: 3,
                     child: TextField(
                       onSubmitted: (String? input) => sendCode(input!),
@@ -61,6 +48,27 @@ Widget loginWidget(Function onSubmit) {
                               fontSize: 12, fontWeight: FontWeight.normal),
                           hintText: AppConstants.numTel,
                           border: InputBorder.none),
+                    )),
+                Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 1,
+                        height: 55,
+                        color: Color.fromARGB(255, 241, 87, 87),
+                        child: Container(
+                            child: Row(
+                          children: [
+                            textWidget(
+                                text: 'Valider', color: Appcolors.redColor),
+                            const Icon(
+                              Icons.done,
+                              color: Color.fromARGB(255, 241, 87, 87),
+                            ),
+                          ],
+                        )),
+                      ),
                     )),
               ],
             ),

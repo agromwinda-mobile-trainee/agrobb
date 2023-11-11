@@ -1,3 +1,4 @@
+import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_google_places/flutter_google_places.dart';
@@ -40,32 +41,37 @@ class _enterDestinationState extends State<enterDestination> {
             borderRadius: BorderRadius.circular(8)),
         child: TextField(
           controller: destinationController,
-          readOnly: true,
-          onTap: (() async {
-            String selectedPlace = await showGoogleAutoComplete(context);
-            destinationController.text = selectedPlace;
-            List<geoCoding.Location> location =
-                await geoCoding.locationFromAddress(selectedPlace);
-            // destination =
-            //     LatLng(locations.first.latitude, locations.first.longitude);
-            // markers.add(Marker(
-            //   markerId: MarkerId(selectedPlace),
-            //   infoWindow: InfoWindow(
-            //     title: 'Destination: $selectedPlace',
-            //   ),
-            //   position: destination,
-            //  // icon: BitmapDescriptor.fromBytes(markIcons),
-            // ));
+          //readOnly: true,
+          // onTap: (() async {
+          //   String selectedPlace = await showGoogleAutoComplete(context);
+          //   destinationController.text = selectedPlace;
+          //   List<geoCoding.Location> location =
+          //       await geoCoding.locationFromAddress(selectedPlace);
+          //   // destination =
+          //   //     LatLng(locations.first.latitude, locations.first.longitude);
+          //   // markers.add(Marker(
+          //   //   markerId: MarkerId(selectedPlace),
+          //   //   infoWindow: InfoWindow(
+          //   //     title: 'Destination: $selectedPlace',
+          //   //   ),
+          //   //   position: destination,
+          //   //  // icon: BitmapDescriptor.fromBytes(markIcons),
+          //   // ));
 
-            myMapController!.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(target: destination, zoom: 14)
-                //17 is new zoom level
-                ));
+          //   myMapController!.animateCamera(CameraUpdate.newCameraPosition(
+          //       CameraPosition(target: destination, zoom: 14)
+          //       //17 is new zoom level
+          //       )
+          //       );
 
-            setState(() {
-              showSourceField = true;
-            });
-          }),
+          //   setState(() {
+          //     showSourceField = true;
+          //   });
+          // }),
+
+          onChanged: (value) {
+            pickPlaces(value);
+          },
           style: GoogleFonts.poppins(
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
           decoration: const InputDecoration(
@@ -85,7 +91,7 @@ class _enterDestinationState extends State<enterDestination> {
 }
 
 Future<String> showGoogleAutoComplete(context) async {
-  const kGoogleApiKey = "";
+  const kGoogleApiKey = "AIzaSyCeISApmlA_dYJeMWgE5OsbVyGG_mzUeTc";
   // Prediction? p = await PlacesAutocomplete.show(
   //   offset: 0,
   //   radius: 1000,

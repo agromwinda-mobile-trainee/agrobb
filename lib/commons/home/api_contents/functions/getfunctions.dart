@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:agrobeba/commons/home/home.dart';
@@ -68,38 +69,87 @@ void saveToken(Map userProfile) async {
 }
 
 Future<Map?>? getToken() async {
-  var userdb = await Hive.openBox('userdb');
-  String? token = userdb.get('token');
-  print('showtoken $token');
+  try {
+    var userdb = await Hive.openBox('userdb');
+    String? token = userdb.get('token');
+    bool data = await checkData();
+    if (data) {
+      final String token = userdb.get("token");
+      if (data == null) {
+        return {'code': 404, 'message': 'utilisateur non trouvé'};
+      }
+    } else {
+      return {
+        'code': 404,
+        'message': 'utilisateur non trouvé',
+      };
+    }
+    print('showtoken $token');
 
-  return token ?? jsonDecode(token!);
+    print(jsonDecode(token!).runtimeType);
+    return jsonDecode(token) as Map;
 
-  // if (token == null) {
-  //   return null;
-  // }
+    // if (token == null) {
+    //   return null;
+    // }
 
-  // return jsonDecode(token);
+    // return jsonDecode(token);
+  } catch (e) {
+    print('erreur $e');
+  }
 }
 
-// decideRoute() async{
+//
 
-//   //step 1: check user login
-//   User? user = FirebaseAuth.instance.currentUser;
-//   if (user != null) {
-//     //step 1.1 : check wether user profil exist
-//     FirebaseFirestore.instance
-//         .collection('users')
-//         .doc(user.uid)
-//         .get()
-//         .then((value) {
-//       if (value.exists) {
-//         Get.to(() => HomeScreen());
-//       } else {
-//         Get.to(() => ProfileSreen());
-//       }
-//     });
-//   }
+Future<Map?> getCredentials() async {
+  try {
+    final savetoken = await Hive.openBox("userdb");
+    bool data = await checkData();
+    if (data) {
+      final String token = savetoken.get("token");
 
-//   //stp2 : check profil completed
-// }
+      if (data == null) {
+        return {'code': 404, 'message': 'utilisateur non trouvé'};
+      }
+    } else {
+      return {
+        'code': 404,
+        'message': 'utilisateur non trouvé',
+      };
+    }
+  } catch (error) {
+    return {
+      'code': 500,
+      'message': "Error on get user data: ${error.toString()}",
+    };
+  }
+}
 
+//
+
+Future<bool> checkData() async {
+  final savetoken = await Hive.openBox("userdb");
+  var result = await savetoken.get("token");
+  if (result == null) return false;
+  return true;
+}
+
+//places
+
+//get function for destination
+
+pickPlaces(String places) async {
+  try {
+    var url = Uri.parse(
+        'http://places.graciasgroup.com/places?page=1&search=$places');
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      log('reponse');
+      print(jsonDecode(response.body));
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+  }
+  ;
+}

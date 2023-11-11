@@ -1,8 +1,11 @@
 import 'dart:ui';
 
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/commons/home/splashScreen.dart';
 import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
@@ -37,12 +40,18 @@ class MyApp extends StatelessWidget {
     authController.decideRoute();
     final TextTheme = Theme.of(context).textTheme;
     return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Agrobeba',
-      theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
-      ),
-      home: const Welcome(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Agrobeba',
+        theme: ThemeData(
+          textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
+        ),
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider<LoginProcessCubit>(
+              create: (BuildContext context) => LoginProcessCubit(),
+            ),
+          ],
+          child: Welcome(),
+        ));
   }
 }

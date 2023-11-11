@@ -72,3 +72,4 @@ class AuthController extends GetxController {
     //stp2 : check profil completed
   }
 }
+   
