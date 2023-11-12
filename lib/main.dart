@@ -40,22 +40,22 @@ class MyApp extends StatelessWidget {
     AuthController authController = Get.put(AuthController());
     authController.decideRoute();
     final TextTheme = Theme.of(context).textTheme;
-    return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Agrobeba',
-        theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginProcessCubit>(
+          create: (BuildContext context) => LoginProcessCubit(),
         ),
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider<LoginProcessCubit>(
-              create: (BuildContext context) => LoginProcessCubit(),
-            ),
-            BlocProvider<DestinationCubit>(
-              create: (BuildContext context) => DestinationCubit(),
-            ),
-          ],
-          child: Welcome(),
-        ));
+        BlocProvider<DestinationCubit>(
+          create: (BuildContext context) => DestinationCubit(),
+        ),
+      ],
+      child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Agrobeba',
+          theme: ThemeData(
+            textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
+          ),
+          home: Welcome()),
+    );
   }
 }

@@ -138,7 +138,7 @@ Future<bool> checkData() async {
 
 //get function for destination
 
-pickPlaces(String places) async {
+Future<List?> pickPlaces(String places) async {
   try {
     var url = Uri.parse(
         'http://places.graciasgroup.com/places?page=1&search=$places');
@@ -147,9 +147,15 @@ pickPlaces(String places) async {
     if (response.statusCode == 200) {
       log('reponse');
       print(jsonDecode(response.body));
+      final Map? data = jsonDecode(response.body) as Map;
+      return data!["data"];
+    } else {
+      log("Erreur");
+      return null;
     }
   } catch (e) {
     print("erreur pick " + e.toString());
+    return null;
   }
   ;
 }

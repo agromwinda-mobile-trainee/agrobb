@@ -34,7 +34,7 @@ Widget enterEmplacement() {
         controller: sourceController,
         readOnly: true,
         onTap: () async {
-          buildSourceSheet();
+          // buildSourceSheet();
         },
         style: GoogleFonts.poppins(
           fontSize: 16,
@@ -61,59 +61,61 @@ Widget enterEmplacement() {
 
 TextEditingController sourceController = TextEditingController();
 
-void buildSourceSheet() {
-  Get.bottomSheet(Container(
-    width: Get.width,
-    height: Get.height * 0.5,
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-        color: Colors.white),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          "Choisir un emplacement",
-          style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        BuildSourcepart(),
-        SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: SvgPicture.asset(
-              "assets/icons/location.svg",
-              color: Color.fromARGB(255, 19, 17, 17),
-              height: 16,
-            ),
-            label: const Text("Utiliser ma position actuelle"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 172, 170, 170),
-              foregroundColor: Color.fromARGB(221, 10, 10, 10),
-              elevation: 0,
-              fixedSize: const Size(double.infinity, 40),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  ));
-}
+// this function is used in the destination widget
+
+// void buildSourceSheet() {
+//   Get.bottomSheet(Container(
+//     width: Get.width,
+//     height: Get.height * 0.5,
+//     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+//     decoration: BoxDecoration(
+//         borderRadius: BorderRadius.only(
+//             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+//         color: Colors.white),
+//     child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: [
+//         const SizedBox(
+//           height: 10,
+//         ),
+//         Text(
+//           "Choisir un emplacement",
+//           style: TextStyle(
+//               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+//         ),
+//         SizedBox(
+//           height: 40,
+//         ),
+//         BuildSourcepart(),
+//         SizedBox(
+//           height: 20,
+//         ),
+//         Padding(
+//           padding: EdgeInsets.all(16),
+//           child: ElevatedButton.icon(
+//             onPressed: () {},
+//             icon: SvgPicture.asset(
+//               "assets/icons/location.svg",
+//               color: Color.fromARGB(255, 19, 17, 17),
+//               height: 16,
+//             ),
+//             label: const Text("Utiliser ma position actuelle"),
+//             style: ElevatedButton.styleFrom(
+//               backgroundColor: Color.fromARGB(255, 172, 170, 170),
+//               foregroundColor: Color.fromARGB(221, 10, 10, 10),
+//               elevation: 0,
+//               fixedSize: const Size(double.infinity, 40),
+//               shape: const RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.all(Radius.circular(10)),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     ),
+//   ));
+// }
 
 class BuildSourcepart extends StatefulWidget {
   const BuildSourcepart({super.key});
@@ -127,7 +129,7 @@ class _BuildSourcepartState extends State<BuildSourcepart> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        Get.back();
+        //  Get.back();
         // String place = await showGoogleAutoComplete(context);
 
         // sourceController.text = place;
@@ -171,8 +173,13 @@ class _BuildSourcepartState extends State<BuildSourcepart> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text("De : "),
+            Icon(
+              Icons.location_on,
+              color: Color.fromARGB(255, 245, 73, 61),
+            ),
             Text(
-              "Donner une position",
+              "ma position",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 12,
