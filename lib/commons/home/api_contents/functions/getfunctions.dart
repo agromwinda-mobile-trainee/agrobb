@@ -159,3 +159,38 @@ Future<List?> pickPlaces(String places) async {
   }
   ;
 }
+
+//send latlong for destination and depart point
+sendCourseRequest() async {
+  try {
+    String lat1 = "-4.267778";
+    String long1 = "15.291944";
+    String lat2 = "-4.325";
+    String long2 = "15.322222";
+    var url = Uri.parse('api.agrobeba.com/api/personal_requests HTTP/1.1');
+    var response = await http.post(url, body: {
+      "service": "",
+      "customer": "",
+      "endPoint": {
+        'Longitude': long1,
+        'latitude': lat1,
+      },
+      "sartpoint": {
+        "Longitude": long2,
+        "latitude": lat2,
+      },
+    });
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final data = jsonDecode(response.body);
+      return data!["data"];
+    } else {
+      log("Erreur eeeeeeeeeeee");
+      return null;
+    }
+  } catch (e) {
+    print("erreur $e");
+  }
+}

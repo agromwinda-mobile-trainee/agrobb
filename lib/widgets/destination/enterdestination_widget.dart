@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:agrobeba/widgets/buildbottomsheet.dart';
+import 'package:agrobeba/widgets/buildriderconfirmation.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 // # import 'package:google_maps_webservice/places.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 
+import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
 import '../enterEmplacement.dart';
 
@@ -151,102 +155,116 @@ Widget resultPlaces(context) {
       width: Get.width,
       child: Column(
           children: placeList
-              .map((e) => placeItem(context, label: e["name"]))
+              .map((e) => placeItem(context, label: e["name"], destinstion: e))
               .toList()),
     );
   });
 }
 
-Widget placeItem(context, {required String label}) {
+Widget placeItem(context, {required String label, required Map destinstion}) {
   return InkWell(
-    onTap: () => Get.bottomSheet(Container(
-      width: Get.width,
-      height: Get.height * 0.5,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-          color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "confirmer la course",
-            style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          BuildSourcepart(),
-          SizedBox(
-            height: 20,
-          ),
-          Container(
-            width: Get.width,
-            height: 50,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      spreadRadius: 4,
-                      blurRadius: 10)
-                ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("A : "),
-                Icon(
-                  Icons.location_on,
-                  color: Color.fromARGB(255, 247, 77, 65),
-                ),
-                Text(
-                  "",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.start,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: SvgPicture.asset(
-                "assets/icons/location.svg",
-                color: Color.fromARGB(255, 19, 17, 17),
-                height: 16,
-              ),
-              label: const Text("confirmer"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 250, 80, 80),
-                foregroundColor: Color.fromARGB(221, 10, 10, 10),
-                elevation: 0,
-                fixedSize: const Size(double.infinity, 40),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    )),
+    onTap: () {
+      BlocProvider.of<DestinationCubit>(context)
+          .saveDestinationValue(value: destinstion);
+      Get.bottomSheet(bottomcall(context));
+    },
     child: Container(
       child: Text(label),
+    ),
+  );
+}
+
+Widget bottomcall(context) {
+  return Container(
+    width: Get.width,
+    height: Get.height * 0.5,
+    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          "confirmer la course",
+          style: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        BuildSourcepart(),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: Get.width,
+          height: 50,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    spreadRadius: 4,
+                    blurRadius: 10)
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("A : "),
+              Icon(
+                Icons.location_on,
+                color: Color.fromARGB(255, 247, 77, 65),
+              ),
+              BlocBuilder<DestinationCubit, DestinationState>(
+                builder: (context, state) {
+                  return Text(
+                    state.destination!["destinationValue"]['name'],
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.start,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Padding(
+          padding: EdgeInsets.all(16),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              BlocProvider.of<DestinationCubit>(context).sendRequest();
+            },
+            icon: SvgPicture.asset(
+              "assets/icons/location.svg",
+              color: Color.fromARGB(255, 19, 17, 17),
+              height: 16,
+            ),
+            label: const Text("confirmer"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 250, 80, 80),
+              foregroundColor: Color.fromARGB(221, 10, 10, 10),
+              elevation: 0,
+              fixedSize: const Size(double.infinity, 40),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }

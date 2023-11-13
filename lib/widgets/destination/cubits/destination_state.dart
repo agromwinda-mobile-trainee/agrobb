@@ -9,5 +9,7 @@ class DestinationState {
 Map initialState() {
   return {
     'places': [],
+    'destinationValue': {},
+    'sendRequest':{},
   };
 }
