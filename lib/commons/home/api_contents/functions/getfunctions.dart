@@ -160,18 +160,19 @@ Future<Map?> sendCourseRequest(
   print("on send request");
   try {
     var url = Uri.parse('api.agrobeba.com/api/personal_requests HTTP/1.1');
-    var response = await http.post(url, body: {
-      "service": "",
-      "customer": "",
-      "endPoint": endPoint,
-      "sartpoint": startPoint,
-    });
+    var response = await http.post(url,
+        body: jsonEncode({
+          "service": "/api/personal_services/1",
+          "customer": "/api/users/1",
+          "endPoint": endPoint,
+          "sartpoint": startPoint,
+        }));
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(jsonDecode(response.body));
       return jsonDecode(response.body) as Map;
     } else {
-      print("Fail on send service-request: ${response.body.toString()} ");
+      print("Fail on send service-request: ${response.body} ");
       return null;
     }
   } catch (e) {

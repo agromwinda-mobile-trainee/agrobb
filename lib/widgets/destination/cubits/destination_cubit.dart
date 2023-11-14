@@ -62,6 +62,7 @@ class DestinationCubit extends Cubit<DestinationState> {
           'currentService': currentService,
           'step': 2,
           'loading': false,
+          'error': '',
         }));
         return;
       }
@@ -69,12 +70,14 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": false,
+        "error": "Requete echouée, veullez réessayer !"
       }));
     } catch (e) {
       print("erreur affichage $e");
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": false,
+        "error": "Une erreur est survenue  !"
       }));
     }
   }
@@ -84,6 +87,7 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationState(destination: {
         ...state.destination!,
         'loading': true,
+        'error': '',
       }));
 
       int requestID = state.destination!["currentService"]["id"];
@@ -95,6 +99,7 @@ class DestinationCubit extends Cubit<DestinationState> {
           ...state.destination!,
           "drivers": drivers ?? [],
           "step": 3,
+          'error': '',
         }));
 
         print("no cars found");
@@ -107,12 +112,14 @@ class DestinationCubit extends Cubit<DestinationState> {
         "loading": false,
         "drivers": drivers,
         "step": 3,
+        'error': '',
       }));
     } catch (e) {
       log("error on finding car: $e ");
       emit(DestinationState(destination: {
         ...state.destination!,
         'loading': false,
+        "error": "Une erreur est survenue  !"
       }));
     }
   }
@@ -122,6 +129,7 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": true,
+        'error': '',
       }));
       Map? driver = await chooseDriver(driverID);
       if (driver != null) {
@@ -142,6 +150,11 @@ class DestinationCubit extends Cubit<DestinationState> {
       }));
     } catch (e) {
       log('error on choosing driver: $e');
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        "error": "Une erreur est survenue  !",
+        "loading": false,
+      }));
     }
   }
 }
