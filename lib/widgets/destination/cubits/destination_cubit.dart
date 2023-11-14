@@ -1,11 +1,8 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages
 import 'dart:async';
-import 'dart:developer';
-import 'dart:io';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agrobeba/commons/home/api_contents/functions/autolocation.dart';
 part 'destination_state.dart';

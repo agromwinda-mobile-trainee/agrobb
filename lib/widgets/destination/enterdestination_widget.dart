@@ -177,37 +177,36 @@ Widget placeItem(context, {required String label, required Map destinstion}) {
 }
 
 Widget bottomcall(context) {
-  return Container(
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    int step = state.destination!["step"];
+    if (step == 1) {
+      return courseCommandeWidget(context);
+    }
+
+    if (step == 1) {
+      return courseDetailsWidget(context);
+    }
+
+    return const SizedBox.shrink();
+  });
+}
+
+Widget courseDetailsWidget(context) {
+  return Ink(
     width: Get.width,
-    height: Get.height * 0.5,
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    decoration: BoxDecoration(
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         color: Colors.white),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          "confirmer la course",
-          style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        BuildSourcepart(),
-        SizedBox(
-          height: 20,
-        ),
         Container(
           width: Get.width,
           height: 50,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
@@ -220,8 +219,77 @@ Widget bottomcall(context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("A : "),
-              Icon(
+              const Icon(
+                Icons.monetization_on,
+                color: Colors.grey,
+              ),
+              const SizedBox(width: 10),
+              BlocBuilder<DestinationCubit, DestinationState>(
+                builder: (context, state) {
+                  return Text(
+                    state.destination!["destinationValue"]['name'],
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.start,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget courseCommandeWidget(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        const Text(
+          "Confirmer la course",
+          style: TextStyle(
+              color: Colors.black54, fontSize: 22, fontWeight: FontWeight.w400),
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        const BuildSourcepart(),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: Get.width,
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    spreadRadius: 4,
+                    blurRadius: 10)
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("A : "),
+              const Icon(
                 Icons.location_on,
                 color: Color.fromARGB(255, 247, 77, 65),
               ),
@@ -229,7 +297,7 @@ Widget bottomcall(context) {
                 builder: (context, state) {
                   return Text(
                     state.destination!["destinationValue"]['name'],
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.w600),
@@ -243,21 +311,26 @@ Widget bottomcall(context) {
         const SizedBox(
           height: 15,
         ),
-        Padding(
-          padding: EdgeInsets.all(16),
+        Ink(
+          width: Get.width,
+          padding: const EdgeInsets.all(16),
           child: ElevatedButton.icon(
             onPressed: () {
               BlocProvider.of<DestinationCubit>(context).sendRequest();
             },
             icon: SvgPicture.asset(
               "assets/icons/location.svg",
-              color: Color.fromARGB(255, 19, 17, 17),
+              color: Colors.grey.shade100,
               height: 16,
             ),
-            label: const Text("confirmer"),
+            label: const Text(
+              "Confirmer",
+              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 250, 80, 80),
-              foregroundColor: Color.fromARGB(221, 10, 10, 10),
+              backgroundColor: const Color.fromARGB(255, 250, 80, 80),
+              foregroundColor: const Color.fromARGB(221, 10, 10, 10),
               elevation: 0,
               fixedSize: const Size(double.infinity, 40),
               shape: const RoundedRectangleBorder(
