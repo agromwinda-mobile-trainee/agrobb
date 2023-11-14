@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages
 import 'dart:async';
+import 'dart:developer';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -74,6 +75,21 @@ class DestinationCubit extends Cubit<DestinationState> {
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": false,
+      }));
+    }
+  }
+
+  Future<void> findAvailableCar() async {
+    try {
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'loading': true,
+      }));
+    } catch (e) {
+      log("error on finding car: $e ");
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'loading': false,
       }));
     }
   }

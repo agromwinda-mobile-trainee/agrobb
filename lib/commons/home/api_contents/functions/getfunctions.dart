@@ -133,7 +133,6 @@ Future<bool> checkData() async {
 //places
 
 //get function for destination
-
 Future<List?> pickPlaces(String places) async {
   try {
     var url = Uri.parse(
@@ -153,7 +152,6 @@ Future<List?> pickPlaces(String places) async {
     print("erreur pick " + e.toString());
     return null;
   }
-  ;
 }
 
 //send latlong for destination and depart point
@@ -178,6 +176,27 @@ Future<Map?> sendCourseRequest(
     }
   } catch (e) {
     print("erreur on send service-request: $e");
+    return null;
+  }
+}
+
+Future<List?> findDrivers(int idRequest) async {
+  try {
+    var url = Uri.parse(
+        'http://api.agrobeba.com/api/drivers/personal-requests/$idRequest');
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map? data = jsonDecode(response.body) as Map;
+      return data!["data"];
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
     return null;
   }
 }
