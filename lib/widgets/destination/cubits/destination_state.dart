@@ -10,6 +10,7 @@ Map initialState() {
   return {
     'places': [],
     'destinationValue': {},
-    'sendRequest':{},
+    'sendRequest': {},
+    'currentService': {},
   };
 }

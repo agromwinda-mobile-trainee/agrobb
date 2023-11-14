@@ -1,13 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:agrobeba/commons/home/home.dart';
-import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-
 import '../../otpscreen.dart';
 
 sendCode(String phoneNumber) async {

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agrobeba/commons/home/api_contents/functions/autolocation.dart';
@@ -33,9 +34,29 @@ class DestinationCubit extends Cubit<DestinationState> {
 
   Future<void> sendRequest() async {
     try {
-      var destination = state.destination!['destinationValue']['coordinates'];
-      var startPosition = await determinePosition();
+      final List? destination =
+          state.destination!['destinationValue']['coordinates'];
+      final Position? startPosition = await determinePosition();
       print("$destination + $startPosition");
+
+      // Create Data To Send
+      final Map endPoint = {
+        "longitude": destination![0],
+        "latitude": destination[1],
+      };
+      final Map startPoint = {
+        "longitude": startPosition!.longitude,
+        "latitude": startPosition.latitude,
+      };
+      Map? currentService =
+          await sendCourseRequest(endPoint: endPoint, startPoint: startPoint);
+
+      if (currentService != null) {
+        emit(DestinationState(destination: {
+          ...state.destination!,
+          'currentService': currentService,
+        }));
+      }
     } catch (e) {
       print("erreur affichage $e");
     }
