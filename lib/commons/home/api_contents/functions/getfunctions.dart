@@ -1,13 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:agrobeba/commons/home/home.dart';
-import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
-
 import '../../otpscreen.dart';
 
 sendCode(String phoneNumber) async {
@@ -137,7 +133,6 @@ Future<bool> checkData() async {
 //places
 
 //get function for destination
-
 Future<List?> pickPlaces(String places) async {
   try {
     var url = Uri.parse(
@@ -157,40 +152,83 @@ Future<List?> pickPlaces(String places) async {
     print("erreur pick " + e.toString());
     return null;
   }
-  ;
 }
 
 //send latlong for destination and depart point
-sendCourseRequest() async {
+Future<Map?>? sendCourseRequest(
+    {required Map endPoint, required Map startPoint}) async {
+  print("on send request");
+  print("startPoint: $startPoint");
+  print("endPoint: $endPoint");
+
   try {
-    String lat1 = "-4.267778";
-    String long1 = "15.291944";
-    String lat2 = "-4.325";
-    String long2 = "15.322222";
-    var url = Uri.parse('api.agrobeba.com/api/personal_requests HTTP/1.1');
-    var response = await http.post(url, body: {
-      "service": "",
-      "customer": "",
-      "endPoint": {
-        'Longitude': long1,
-        'latitude': lat1,
-      },
-      "sartpoint": {
-        "Longitude": long2,
-        "latitude": lat2,
-      },
-    });
+    var url = Uri.parse('http://api.agrobeba.com/api/personal_requests');
+    var response = await http
+        .post(url,
+            headers: {
+              "content-type": "application/json",
+              // "Content-Length": "220",
+              "Authorization":
+                  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpYXQiOjE2OTIwMDY4NDcsImV4cCI6MTY5MjA5MzI0NywiaWQiOjMwLCJjb2RlIjozMCwibmFtZXMiOiJCSU9MQSBNYXR1IENhcmVsIiwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9GSU5BTkNFX0NBQ0hFUiIsIlJPTEVfU1VQUE9SVCIsIlJPTEVfSEVMUF9ERVNLIiwiUk9MRV9DT09SRE9OQVRPUiIsIlJPTEVfU1RBRkYiLCJST0xFX1VTRVIiXX0.q0b68RDvkBSE3l6UTdcmUUPs3E13nWmW2HON9s_JSFvMR0FqWtjTFcjxMezM28OC9Xslywrl_UWhzDITQRR3DA "
+            },
+            body: jsonEncode({
+              "service": "/api/personal_services/1",
+              "customer": "/api/users/1",
+              "endPoint": endPoint,
+              "startPoint": startPoint,
+            }))
+        .timeout(const Duration(seconds: 5));
     print('Response status: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      log('reponse');
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print(jsonDecode(response.body));
-      final data = jsonDecode(response.body);
-      return data!["data"];
+      return jsonDecode(response.body) as Map;
     } else {
-      log("Erreur eeeeeeeeeeee");
+      print("Fail on send service-request: ${response.body} ");
       return null;
     }
   } catch (e) {
-    print("erreur $e");
+    print("erreur on send service-request: $e");
+    return null;
+  }
+}
+
+Future<List?> findDrivers(int idRequest) async {
+  try {
+    var url = Uri.parse(
+        'http://api.agrobeba.com/api/drivers/personal-requests/$idRequest');
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map? data = jsonDecode(response.body) as Map;
+      return data!["data"];
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return null;
+  }
+}
+
+Future<Map?> chooseDriver(int driverID) async {
+  try {
+    var url = Uri.parse('http://api.agrobeba.com/api/drivers/$driverID/choose');
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map? data = jsonDecode(response.body) as Map;
+      return data!;
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return null;
   }
 }

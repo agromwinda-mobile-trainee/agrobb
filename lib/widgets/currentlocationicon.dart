@@ -8,7 +8,7 @@ Widget currentLocationIcon() {
     alignment: Alignment.bottomRight,
     child: InkWell(
       onTap: () {
-        sendCourseRequest();
+        // sendCourseRequest();
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30, right: 10),
