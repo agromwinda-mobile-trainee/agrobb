@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'destination/cubits/destination_cubit.dart';
 
-Widget customButton(context, {Widget? icon, required String text}) {
+Widget customButton(context,
+    {Widget? icon, required String text, required Function onTap}) {
   return Ink(
     width: Get.width,
     padding: const EdgeInsets.all(16),
     child: ElevatedButton.icon(
-      onPressed: () {
-        BlocProvider.of<DestinationCubit>(context).sendRequest();
-      },
+      onPressed: () => onTap(),
       icon: icon ?? const SizedBox.shrink(),
       label: Text(
         text,

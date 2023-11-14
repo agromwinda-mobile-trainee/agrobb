@@ -257,6 +257,14 @@ Widget courseDetailsWidget(context) {
           courseDetailsItem(context, text: "details A"),
           courseDetailsItem(context, text: "details B"),
           courseDetailsItem(context, text: "details C"),
+          customButton(context,
+              text: "Commander un taxi",
+              icon: SvgPicture.asset(
+                "assets/icons/location.svg",
+                color: Colors.grey.shade100,
+                height: 16,
+              ),
+              onTap: () {}),
         ],
       ),
     ),
@@ -376,13 +384,16 @@ Widget courseCommandeWidget(context) {
         const SizedBox(
           height: 15,
         ),
-        customButton(context,
-            text: "Confirmer",
-            icon: SvgPicture.asset(
-              "assets/icons/location.svg",
-              color: Colors.grey.shade100,
-              height: 16,
-            )),
+        customButton(
+          context,
+          text: "Confirmer",
+          icon: SvgPicture.asset(
+            "assets/icons/location.svg",
+            color: Colors.grey.shade100,
+            height: 16,
+          ),
+          onTap: () => BlocProvider.of<DestinationCubit>(context).sendRequest(),
+        ),
       ],
     ),
   );
