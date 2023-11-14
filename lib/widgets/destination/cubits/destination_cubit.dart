@@ -87,12 +87,25 @@ class DestinationCubit extends Cubit<DestinationState> {
       }));
 
       int requestID = state.destination!["currentService"]["id"];
-      List? drivers = await findDrivers(requestID);
+      List? drivers = [];
 
+      do {
+        drivers = await findDrivers(requestID);
+        emit(DestinationState(destination: {
+          ...state.destination!,
+          "drivers": drivers ?? [],
+          "step": 3,
+        }));
+
+        print("no cars found");
+        await Future.delayed(const Duration(minutes: 5));
+      } while (drivers!.isEmpty);
+
+      print("some cars found");
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": false,
-        "drivers": drivers ?? [],
+        "drivers": drivers,
         "step": 3,
       }));
     } catch (e) {
