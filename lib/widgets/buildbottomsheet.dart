@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +15,7 @@ Widget buildBottomSheet() {
                 spreadRadius: 4),
           ],
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topRight: Radius.circular(12), topLeft: Radius.circular(12))),
       child: Center(
         child: Container(

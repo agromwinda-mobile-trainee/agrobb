@@ -17,6 +17,7 @@ import 'package:geocoding/geocoding.dart' as geoCoding;
 
 import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
+import '../custom_button.dart';
 import '../enterEmplacement.dart';
 
 class enterDestination extends StatefulWidget {
@@ -184,12 +185,61 @@ Widget bottomcall(context) {
       return courseCommandeWidget(context);
     }
 
-    if (step == 1) {
+    if (step == 2) {
       return courseDetailsWidget(context);
+    }
+
+    if (step == 3) {
+      return drivers(context);
+    }
+
+    if (step == 4) {
+      return waitingForDriver(context);
     }
 
     return const SizedBox.shrink();
   });
+}
+
+Widget waitingForDriver(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          courseDetailsItem(context,
+              text: "En attente d'une confirmation du taxi..."),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget drivers(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          courseDetailsItem(context, text: "Car A"),
+          courseDetailsItem(context, text: "Car B"),
+          courseDetailsItem(context, text: "Car C"),
+        ],
+      ),
+    ),
+  );
 }
 
 Widget courseDetailsWidget(context) {
@@ -201,12 +251,14 @@ Widget courseDetailsWidget(context) {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         color: Colors.white),
-    child: Column(
-      children: [
-        courseDetailsItem(context, text: "details A"),
-        courseDetailsItem(context, text: "details B"),
-        courseDetailsItem(context, text: "details C"),
-      ],
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          courseDetailsItem(context, text: "details A"),
+          courseDetailsItem(context, text: "details B"),
+          courseDetailsItem(context, text: "details C"),
+        ],
+      ),
     ),
   );
 }
@@ -239,6 +291,7 @@ Widget courseDetailsItem(context, {required String text}) {
           style: const TextStyle(
               color: Colors.black, fontSize: 12, fontWeight: FontWeight.w600),
           textAlign: TextAlign.start,
+          softWrap: true,
         ),
       ],
     ),
@@ -323,34 +376,13 @@ Widget courseCommandeWidget(context) {
         const SizedBox(
           height: 15,
         ),
-        Ink(
-          width: Get.width,
-          padding: const EdgeInsets.all(16),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              BlocProvider.of<DestinationCubit>(context).sendRequest();
-            },
+        customButton(context,
+            text: "Confirmer",
             icon: SvgPicture.asset(
               "assets/icons/location.svg",
               color: Colors.grey.shade100,
               height: 16,
-            ),
-            label: const Text(
-              "Confirmer",
-              style: TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(255, 250, 80, 80),
-              foregroundColor: const Color.fromARGB(221, 10, 10, 10),
-              elevation: 0,
-              fixedSize: const Size(double.infinity, 40),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-            ),
-          ),
-        ),
+            )),
       ],
     ),
   );
