@@ -93,6 +93,7 @@ class DestinationCubit extends Cubit<DestinationState> {
         ...state.destination!,
         "loading": false,
         "drivers": drivers ?? [],
+        "step": 3,
       }));
     } catch (e) {
       log("error on finding car: $e ");

@@ -230,15 +230,22 @@ Widget drivers(context) {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         color: Colors.white),
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          courseDetailsItem(context, text: "Car A"),
-          courseDetailsItem(context, text: "Car B"),
-          courseDetailsItem(context, text: "Car C"),
-        ],
-      ),
-    ),
+    child: BlocBuilder<DestinationCubit, DestinationState>(
+        builder: (context, state) {
+      List? drivers = state.destination!["drivers"];
+
+      if (drivers!.isEmpty) {
+        return const Center(child: Text("Recherche des taxi encours..."));
+      }
+
+      return SingleChildScrollView(
+        child: Column(
+          children: [1, 2]
+              .map((driver) => courseDetailsItem(context, text: "Car A"))
+              .toList(),
+        ),
+      );
+    }),
   );
 }
 
