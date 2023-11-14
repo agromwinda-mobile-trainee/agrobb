@@ -261,6 +261,7 @@ Widget drivers(context) {
             Column(
               children: drivers
                   .map((driver) => courseDetailsItem(context,
+                      driver: driver,
                       text: driver["names"] +
                           ' à' +
                           driver["distance"].toString() +
@@ -310,9 +311,14 @@ Widget courseDetailsWidget(context) {
   );
 }
 
-Widget courseDetailsItem(context, {required String text}) {
+Widget courseDetailsItem(context, {required String text, Map? driver}) {
   return InkWell(
-    onTap: () {},
+    onTap: () {
+      if (driver!.isNotEmpty) {
+        BlocProvider.of<DestinationCubit>(context).onChooseDriver(driver["id"]);
+        return;
+      }
+    },
     child: Container(
       width: Get.width,
       height: 50,
