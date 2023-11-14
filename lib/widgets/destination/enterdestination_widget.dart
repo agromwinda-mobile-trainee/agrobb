@@ -240,8 +240,12 @@ Widget drivers(context) {
 
       return SingleChildScrollView(
         child: Column(
-          children: [1, 2]
-              .map((driver) => courseDetailsItem(context, text: "Car A"))
+          children: drivers
+              .map((driver) => courseDetailsItem(context,
+                  text: driver["names"] +
+                      ' à' +
+                      driver["distance"].toString() +
+                      'm'))
               .toList(),
         ),
       );
