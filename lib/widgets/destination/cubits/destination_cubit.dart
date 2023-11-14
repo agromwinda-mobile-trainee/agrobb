@@ -22,12 +22,15 @@ class DestinationCubit extends Cubit<DestinationState> {
   }
 
   Future<void> saveDestinationValue({required Map value}) async {
-    // PickPlaces()
+    final Position startPosition = await determinePosition();
+    print("current position got: $startPosition");
 
     emit(DestinationState(destination: {
       ...state.destination!,
       "destinationValue": value,
+      "startPoint": startPosition,
       "step": 1,
+      'error': '',
     }));
   }
 
@@ -41,7 +44,10 @@ class DestinationCubit extends Cubit<DestinationState> {
       // Retrieve map data
       final List? destination =
           state.destination!['destinationValue']['coordinates'];
-      final Position startPosition = await determinePosition();
+      final Position? currentPosition = state.destination!["startPoint"];
+
+      // final Position startPosition = await determinePosition();
+      // print("current position got: ${Geolocator.getCurrentPosition()}");
 
       // Prepare map data to request like
       final Map endPoint = {
@@ -49,9 +55,10 @@ class DestinationCubit extends Cubit<DestinationState> {
         "latitude": destination[1],
       };
       final Map startPoint = {
-        "longitude": startPosition.longitude,
-        "latitude": startPosition.latitude,
+        "longitude": currentPosition!.longitude,
+        "latitude": currentPosition.latitude,
       };
+
       Map? currentService =
           await sendCourseRequest(endPoint: endPoint, startPoint: startPoint);
 

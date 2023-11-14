@@ -155,18 +155,29 @@ Future<List?> pickPlaces(String places) async {
 }
 
 //send latlong for destination and depart point
-Future<Map?> sendCourseRequest(
+Future<Map?>? sendCourseRequest(
     {required Map endPoint, required Map startPoint}) async {
   print("on send request");
+  print("startPoint: $startPoint");
+  print("endPoint: $endPoint");
+
   try {
-    var url = Uri.parse('api.agrobeba.com/api/personal_requests HTTP/1.1');
-    var response = await http.post(url,
-        body: jsonEncode({
-          "service": "/api/personal_services/1",
-          "customer": "/api/users/1",
-          "endPoint": endPoint,
-          "sartpoint": startPoint,
-        }));
+    var url = Uri.parse('http://api.agrobeba.com/api/personal_requests');
+    var response = await http
+        .post(url,
+            headers: {
+              "content-type": "application/json",
+              // "Content-Length": "220",
+              "Authorization":
+                  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpYXQiOjE2OTIwMDY4NDcsImV4cCI6MTY5MjA5MzI0NywiaWQiOjMwLCJjb2RlIjozMCwibmFtZXMiOiJCSU9MQSBNYXR1IENhcmVsIiwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9GSU5BTkNFX0NBQ0hFUiIsIlJPTEVfU1VQUE9SVCIsIlJPTEVfSEVMUF9ERVNLIiwiUk9MRV9DT09SRE9OQVRPUiIsIlJPTEVfU1RBRkYiLCJST0xFX1VTRVIiXX0.q0b68RDvkBSE3l6UTdcmUUPs3E13nWmW2HON9s_JSFvMR0FqWtjTFcjxMezM28OC9Xslywrl_UWhzDITQRR3DA "
+            },
+            body: jsonEncode({
+              "service": "/api/personal_services/1",
+              "customer": "/api/users/1",
+              "endPoint": endPoint,
+              "startPoint": startPoint,
+            }))
+        .timeout(const Duration(seconds: 5));
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       print(jsonDecode(response.body));

@@ -12,6 +12,7 @@ Map initialState() {
     'drivers': [],
     'driver': {},
     'destinationValue': {},
+    'startPoint': null,
     'sendRequest': {},
     'currentService': {},
     'step': 0,

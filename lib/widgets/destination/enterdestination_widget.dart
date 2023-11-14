@@ -273,22 +273,28 @@ Widget courseDetailsWidget(context) {
             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         color: Colors.white),
     child: SingleChildScrollView(
-      child: Column(
-        children: [
-          courseDetailsItem(context, text: "details A"),
-          courseDetailsItem(context, text: "details B"),
-          courseDetailsItem(context, text: "details C"),
-          customButton(context,
-              text: "Commander un taxi",
-              icon: SvgPicture.asset(
-                "assets/icons/location.svg",
-                color: Colors.grey.shade100,
-                height: 16,
-              ),
-              onTap: () => BlocProvider.of<DestinationCubit>(context)
-                  .findAvailableCar()),
-        ],
-      ),
+      child: BlocBuilder<DestinationCubit, DestinationState>(
+          builder: (context, state) {
+        Map? courseDetails = state.destination!["currentService"];
+        return Column(
+          children: [
+            courseDetailsItem(context,
+                text: courseDetails!["totalAmount"].toString() +
+                    courseDetails["currency"].toString()),
+            courseDetailsItem(context, text: courseDetails["service"]["name"]),
+            courseDetailsItem(context, text: "Autres détails C"),
+            customButton(context,
+                text: "Commander un taxi",
+                icon: SvgPicture.asset(
+                  "assets/icons/location.svg",
+                  color: Colors.grey.shade100,
+                  height: 16,
+                ),
+                onTap: () => BlocProvider.of<DestinationCubit>(context)
+                    .findAvailableCar()),
+          ],
+        );
+      }),
     ),
   );
 }
