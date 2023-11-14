@@ -126,14 +126,16 @@ Widget searchBoxField(context) {
       // }),
 
       onChanged: (value) {
-        BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
+        if (value.toString().length > 2) {
+          BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
+        }
       },
       style: GoogleFonts.poppins(
           fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
       decoration: const InputDecoration(
           hintText: 'Entrez votre Destination',
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 10),
             child: Icon(
               Icons.search,
               color: Appcolors.redColor,

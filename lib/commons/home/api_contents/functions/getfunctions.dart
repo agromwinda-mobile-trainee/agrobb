@@ -161,36 +161,26 @@ Future<List?> pickPlaces(String places) async {
 }
 
 //send latlong for destination and depart point
-sendCourseRequest() async {
+Future<Map?> sendCourseRequest(
+    {required Map endPoint, required Map startPoint}) async {
   try {
-    String lat1 = "-4.267778";
-    String long1 = "15.291944";
-    String lat2 = "-4.325";
-    String long2 = "15.322222";
     var url = Uri.parse('api.agrobeba.com/api/personal_requests HTTP/1.1');
     var response = await http.post(url, body: {
       "service": "",
       "customer": "",
-      "endPoint": {
-        'Longitude': long1,
-        'latitude': lat1,
-      },
-      "sartpoint": {
-        "Longitude": long2,
-        "latitude": lat2,
-      },
+      "endPoint": endPoint,
+      "sartpoint": startPoint,
     });
     print('Response status: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      log('reponse');
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print(jsonDecode(response.body));
-      final data = jsonDecode(response.body);
-      return data!["data"];
+      return jsonDecode(response.body) as Map;
     } else {
-      log("Erreur eeeeeeeeeeee");
+      print("Fail on send service-request: ${response.body.toString()} ");
       return null;
     }
   } catch (e) {
-    print("erreur $e");
+    print("erreur on send service-request: $e");
+    return null;
   }
 }
