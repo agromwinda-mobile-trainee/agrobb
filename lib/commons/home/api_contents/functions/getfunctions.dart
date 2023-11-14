@@ -200,3 +200,23 @@ Future<List?> findDrivers(int idRequest) async {
     return null;
   }
 }
+
+Future<Map?> chooseDriver(int driverID) async {
+  try {
+    var url = Uri.parse('http://api.agrobeba.com/api/drivers/$driverID/choose');
+    var response = await http.get(url);
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map? data = jsonDecode(response.body) as Map;
+      return data!;
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return null;
+  }
+}

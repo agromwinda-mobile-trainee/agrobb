@@ -116,4 +116,10 @@ class DestinationCubit extends Cubit<DestinationState> {
       }));
     }
   }
+
+  Future<void> chooseDriver(int driverID) async {
+    try {} catch (e) {
+      log('error on choosing driver: $e');
+    }
+  }
 }
