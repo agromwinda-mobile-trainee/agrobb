@@ -9,6 +9,7 @@ class DestinationState {
 Map initialState() {
   return {
     'places': [],
+    'drivers': [],
     'destinationValue': {},
     'sendRequest': {},
     'currentService': {},

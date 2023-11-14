@@ -85,6 +85,15 @@ class DestinationCubit extends Cubit<DestinationState> {
         ...state.destination!,
         'loading': true,
       }));
+
+      int requestID = state.destination!["currentService"]["id"];
+      List? drivers = await findDrivers(requestID);
+
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        "loading": false,
+        "drivers": drivers ?? [],
+      }));
     } catch (e) {
       log("error on finding car: $e ");
       emit(DestinationState(destination: {

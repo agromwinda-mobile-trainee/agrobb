@@ -264,7 +264,8 @@ Widget courseDetailsWidget(context) {
                 color: Colors.grey.shade100,
                 height: 16,
               ),
-              onTap: () {}),
+              onTap: () => BlocProvider.of<DestinationCubit>(context)
+                  .findAvailableCar()),
         ],
       ),
     ),
