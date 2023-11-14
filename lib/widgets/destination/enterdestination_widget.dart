@@ -19,6 +19,7 @@ import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
 import '../custom_button.dart';
 import '../enterEmplacement.dart';
+import '../loader.dart';
 
 class enterDestination extends StatefulWidget {
   const enterDestination({super.key});
@@ -397,14 +398,13 @@ Widget courseCommandeWidget(context) {
         const SizedBox(
           height: 15,
         ),
-        const SizedBox(
-          height: 40,
-          width: 40,
-          child: CircularProgressIndicator(
-            color: Color.fromARGB(255, 250, 80, 80),
-            strokeWidth: 2,
-          ),
-        ),
+        BlocBuilder<DestinationCubit, DestinationState>(
+            builder: (context, state) {
+          if (!state.destination!['loading']) {
+            return const SizedBox.shrink();
+          }
+          return loader(context);
+        }),
         const SizedBox(
           height: 15,
         ),
