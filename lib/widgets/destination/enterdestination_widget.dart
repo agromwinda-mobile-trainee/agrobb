@@ -241,7 +241,18 @@ Widget drivers(context) {
 
       return SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Voiture(s) disponible",
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Colors.black54,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
             if (state.destination!["error"] != '')
               Text(
                 state.destination!["error"],
