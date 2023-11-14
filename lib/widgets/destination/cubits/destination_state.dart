@@ -13,5 +13,6 @@ Map initialState() {
     'sendRequest': {},
     'currentService': {},
     'step': 0,
+    'loading': false,
   };
 }

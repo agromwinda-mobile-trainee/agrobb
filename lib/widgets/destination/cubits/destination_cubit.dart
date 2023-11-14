@@ -32,6 +32,11 @@ class DestinationCubit extends Cubit<DestinationState> {
 
   Future<void> sendRequest() async {
     try {
+      // Active Loader
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        "loading": true,
+      }));
       // Retrieve map data
       final List? destination =
           state.destination!['destinationValue']['coordinates'];
@@ -55,10 +60,21 @@ class DestinationCubit extends Cubit<DestinationState> {
           ...state.destination!,
           'currentService': currentService,
           'step': 2,
+          'loading': false,
         }));
+        return;
       }
+
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        "loading": false,
+      }));
     } catch (e) {
       print("erreur affichage $e");
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        "loading": false,
+      }));
     }
   }
 }

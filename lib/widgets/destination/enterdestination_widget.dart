@@ -203,41 +203,42 @@ Widget courseDetailsWidget(context) {
         color: Colors.white),
     child: Column(
       children: [
-        Container(
-          width: Get.width,
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
-                    spreadRadius: 4,
-                    blurRadius: 10)
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.monetization_on,
-                color: Colors.grey,
-              ),
-              const SizedBox(width: 10),
-              BlocBuilder<DestinationCubit, DestinationState>(
-                builder: (context, state) {
-                  return Text(
-                    state.destination!["destinationValue"]['name'],
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.start,
-                  );
-                },
-              ),
-            ],
-          ),
+        courseDetailsItem(context, text: "details A"),
+        courseDetailsItem(context, text: "details B"),
+        courseDetailsItem(context, text: "details C"),
+      ],
+    ),
+  );
+}
+
+Widget courseDetailsItem(context, {required String text}) {
+  return Container(
+    width: Get.width,
+    height: 50,
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    margin: const EdgeInsets.only(bottom: 10),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              spreadRadius: 4,
+              blurRadius: 10)
+        ]),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(
+          Icons.monetization_on,
+          color: Colors.grey,
+        ),
+        const SizedBox(width: 10),
+        Text(
+          text,
+          style: const TextStyle(
+              color: Colors.black, fontSize: 12, fontWeight: FontWeight.w600),
+          textAlign: TextAlign.start,
         ),
       ],
     ),
@@ -306,6 +307,17 @@ Widget courseCommandeWidget(context) {
                 },
               ),
             ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const SizedBox(
+          height: 40,
+          width: 40,
+          child: CircularProgressIndicator(
+            color: Color.fromARGB(255, 250, 80, 80),
+            strokeWidth: 2,
           ),
         ),
         const SizedBox(
