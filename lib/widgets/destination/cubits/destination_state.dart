@@ -10,10 +10,12 @@ Map initialState() {
   return {
     'places': [],
     'drivers': [],
+    'driver': {},
     'destinationValue': {},
     'sendRequest': {},
     'currentService': {},
     'step': 0,
     'loading': false,
+    'error': '',
   };
 }

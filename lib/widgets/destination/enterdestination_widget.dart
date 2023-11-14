@@ -240,13 +240,22 @@ Widget drivers(context) {
 
       return SingleChildScrollView(
         child: Column(
-          children: drivers
-              .map((driver) => courseDetailsItem(context,
-                  text: driver["names"] +
-                      ' à' +
-                      driver["distance"].toString() +
-                      'm'))
-              .toList(),
+          children: [
+            if (state.destination!["error"] != '')
+              Text(
+                state.destination!["error"],
+                style: const TextStyle(color: Colors.red),
+              ),
+            Column(
+              children: drivers
+                  .map((driver) => courseDetailsItem(context,
+                      text: driver["names"] +
+                          ' à' +
+                          driver["distance"].toString() +
+                          'm'))
+                  .toList(),
+            ),
+          ],
         ),
       );
     }),
