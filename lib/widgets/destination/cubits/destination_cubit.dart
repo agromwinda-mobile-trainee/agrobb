@@ -29,32 +29,35 @@ class DestinationCubit extends Cubit<DestinationState> {
     emit(DestinationState(destination: {
       ...state.destination!,
       "destinationValue": value,
+      "step": 1,
     }));
   }
 
   Future<void> sendRequest() async {
     try {
+      // Retrieve map data
       final List? destination =
           state.destination!['destinationValue']['coordinates'];
-      final Position? startPosition = await determinePosition();
-      print("$destination + $startPosition");
+      final Position startPosition = await determinePosition();
 
-      // Create Data To Send
+      // Prepare map data to request like
       final Map endPoint = {
         "longitude": destination![0],
         "latitude": destination[1],
       };
       final Map startPoint = {
-        "longitude": startPosition!.longitude,
+        "longitude": startPosition.longitude,
         "latitude": startPosition.latitude,
       };
       Map? currentService =
           await sendCourseRequest(endPoint: endPoint, startPoint: startPoint);
 
+      // Save response if request is successful
       if (currentService != null) {
         emit(DestinationState(destination: {
           ...state.destination!,
           'currentService': currentService,
+          'step': 2,
         }));
       }
     } catch (e) {

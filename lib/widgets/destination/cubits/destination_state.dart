@@ -12,5 +12,6 @@ Map initialState() {
     'destinationValue': {},
     'sendRequest': {},
     'currentService': {},
+    'step': 0,
   };
 }
