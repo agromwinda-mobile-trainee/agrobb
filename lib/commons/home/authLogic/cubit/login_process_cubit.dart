@@ -1,4 +1,6 @@
+import 'package:agrobeba/commons/home/home.dart';
 import 'package:bloc/bloc.dart';
+import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
 import '../../api_contents/functions/getfunctions.dart';
@@ -16,22 +18,21 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
   }
 
   void checkUser() async {
-    final Map? userAuth = await getToken();
-    if (userAuth!['code'] == 500) {
-      emit(LoginProcessState(usercontent: {
+    final String? token = await getToken();
+    if (token == "0") {
+      emit(LoginProcessState(usercontent: const {
         'statusCode': 500,
-        'error': userAuth['message'],
+        'error': "",
       }));
       return;
     }
 
-    if (userAuth['code'] == 404) {
-      emit(LoginProcessState(usercontent: {
-        'statusCode': 404,
-        'error': userAuth['message'],
-      }));
-      return;
-    }
+    emit(LoginProcessState(usercontent: {
+      "code": 200,
+      "token": token,
+    }));
+
+    Get.to(const HomeScreen());
   }
 }
 
