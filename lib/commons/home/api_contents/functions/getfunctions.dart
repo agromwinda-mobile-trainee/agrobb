@@ -25,9 +25,11 @@ otpVerify(String code) async {
   try {
     var url = Uri.parse(
         "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
-    var response = await http.get(url);
+    var response =
+        await http.get(url, headers: {"content-type": "application/json"});
     print('response status: ${response.statusCode}');
     if (response.statusCode == 200) {
+      print('response : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
       // save credential on local storage
       Get.to(HomeScreen());
@@ -61,29 +63,33 @@ void saveToken(Map userProfile) async {
   var userdb = await Hive.openBox('userdb');
 
   userdb.put('token', jsonEncode(userProfile));
-  print('succes');
+  userdb.put('jwt', userProfile["hydra:member"][0]["jwt"]);
+  print('token saved: ${userProfile["hydra:member"][0]["jwt"]}');
 }
 
-Future<Map?>? getToken() async {
+Future<String?>? getToken() async {
   try {
     var userdb = await Hive.openBox('userdb');
-    String? token = userdb.get('token');
-    bool data = await checkData();
-    if (data) {
-      final String token = userdb.get("token");
-      if (data == null) {
-        return {'code': 404, 'message': 'utilisateur non trouvé'};
-      }
-    } else {
-      return {
-        'code': 404,
-        'message': 'utilisateur non trouvé',
-      };
-    }
-    print('showtoken $token');
+    String? token = userdb.get('jwt');
+    // bool data = await checkData();
+    // if (data) {
+    //   final String token = userdb.get("token");
+    //   if (data == null) {
+    //     return {'code': 404, 'message': 'utilisateur non trouvé'};
+    //   }
+    // } else {
+    //   return {
+    //     'code': 404,
+    //     'message': 'utilisateur non trouvé',
+    //   };
+    // }
 
-    print(jsonDecode(token!).runtimeType);
-    return jsonDecode(token) as Map;
+    // Map _token = jsonDecode(token!);
+
+    // print('showtoken $_token');
+    // print(_token["hydra:member"][0]["jwt"]);
+
+    return token ?? "0";
 
     // if (token == null) {
     //   return null;
