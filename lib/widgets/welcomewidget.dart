@@ -13,7 +13,7 @@ import '../utils/colors.dart';
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
-  @override 
+  @override
   State<Welcome> createState() => _WelcomeState();
 }
 
@@ -25,15 +25,15 @@ class _WelcomeState extends State<Welcome> {
   }
 
   Widget build(BuildContext context) {
-    BlocBuilder<LoginProcessCubit, LoginProcessState>(
+    return BlocBuilder<LoginProcessCubit, LoginProcessState>(
         builder: (context, state) {
-      int? statusCode = state.usercontent!['statusCode'];
+      int? statusCode = state.usercontent!['code'];
       if (statusCode == 200) return const HomeScreen();
-      if (statusCode == 404 || statusCode == 400 || statusCode == 500)
+      if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
         return const Welcomeboard();
-      return SizedBox();
+      }
+      return const SizedBox();
     });
-    return const Welcomeboard();
   }
 }
 

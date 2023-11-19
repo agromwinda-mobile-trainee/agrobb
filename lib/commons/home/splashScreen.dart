@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginProcessCubit, LoginProcessState>(
         builder: (context, state) {
-      int? statusCode = state.usercontent!['statusCode'];
+      int? statusCode = state.usercontent!['code'];
       if (statusCode == 200) return const HomeScreen();
       if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
         return const Welcome();

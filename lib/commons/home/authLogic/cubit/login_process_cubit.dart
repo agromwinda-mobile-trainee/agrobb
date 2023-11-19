@@ -2,13 +2,11 @@ import 'package:agrobeba/commons/home/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-
 import '../../api_contents/functions/getfunctions.dart';
-
 part 'login_process_state.dart';
 
 class LoginProcessCubit extends Cubit<LoginProcessState> {
-  LoginProcessCubit() : super(LoginProcessState(usercontent: AuthModel()));
+  LoginProcessCubit() : super(LoginProcessState(usercontent: initialState()));
 
   void onChangeusercontent({required String field, required value}) async {
     emit(LoginProcessState(usercontent: {
@@ -20,19 +18,23 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
   void checkUser() async {
     final String? token = await getToken();
     if (token == "0") {
-      emit(LoginProcessState(usercontent: const {
-        'statusCode': 500,
+      emit(LoginProcessState(usercontent: {
+        ...state.usercontent!,
+        'code': 500,
         'error': "",
       }));
       return;
     }
 
+    print("check token: $token");
+
     emit(LoginProcessState(usercontent: {
+      ...state.usercontent!,
       "code": 200,
       "token": token,
     }));
 
-    Get.to(const HomeScreen());
+    // Get.to(const HomeScreen());
   }
 }
 

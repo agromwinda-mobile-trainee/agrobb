@@ -86,7 +86,7 @@ Future<String?>? getToken() async {
 
     // Map _token = jsonDecode(token!);
 
-    // print('showtoken $_token');
+    print('showtoken $token');
     // print(_token["hydra:member"][0]["jwt"]);
 
     return token ?? "0";
