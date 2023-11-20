@@ -77,11 +77,16 @@ void savePhoneNumber(String phoneNumber) async {
 }
 
 Future<void> logout() async {
-  var userdb = await Hive.openBox('userdb');
+  try {
+    var userdb = await Hive.openBox('userdb');
 
-  userdb.put('phoneNumber', "");
-  userdb.put('jwt', "");
-  print('PhoneNumber & jwt removed');
+    userdb.put('phoneNumber', null);
+    userdb.put('jwt', null);
+    userdb.put('token', null);
+    print('PhoneNumber & token removed');
+  } catch (error) {
+    log(error.toString());
+  }
 }
 
 Future<String?>? getPhoneNumber() async {
@@ -95,7 +100,7 @@ Future<String?>? getPhoneNumber() async {
   }
 }
 
-Future<String?>? getToken() async {
+Future<String?> getToken() async {
   try {
     var userdb = await Hive.openBox('userdb');
     String? token = userdb.get('jwt');
@@ -117,7 +122,7 @@ Future<String?>? getToken() async {
     print('showtoken $token');
     // print(_token["hydra:member"][0]["jwt"]);
 
-    return token ?? "0";
+    return token;
 
     // if (token == null) {
     //   return null;
@@ -126,6 +131,7 @@ Future<String?>? getToken() async {
     // return jsonDecode(token);
   } catch (e) {
     print('erreur $e');
+    return null;
   }
 }
 

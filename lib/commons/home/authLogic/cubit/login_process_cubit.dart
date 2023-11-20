@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:bloc/bloc.dart';
@@ -19,31 +21,36 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
   void checkUser() async {
     final String? token = await getToken();
     final String? phoneNumber = await getPhoneNumber();
-    if (token == "0") {
+    if (token == null) {
       emit(LoginProcessState(usercontent: {
         ...state.usercontent!,
         'code': 500,
         'error': "",
       }));
+      print("token not found");
       return;
+    } else {
+      print("check token: $token");
+
+      emit(LoginProcessState(usercontent: {
+        ...state.usercontent!,
+        "code": 200,
+        "token": token,
+        "phoneNumber": phoneNumber,
+      }));
     }
-
-    print("check token: $token");
-
-    emit(LoginProcessState(usercontent: {
-      ...state.usercontent!,
-      "code": 200,
-      "token": token,
-      "phoneNumber": phoneNumber,
-    }));
 
     // Get.to(const HomeScreen());
   }
 
   void onLogout() async {
-    await logout();
-    emit(LoginProcessState(usercontent: initialState()));
-    Get.offAll(const Welcome());
+    try {
+      await logout();
+      emit(LoginProcessState(usercontent: initialState()));
+      Get.offAll(const Welcome());
+    } catch (error) {
+      log(error.toString());
+    }
   }
 }
 
