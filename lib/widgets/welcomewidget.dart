@@ -1,4 +1,5 @@
 import 'package:agrobeba/commons/home/loginscreen.dart';
+import 'package:agrobeba/driver-app/screens/home.dart';
 import 'package:agrobeba/widgets/loginWidget.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
 import '../commons/home/authLogic/cubit/login_process_cubit.dart';
-import '../commons/home/home.dart';
+import '../customer-app/screens/home.dart';
 import '../utils/colors.dart';
 
 class Welcome extends StatefulWidget {
@@ -28,7 +29,9 @@ class _WelcomeState extends State<Welcome> {
     return BlocBuilder<LoginProcessCubit, LoginProcessState>(
         builder: (context, state) {
       int? statusCode = state.usercontent!['code'];
-      if (statusCode == 200) return const HomeScreen();
+      String? role = state.usercontent!['role'];
+      if (statusCode == 200 && role == "customer") return const HomeScreen();
+      if (statusCode == 200 && role == "driver") return const HomeDriver();
       if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
         return const Welcomeboard();
       }

@@ -7,6 +7,7 @@ class LoginProcessState {
 
 Map initialState() {
   return {
+    'role': 'customer',
     'code': 0,
     'token': '',
     'Telephone': "",
