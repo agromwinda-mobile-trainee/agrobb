@@ -17,6 +17,7 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
 
   void checkUser() async {
     final String? token = await getToken();
+    final String? phoneNumber = await getPhoneNumber();
     if (token == "0") {
       emit(LoginProcessState(usercontent: {
         ...state.usercontent!,
@@ -32,6 +33,7 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
       ...state.usercontent!,
       "code": 200,
       "token": token,
+      "phoneNumber": phoneNumber,
     }));
 
     // Get.to(const HomeScreen());

@@ -10,6 +10,6 @@ Map initialState() {
   return {
     'currentPosition': {},
     'commandes': [],
-    'acceptedCommande': {},
+    'acceptedCommande': null,
   };
 }
