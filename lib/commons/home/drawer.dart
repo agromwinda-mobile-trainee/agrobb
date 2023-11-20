@@ -107,6 +107,23 @@ class _BuildDrawerState extends State<BuildDrawer> {
           Spacer(),
           Divider(),
           switchMode(context),
+          Divider(
+            color: Colors.grey.withOpacity(.2),
+            height: 2,
+          ),
+          ListTile(
+            onTap: (() =>
+                BlocProvider.of<LoginProcessCubit>(context).onLogout()),
+            leading: const Icon(
+              Icons.logout_rounded,
+              size: 20,
+              color: Colors.red,
+            ),
+            title: const Text(
+              'Se déconnecter',
+              style: TextStyle(color: Colors.black54),
+            ),
+          ),
           // Container(
           //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           //   child: Column(

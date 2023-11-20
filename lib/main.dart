@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
           ),
-          home: Welcome()),
+          home: const Welcome()),
     );
   }
 }

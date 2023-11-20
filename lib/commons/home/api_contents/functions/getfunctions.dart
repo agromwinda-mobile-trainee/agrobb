@@ -14,6 +14,7 @@ sendCode(String phoneNumber) async {
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
+      savePhoneNumber(phoneNumber);
       Get.to(OtpScreen(phoneNumber));
     } else {}
   } catch (e) {
@@ -31,7 +32,7 @@ otpVerify(String code, String phoneNumber) async {
     if (response.statusCode == 200) {
       print('response : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
-      savePhoneNumber(phoneNumber);
+      // savePhoneNumber(phoneNumber);
       // save credential on local storage
       Get.to(HomeScreen());
     } else {}
@@ -73,6 +74,14 @@ void savePhoneNumber(String phoneNumber) async {
 
   userdb.put('phoneNumber', phoneNumber);
   print('PhoneNumber saved: $phoneNumber');
+}
+
+Future<void> logout() async {
+  var userdb = await Hive.openBox('userdb');
+
+  userdb.put('phoneNumber', "");
+  userdb.put('jwt', "");
+  print('PhoneNumber & jwt removed');
 }
 
 Future<String?>? getPhoneNumber() async {
