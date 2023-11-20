@@ -21,7 +21,7 @@ sendCode(String phoneNumber) async {
   }
 }
 
-otpVerify(String code) async {
+otpVerify(String code, String phoneNumber) async {
   try {
     var url = Uri.parse(
         "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
@@ -31,6 +31,7 @@ otpVerify(String code) async {
     if (response.statusCode == 200) {
       print('response : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
+      savePhoneNumber(phoneNumber);
       // save credential on local storage
       Get.to(HomeScreen());
     } else {}
@@ -65,6 +66,24 @@ void saveToken(Map userProfile) async {
   userdb.put('token', jsonEncode(userProfile));
   userdb.put('jwt', userProfile["hydra:member"][0]["jwt"]);
   print('token saved: ${userProfile["hydra:member"][0]["jwt"]}');
+}
+
+void savePhoneNumber(String phoneNumber) async {
+  var userdb = await Hive.openBox('userdb');
+
+  userdb.put('phoneNumber', phoneNumber);
+  print('PhoneNumber saved: $phoneNumber');
+}
+
+Future<String?>? getPhoneNumber() async {
+  try {
+    var userdb = await Hive.openBox('userdb');
+    String? phoneNumber = userdb.get('phoneNumber');
+    return phoneNumber;
+  } catch (error) {
+    log(error.toString());
+    return null;
+  }
 }
 
 Future<String?>? getToken() async {
@@ -236,5 +255,45 @@ Future<Map?> chooseDriver(int driverID) async {
   } catch (e) {
     print("erreur pick " + e.toString());
     return null;
+  }
+}
+
+Future<List?> getCommandes({required String token}) async {
+  try {
+    var url = Uri.parse('http://api.agrobeba.com/api/personal_requests');
+    var response = await http.get(url, headers: {
+      "content-type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map data = jsonDecode(response.body);
+      return data["hydra:member"];
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return null;
+  }
+}
+
+Future<void> sendCurrentPosition({required Map data}) async {
+  try {
+    var url = Uri.parse('http://eppt.graciasgroup.com/api/sms/send');
+    var response = await http
+        .post(url,
+            headers: {
+              "content-type": "application/json",
+              // "Content-Length": "220",
+            },
+            body: jsonEncode(data))
+        .timeout(const Duration(seconds: 10));
+    log('Response status: ${response.statusCode}');
+  } catch (e) {
+    log("erreur on sendCurrentPosition : $e");
   }
 }

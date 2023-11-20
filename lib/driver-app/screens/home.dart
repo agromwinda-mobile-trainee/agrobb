@@ -1,6 +1,9 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
 import 'package:agrobeba/widgets/widget_build_Tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../commons/home/drawer.dart';
@@ -22,7 +25,17 @@ class _HomeDriverState extends State<HomeDriver> {
     rootBundle.loadString('assets/map_style.txt').then((String) {
       _mapStyle = String;
     });
-    // permanentRequest();
+
+    String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+        .state
+        .usercontent!["token"];
+    String phoneNumber =
+        BlocProvider.of<LoginProcessCubit>(context, listen: true)
+            .state
+            .usercontent!["Telephone"];
+
+    BlocProvider.of<DriverCubit>(context)
+        .onSendPermanentRequests(token, phoneNumber);
     super.initState();
   }
 
@@ -69,12 +82,26 @@ Widget awaitForCommandes(context) {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      child: const Center(
-        child: Text(
-          "En attente d'une course...",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
+      child: BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
+        List? commandes = state.driver!["commandes"];
+
+        if (commandes!.isEmpty) {
+          return const Center(
+            child: Text(
+              "En attente d'une course...",
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        }
+
+        return Column(
+          children: commandes
+              .map((commande) => ListTile(
+                    title: Text("Course + ${commande["id"]}"),
+                  ))
+              .toList(),
+        );
+      }),
     ),
   );
 }

@@ -8,7 +8,7 @@ class DriverState {
 
 Map initialState() {
   return {
-    'currentPosition': [],
+    'currentPosition': {},
     'commandes': [],
     'acceptedCommande': {},
   };
