@@ -1,5 +1,5 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/container.dart';

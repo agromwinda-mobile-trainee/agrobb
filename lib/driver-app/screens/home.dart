@@ -1,3 +1,4 @@
+import 'package:agrobeba/widgets/widget_build_Tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -48,6 +49,7 @@ class _HomeDriverState extends State<HomeDriver> {
             },
             initialCameraPosition: _kGooglePlex,
           ),
+          buildProfileTile(),
           awaitForCommandes(context),
         ],
       ),

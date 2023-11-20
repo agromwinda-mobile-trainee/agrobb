@@ -1,4 +1,4 @@
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';

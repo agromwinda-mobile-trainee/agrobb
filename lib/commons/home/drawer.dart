@@ -1,11 +1,15 @@
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+enum SingingCharacter { customer, driver }
 
 class BuildDrawer extends StatefulWidget {
   const BuildDrawer({super.key});
@@ -67,7 +71,7 @@ class _BuildDrawerState extends State<BuildDrawer> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              children: [ 
+              children: [
                 // Positioned(
                 //     top: 25,
                 //     left: 120,
@@ -102,38 +106,39 @@ class _BuildDrawerState extends State<BuildDrawer> {
           ),
           Spacer(),
           Divider(),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                buildDrawerItem(
-                    title: 'Nos rx sociaux',
-                    onPressed: () {},
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.15),
-                    height: 20),
-                buildDrawerItem(
-                    title: 'conditions et politiques',
-                    onPressed: () {},
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black.withOpacity(0.15),
-                    height: 20),
-                buildDrawerItem(
-                  title: 'By Agromwinda',
-                  onPressed: () {},
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black.withOpacity(0.15),
-                  height: 20,
-                ),
-              ],
-            ),
-          ),
+          switchMode(context),
+          // Container(
+          //   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          //   child: Column(
+          //     children: [
+          //       const SizedBox(
+          //         height: 20,
+          //       ),
+          //       buildDrawerItem(
+          //           title: 'Nos rx sociaux',
+          //           onPressed: () {},
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.w500,
+          //           color: Colors.black.withOpacity(0.15),
+          //           height: 20),
+          //       buildDrawerItem(
+          //           title: 'conditions et politiques',
+          //           onPressed: () {},
+          //           fontSize: 12,
+          //           fontWeight: FontWeight.w500,
+          //           color: Colors.black.withOpacity(0.15),
+          //           height: 20),
+          //       buildDrawerItem(
+          //         title: 'By Agromwinda',
+          //         onPressed: () {},
+          //         fontSize: 12,
+          //         fontWeight: FontWeight.w500,
+          //         color: Colors.black.withOpacity(0.15),
+          //         height: 20,
+          //       ),
+          //     ],
+          //   ),
+          // ),
           const SizedBox(
             height: 20,
           ),
@@ -141,4 +146,36 @@ class _BuildDrawerState extends State<BuildDrawer> {
       ),
     );
   }
+}
+
+Widget switchMode(context) {
+  String mode = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+      .state
+      .usercontent!["role"];
+  return Column(
+    children: <Widget>[
+      ListTile(
+        title: const Text('Lafayette'),
+        leading: Radio<String>(
+          value: "customer",
+          groupValue: mode,
+          onChanged: (String? value) {
+            BlocProvider.of<LoginProcessCubit>(context)
+                .onChangeusercontent(field: "role", value: "customer");
+          },
+        ),
+      ),
+      ListTile(
+        title: const Text('Thomas Jefferson'),
+        leading: Radio<String>(
+          value: "driver",
+          groupValue: mode,
+          onChanged: (String? value) {
+            BlocProvider.of<LoginProcessCubit>(context)
+                .onChangeusercontent(field: "role", value: "drive");
+          },
+        ),
+      ),
+    ],
+  );
 }

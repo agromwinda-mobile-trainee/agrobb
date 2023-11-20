@@ -1,4 +1,4 @@
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/utils/colors.dart';
 import 'package:agrobeba/widgets/introwidget.dart';
 import 'package:flutter/src/widgets/container.dart';
