@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/commons/home/splashScreen.dart';
+import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -47,6 +48,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<DestinationCubit>(
           create: (BuildContext context) => DestinationCubit(),
+        ),
+        BlocProvider<DriverCubit>(
+          create: (BuildContext context) => DriverCubit(),
         ),
       ],
       child: GetMaterialApp(

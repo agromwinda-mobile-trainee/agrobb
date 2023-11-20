@@ -155,7 +155,7 @@ Widget switchMode(context) {
   return Column(
     children: <Widget>[
       ListTile(
-        title: const Text('Lafayette'),
+        title: const Text('Passager'),
         leading: Radio<String>(
           value: "customer",
           groupValue: mode,
@@ -166,13 +166,13 @@ Widget switchMode(context) {
         ),
       ),
       ListTile(
-        title: const Text('Thomas Jefferson'),
+        title: const Text('Conducteur'),
         leading: Radio<String>(
           value: "driver",
           groupValue: mode,
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
-                .onChangeusercontent(field: "role", value: "drive");
+                .onChangeusercontent(field: "role", value: "driver");
           },
         ),
       ),

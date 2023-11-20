@@ -19,10 +19,11 @@ class _HomeDriverState extends State<HomeDriver> {
 
   @override
   void initState() {
-    super.initState();
     rootBundle.loadString('assets/map_style.txt').then((String) {
       _mapStyle = String;
     });
+    // permanentRequest();
+    super.initState();
   }
 
   final CameraPosition _kGooglePlex = const CameraPosition(
@@ -58,15 +59,22 @@ class _HomeDriverState extends State<HomeDriver> {
 }
 
 Widget awaitForCommandes(context) {
-  return Container(
-    decoration: const BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-    ),
-    child: const Text(
-      "En attente d'une course...",
-      style: TextStyle(color: Colors.black),
+  return Positioned(
+    bottom: 0,
+    child: Container(
+      width: MediaQuery.of(context).size.width,
+      height: 400,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: const Center(
+        child: Text(
+          "En attente d'une course...",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
     ),
   );
 }
