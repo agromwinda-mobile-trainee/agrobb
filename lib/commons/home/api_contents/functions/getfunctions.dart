@@ -297,3 +297,22 @@ Future<void> sendCurrentPosition({required Map data}) async {
     log("erreur on sendCurrentPosition : $e");
   }
 }
+
+Future<int?>? confirmCommande({required String token, required id}) async {
+  try {
+    var url =
+        Uri.parse('http://api.agrobeba.com/api/personal_requests/$id/confirm');
+    var response = await http.get(url, headers: {
+      "content-type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.statusCode;
+    }
+    return 400;
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return 500;
+  }
+}

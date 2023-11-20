@@ -72,6 +72,8 @@ class _HomeDriverState extends State<HomeDriver> {
 }
 
 Widget awaitForCommandes(context) {
+  String token =
+      BlocProvider.of<LoginProcessCubit>(context).state.usercontent!["token"];
   return Positioned(
     bottom: 0,
     child: Container(
@@ -98,6 +100,8 @@ Widget awaitForCommandes(context) {
           children: commandes
               .map((commande) => ListTile(
                     title: Text("Course + ${commande["id"]}"),
+                    onTap: () => BlocProvider.of<DriverCubit>(context)
+                        .onConfirmeCommande(token: token, commande: commande),
                   ))
               .toList(),
         );

@@ -36,7 +36,7 @@ class DriverCubit extends Cubit<DriverState> {
           }));
 
           print("no cars found");
-          await Future.delayed(const Duration(minutes: 5));
+          await Future.delayed(const Duration(seconds: 10));
         } while (true);
       }
 
@@ -47,6 +47,21 @@ class DriverCubit extends Cubit<DriverState> {
       // }));
     } catch (error) {
       log("error on permanent requests: $error");
+    }
+  }
+
+  void onConfirmeCommande(
+      {required String token, required Map commande}) async {
+    try {
+      int? resultCode = await confirmCommande(id: commande["id"], token: token);
+
+      emit(DriverState(driver: {
+        ...state.driver!,
+        "acceptedCommande":
+            (resultCode == 200 || resultCode == 201) ? commande : null,
+      }));
+    } catch (error) {
+      log(error.toString());
     }
   }
 }

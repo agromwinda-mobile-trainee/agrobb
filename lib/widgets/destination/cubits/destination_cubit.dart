@@ -110,7 +110,7 @@ class DestinationCubit extends Cubit<DestinationState> {
         }));
 
         print("no cars found");
-        await Future.delayed(const Duration(minutes: 5));
+        await Future.delayed(const Duration(seconds: 10));
       } while (drivers!.isEmpty);
 
       print("some cars found");
