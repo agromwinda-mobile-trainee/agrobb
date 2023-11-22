@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
               initialCameraPosition: _kGooglePlex,
             ),
             buildProfileTile(),
-            const enterDestination(),
+            // const enterDestination(),
             // destinationInputField(context),
             showSourceField ? enterEmplacement() : Container(),
             // currentLocationIcon(),
