@@ -32,7 +32,7 @@ Widget buildBottomSheet(context) {
           child: InkWell(
             onTap: () => Get.bottomSheet(
               destinationFormWidget(context),
-              isDismissible: true,
+              isDismissible: false,
               elevation: 1,
               exitBottomSheetDuration: const Duration(milliseconds: 300),
               enterBottomSheetDuration: const Duration(milliseconds: 300),
@@ -70,20 +70,11 @@ Widget destinationFormWidget(context) {
           destinationFormWidgetHead(context),
           destinationFormWidgetInputFields(context),
           const SizedBox(height: 20),
-          gettingPlacesLoader(context),
           resultPlaces(context),
         ],
       ),
     ),
   );
-}
-
-Widget gettingPlacesLoader(context) {
-  return BlocBuilder<DestinationCubit, DestinationState>(
-      builder: (context, state) {
-    bool? gettingPlaces = state.destination!["gettingPlaces"];
-    return gettingPlaces! ? loader(context) : const SizedBox.shrink();
-  });
 }
 
 Decoration bottomSheetDecoration(context) {
@@ -109,7 +100,11 @@ Widget destinationFormWidgetHead(context) {
     child: Row(
       children: [
         InkWell(
-          onTap: () => Get.back(),
+          onTap: () => {
+            Get.back(),
+            BlocProvider.of<DestinationCubit>(context)
+                .onChangeField(field: "places", value: []),
+          },
           splashColor: Colors.grey.shade400,
           focusColor: Colors.grey.shade400,
           hoverColor: Colors.grey.shade400,
