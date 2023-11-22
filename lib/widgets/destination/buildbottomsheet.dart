@@ -1,5 +1,6 @@
 import 'package:agrobeba/widgets/currentlocationicon.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
+import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,10 @@ Widget buildBottomSheet(context) {
           child: InkWell(
             onTap: () => Get.bottomSheet(
               destinationFormWidget(context),
+              isDismissible: true,
+              elevation: 1,
+              exitBottomSheetDuration: const Duration(milliseconds: 300),
+              enterBottomSheetDuration: const Duration(milliseconds: 300),
             ),
             child: Container(
               alignment: Alignment.centerLeft,
@@ -62,8 +67,9 @@ Widget destinationFormWidget(context) {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           destinationFormWidgetHead(context),
-          // const SizedBox(height: 20),
           destinationFormWidgetInputFields(context),
+          const SizedBox(height: 20),
+          resultPlaces(context),
         ],
       ),
     ),
@@ -210,6 +216,11 @@ Widget inputField(context,
   return Ink(
     // padding: const EdgeInsets.symmetric(vertical: 6),
     child: TextField(
+      onChanged: (String? value) {
+        if (value!.length > 2) {
+          BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
+        }
+      },
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
         border: InputBorder.none,

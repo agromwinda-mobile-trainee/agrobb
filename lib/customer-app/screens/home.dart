@@ -9,8 +9,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
+import 'package:iconly/iconly.dart';
 
-import '../../widgets/buildbottomsheet.dart';
+import '../../widgets/destination/buildbottomsheet.dart';
 import '../../widgets/currentlocationicon.dart';
 import '../../widgets/enterEmplacement.dart';
 import '../../widgets/widget_build_Tile.dart';
@@ -64,19 +65,48 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               initialCameraPosition: _kGooglePlex,
             ),
-            buildProfileTile(),
+            // buildProfileTile(),
+
             // const enterDestination(),
             // destinationInputField(context),
-            showSourceField ? enterEmplacement() : Container(),
+            // showSourceField ? enterEmplacement() : Container(),
             // currentLocationIcon(),
 
             // noficationIcon(),
+
+            iconMenu(context),
             buildBottomSheet(context),
           ],
         ),
       ),
     );
   }
+}
+
+Widget iconMenu(context) {
+  return Positioned(
+    top: 60,
+    left: 20,
+    child: InkWell(
+      onTap: () => Get.to(const BuildDrawer()),
+      splashColor: Colors.white38,
+      child: Ink(
+        decoration: const BoxDecoration(
+            color: Colors.transparent, shape: BoxShape.circle),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(.9),
+              shape: BoxShape.circle),
+          child: const Icon(
+            Icons.menu_rounded,
+            size: 20,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 List<Map> places = [

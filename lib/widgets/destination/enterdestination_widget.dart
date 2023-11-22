@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
-import 'package:agrobeba/widgets/buildbottomsheet.dart';
+import 'package:agrobeba/widgets/destination/buildbottomsheet.dart';
 import 'package:agrobeba/widgets/buildriderconfirmation.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // # import 'package:google_maps_webservice/places.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
+import 'package:iconly/iconly.dart';
 
 import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
@@ -172,8 +173,37 @@ Widget placeItem(context, {required String label, required Map destinstion}) {
           .saveDestinationValue(value: destinstion);
       Get.bottomSheet(bottomcall(context));
     },
-    child: Container(
-      child: Text(label),
+    child: ListTile(
+      title: Text(
+        label,
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
+      subtitle: Text(
+        label,
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              fontWeight: FontWeight.w500,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+      ),
+      leading: placeItemLeading(context),
+      minLeadingWidth: 20,
+    ),
+  );
+}
+
+Widget placeItemLeading(context) {
+  return Container(
+    height: 20,
+    width: 20,
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.grey,
+    ),
+    child: const Icon(
+      IconlyBold.location,
+      color: Colors.white70,
+      size: 14,
     ),
   );
 }
