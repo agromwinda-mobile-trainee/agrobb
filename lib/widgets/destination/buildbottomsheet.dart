@@ -85,7 +85,7 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
 
   Widget destinationFormWidget(context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 100,
+      height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width,
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(

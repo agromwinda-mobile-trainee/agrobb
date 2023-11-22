@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 Widget customButton(context,
     {Widget? icon, required String text, required Function onTap}) {
   return Ink(
-    width: Get.width,
+    width: double.infinity,
     padding: const EdgeInsets.all(16),
     child: ElevatedButton.icon(
       onPressed: () => onTap(),
