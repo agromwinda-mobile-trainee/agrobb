@@ -81,8 +81,8 @@ Widget destinationFormWidget(context) {
 Widget gettingPlacesLoader(context) {
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
-    bool gettingPlaces = state.destination!["gettingPlaces"];
-    return gettingPlaces ? loader(context) : const SizedBox.shrink();
+    bool? gettingPlaces = state.destination!["gettingPlaces"];
+    return gettingPlaces! ? loader(context) : const SizedBox.shrink();
   });
 }
 

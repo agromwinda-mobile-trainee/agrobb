@@ -154,11 +154,17 @@ Widget resultPlaces(context) {
       builder: (context, state) {
     List placeList = state.destination!["places"];
 
-    if (placeList.isEmpty) {
-      return SizedBox();
+    bool gettingPlaces = state.destination!["gettingPlaces"];
+
+    if (gettingPlaces) {
+      return loader(context);
     }
-    return Container(
-      width: Get.width,
+
+    if (placeList.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: Column(
           children: placeList
               .map((e) => placeItem(context, label: e["name"], destination: e))
