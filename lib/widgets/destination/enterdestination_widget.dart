@@ -186,35 +186,47 @@ Widget placeItem(context,
     required Map destination,
     required TextEditingController startPointTextController,
     required TextEditingController destinationTextController}) {
-  return InkWell(
-    onTap: () {
-      BlocProvider.of<DestinationCubit>(context)
-          .saveEmplacementValue(value: destination);
-      startPointTextController.value = TextEditingValue(text: label);
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .saveEmplacementValue(value: destination);
 
-      // Get.bottomSheet(bottomcall(context));
-    },
-    splashColor: Colors.grey.shade300,
-    child: Ink(
-      color: Colors.transparent,
-      child: ListTile(
-        title: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium,
+        if (state.destination!["emplacementField"] == "destinationValue") {
+          startPointTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        if (state.destination!["emplacementField"] == "startPoint") {
+          startPointTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        // Get.bottomSheet(bottomcall(context));
+      },
+      splashColor: Colors.grey.shade300,
+      child: Ink(
+        color: Colors.transparent,
+        child: ListTile(
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          subtitle: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+          ),
+          leading: placeItemLeading(context),
+          minLeadingWidth: 20,
         ),
-        subtitle: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w500,
-                color: Colors.grey,
-                fontSize: 12,
-              ),
-        ),
-        leading: placeItemLeading(context),
-        minLeadingWidth: 20,
       ),
-    ),
-  );
+    );
+  });
 }
 
 Widget placeItemLeading(context) {
