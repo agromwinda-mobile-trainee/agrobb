@@ -28,7 +28,9 @@ Widget buildBottomSheet(context) {
           padding: const EdgeInsets.all(20),
           decoration: bottomSheetDecoration(context),
           child: InkWell(
-            onTap: () => Get.bottomSheet(destinationFormWidget(context)),
+            onTap: () => Get.bottomSheet(
+              destinationFormWidget(context),
+            ),
             child: Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.all(20),
@@ -50,7 +52,7 @@ Widget buildBottomSheet(context) {
 
 Widget destinationFormWidget(context) {
   return Container(
-    height: 500,
+    height: MediaQuery.of(context).size.height - 100,
     width: MediaQuery.of(context).size.width,
     decoration: bottomSheetDecoration(context),
     child: SingleChildScrollView(
@@ -225,7 +227,9 @@ Widget inputField(context,
           ],
         ),
         hintText: hint,
-        hintStyle: Theme.of(context).textTheme.bodyMedium,
+        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Colors.black26,
+            ),
       ),
     ),
   );
