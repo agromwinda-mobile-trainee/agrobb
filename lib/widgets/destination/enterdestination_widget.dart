@@ -164,19 +164,31 @@ Widget resultPlaces(context,
 
     if (emplacementForm["destinationValue"].toString().isNotEmpty &&
         emplacementForm["startPoint"].toString().isNotEmpty) {
-      return Row(
-        children: [
-          customButton(
-            context,
-            text: "Annuler la course",
-            onTap: () => Get.back(),
-          ),
-          customButton(
-            context,
-            text: "Confirmer",
-            onTap: () {},
-          ),
-        ],
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: customButton(
+                context,
+                text: "Annuler",
+                textColor: Theme.of(context).colorScheme.primary,
+                borderColor: Theme.of(context).colorScheme.primary,
+                bkgColor: Colors.transparent,
+                onTap: () => Get.back(),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: customButton(
+                context,
+                text: "Confirmer",
+                onTap: () {},
+              ),
+            ),
+          ],
+        ),
       );
     }
 

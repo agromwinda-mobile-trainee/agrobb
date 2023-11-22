@@ -90,7 +90,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
+        child: Flex(
+          direction: Axis.vertical,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
