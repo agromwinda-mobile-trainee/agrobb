@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthController authController = Get.put(AuthController());
     authController.decideRoute();
-    final TextTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginProcessCubit>(
@@ -57,7 +57,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Agrobeba',
           theme: ThemeData(
-            textTheme: GoogleFonts.poppinsTextTheme(TextTheme),
+            textTheme: GoogleFonts.poppinsTextTheme(textTheme),
+            colorScheme: const ColorScheme.light(
+              background: Colors.white,
+              primary: Color.fromRGBO(220, 80, 91, 1),
+              secondary: Color.fromRGBO(246, 239, 101, 1),
+            ),
           ),
           home: const Welcome()),
     );

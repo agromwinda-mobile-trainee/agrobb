@@ -49,26 +49,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: BuildDrawer(),
-      body: Stack(
-        children: [
-          GoogleMap(
-            markers: markers,
-            zoomControlsEnabled: false,
-            // mapType: MapType.terrain,
-            onMapCreated: (GoogleMapController controller) {
-              myMapController = controller;
-              myMapController!.setMapStyle(_mapStyle);
-            },
-            initialCameraPosition: _kGooglePlex,
-          ),
-          buildProfileTile(),
-          enterDestination(),
-          // destinationInputField(context),
-          showSourceField ? enterEmplacement() : Container(),
-          currentLocationIcon(),
-          noficationIcon(),
-          buildBottomSheet(),
-        ],
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            GoogleMap(
+              markers: markers,
+              zoomControlsEnabled: false,
+              // mapType: MapType.terrain,
+              onMapCreated: (GoogleMapController controller) {
+                myMapController = controller;
+                myMapController!.setMapStyle(_mapStyle);
+              },
+              initialCameraPosition: _kGooglePlex,
+            ),
+            buildProfileTile(),
+            const enterDestination(),
+            // destinationInputField(context),
+            showSourceField ? enterEmplacement() : Container(),
+            // currentLocationIcon(),
+
+            // noficationIcon(),
+            buildBottomSheet(context),
+          ],
+        ),
       ),
     );
   }

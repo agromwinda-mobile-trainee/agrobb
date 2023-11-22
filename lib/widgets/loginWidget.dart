@@ -12,7 +12,7 @@ import '../commons/home/api_contents/functions/getfunctions.dart';
 
 Widget loginWidget(Function onSubmit) {
   return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
