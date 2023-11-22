@@ -18,6 +18,14 @@ class BuildBottomSheet extends StatefulWidget {
 class _BuildBottomSheetState extends State<BuildBottomSheet> {
   TextEditingController startPointTextController = TextEditingController();
   TextEditingController destinationTextController = TextEditingController();
+
+  @override
+  void dispose() {
+    startPointTextController.dispose();
+    destinationTextController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildBottomSheet(context);
@@ -49,7 +57,10 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
               onTap: () => Get.bottomSheet(
                 destinationFormWidget(context),
                 isDismissible: false,
+                isScrollControlled: true,
+                useRootNavigator: true,
                 elevation: 1,
+                enableDrag: false,
                 exitBottomSheetDuration: const Duration(milliseconds: 300),
                 enterBottomSheetDuration: const Duration(milliseconds: 300),
               ),

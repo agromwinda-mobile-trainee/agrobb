@@ -31,12 +31,6 @@ class _InputFormFieldsState extends State<InputFormFields> {
   }
 
   @override
-  void dispose() {
-    widget.textController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<DestinationCubit, DestinationState>(
         builder: (context, state) {

@@ -155,11 +155,29 @@ Widget resultPlaces(context,
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
     List placeList = state.destination!["places"];
-
     bool gettingPlaces = state.destination!["gettingPlaces"];
+    Map emplacementForm = state.destination!["emplacementForm"];
 
     if (gettingPlaces) {
       return loader(context);
+    }
+
+    if (emplacementForm["destinationValue"].toString().isNotEmpty &&
+        emplacementForm["startPoint"].toString().isNotEmpty) {
+      return Row(
+        children: [
+          customButton(
+            context,
+            text: "Annuler la course",
+            onTap: () => Get.back(),
+          ),
+          customButton(
+            context,
+            text: "Confirmer",
+            onTap: () {},
+          ),
+        ],
+      );
     }
 
     if (placeList.isEmpty) {
