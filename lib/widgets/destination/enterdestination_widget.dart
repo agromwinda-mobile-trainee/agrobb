@@ -42,7 +42,7 @@ class _enterDestinationState extends State<enterDestination> {
       child: Column(
         children: [
           searchBoxField(context),
-          resultPlaces(context),
+          // resultPlaces(context),
         ],
       ),
     );
@@ -149,7 +149,9 @@ Widget searchBoxField(context) {
   );
 }
 
-Widget resultPlaces(context) {
+Widget resultPlaces(context,
+    {required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
     List placeList = state.destination!["places"];
@@ -167,34 +169,50 @@ Widget resultPlaces(context) {
       width: MediaQuery.of(context).size.width,
       child: Column(
           children: placeList
-              .map((e) => placeItem(context, label: e["name"], destination: e))
+              .map((e) => placeItem(
+                    context,
+                    label: e["name"],
+                    destination: e,
+                    destinationTextController: destinationTextController,
+                    startPointTextController: startPointTextController,
+                  ))
               .toList()),
     );
   });
 }
 
-Widget placeItem(context, {required String label, required Map destination}) {
+Widget placeItem(context,
+    {required String label,
+    required Map destination,
+    required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
   return InkWell(
     onTap: () {
       BlocProvider.of<DestinationCubit>(context)
           .saveEmplacementValue(value: destination);
+      startPointTextController.value = TextEditingValue(text: label);
+
       // Get.bottomSheet(bottomcall(context));
     },
-    child: ListTile(
-      title: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyMedium,
+    splashColor: Colors.grey.shade300,
+    child: Ink(
+      color: Colors.transparent,
+      child: ListTile(
+        title: Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        subtitle: Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+                fontSize: 12,
+              ),
+        ),
+        leading: placeItemLeading(context),
+        minLeadingWidth: 20,
       ),
-      subtitle: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              fontWeight: FontWeight.w500,
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-      ),
-      leading: placeItemLeading(context),
-      minLeadingWidth: 20,
     ),
   );
 }

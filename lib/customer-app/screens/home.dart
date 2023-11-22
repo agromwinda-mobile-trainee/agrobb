@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // noficationIcon(),
 
             iconMenu(context),
-            buildBottomSheet(context),
+            BuildBottomSheet(),
           ],
         ),
       ),

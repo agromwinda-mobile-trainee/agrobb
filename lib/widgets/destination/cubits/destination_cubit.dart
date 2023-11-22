@@ -28,13 +28,20 @@ class DestinationCubit extends Cubit<DestinationState> {
   Future<void> saveEmplacementValue({required Map value}) async {
     // final Position startPosition = await determinePosition();
     // print("current position got: $startPosition");
+    print("save emplacement: ${value.toString()}");
 
     String emplacementField = state.destination!["emplacementField"];
+    Map emplacementForm = {
+      ...state.destination!["emplacementForm"],
+      emplacementField: value["name"],
+    };
 
+    print("emplacementForm: ${emplacementForm.toString()}");
+    print("emplacementField: ${emplacementField.toString()}");
     emit(DestinationState(destination: {
       ...state.destination!,
       emplacementField: value,
-      // "startPoint": startPosition,
+      "emplacementForm": emplacementForm,
       "step": 1,
       'error': '',
     }));
