@@ -212,7 +212,7 @@ Widget placeItem(context,
             .saveEmplacementValue(value: destination);
 
         if (state.destination!["emplacementField"] == "destinationValue") {
-          startPointTextController.value = TextEditingValue(text: label);
+          destinationTextController.value = TextEditingValue(text: label);
           return;
         }
 

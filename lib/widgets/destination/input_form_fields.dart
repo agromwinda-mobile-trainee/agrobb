@@ -38,6 +38,7 @@ class _InputFormFieldsState extends State<InputFormFields> {
         child: TextFormField(
           controller: widget.textController,
           onChanged: (String? value) {
+            print("on change... ${widget.stateField}");
             BlocProvider.of<DestinationCubit>(context).onChangeField(
                 field: "emplacementField", value: widget.stateField);
             if (value!.length > 2) {
