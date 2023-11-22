@@ -153,6 +153,7 @@ Widget resultPlaces(context) {
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
     List placeList = state.destination!["places"];
+
     if (placeList.isEmpty) {
       return SizedBox();
     }
@@ -160,18 +161,18 @@ Widget resultPlaces(context) {
       width: Get.width,
       child: Column(
           children: placeList
-              .map((e) => placeItem(context, label: e["name"], destinstion: e))
+              .map((e) => placeItem(context, label: e["name"], destination: e))
               .toList()),
     );
   });
 }
 
-Widget placeItem(context, {required String label, required Map destinstion}) {
+Widget placeItem(context, {required String label, required Map destination}) {
   return InkWell(
     onTap: () {
       BlocProvider.of<DestinationCubit>(context)
-          .saveDestinationValue(value: destinstion);
-      Get.bottomSheet(bottomcall(context));
+          .saveEmplacementValue(value: destination);
+      // Get.bottomSheet(bottomcall(context));
     },
     child: ListTile(
       title: Text(

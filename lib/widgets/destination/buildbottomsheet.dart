@@ -1,6 +1,7 @@
 import 'package:agrobeba/widgets/currentlocationicon.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
+import 'package:agrobeba/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -69,11 +70,20 @@ Widget destinationFormWidget(context) {
           destinationFormWidgetHead(context),
           destinationFormWidgetInputFields(context),
           const SizedBox(height: 20),
+          gettingPlacesLoader(context),
           resultPlaces(context),
         ],
       ),
     ),
   );
+}
+
+Widget gettingPlacesLoader(context) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    bool gettingPlaces = state.destination!["gettingPlaces"];
+    return gettingPlaces ? loader(context) : const SizedBox.shrink();
+  });
 }
 
 Decoration bottomSheetDecoration(context) {
@@ -146,6 +156,7 @@ Widget destinationFormWidgetInputFields(context) {
           label: "Point de depart",
           hint: "9, avenue de l'Equateur, Gombe, Kinshasa...",
           prefixIcon: prefixIconStartPoint(context),
+          stateField: 'startPoint',
         ),
         const SizedBox(height: 10),
         Divider(
@@ -158,6 +169,7 @@ Widget destinationFormWidgetInputFields(context) {
           label: "Destination",
           hint: "Kitambo, magasin, Ngaliema, Kinshasa...",
           prefixIcon: prefixIconFinalPoint(context),
+          stateField: 'destinationValue',
         ),
       ],
     ),
@@ -212,11 +224,15 @@ Widget prefixIconFinalPoint(context) {
 }
 
 Widget inputField(context,
-    {required String label, String? hint, Widget? prefixIcon}) {
+    {required String stateField,
+    required String label,
+    String? hint,
+    Widget? prefixIcon}) {
   return Ink(
-    // padding: const EdgeInsets.symmetric(vertical: 6),
     child: TextField(
       onChanged: (String? value) {
+        BlocProvider.of<DestinationCubit>(context)
+            .onChangeField(field: "emplacementField", value: stateField);
         if (value!.length > 2) {
           BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
         }
@@ -230,11 +246,11 @@ Widget inputField(context,
         labelText: label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         prefixIconConstraints:
-            const BoxConstraints(maxHeight: 50, maxWidth: 50),
+            const BoxConstraints(maxHeight: 50, maxWidth: 30),
         prefixIcon: Row(
           children: [
             prefixIcon ?? prefixIconStartPoint(context),
-            const SizedBox(width: 5),
+            const SizedBox(width: 4),
           ],
         ),
         hintText: hint,

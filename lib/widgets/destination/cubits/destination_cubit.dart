@@ -5,32 +5,45 @@ import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:agrobeba/commons/home/api_contents/functions/autolocation.dart';
 part 'destination_state.dart';
 
 class DestinationCubit extends Cubit<DestinationState> {
   DestinationCubit() : super(DestinationState(destination: initialState()));
 
   Future<void> getPlaces({required String value}) async {
+    emit(DestinationState(destination: {
+      ...state.destination!,
+      "gettingPlaces": true,
+    }));
     // PickPlaces()
     List? places = await pickPlaces(value);
 
     emit(DestinationState(destination: {
       ...state.destination!,
       "places": places ?? [],
+      "gettingPlaces": false,
     }));
   }
 
-  Future<void> saveDestinationValue({required Map value}) async {
-    final Position startPosition = await determinePosition();
-    print("current position got: $startPosition");
+  Future<void> saveEmplacementValue({required Map value}) async {
+    // final Position startPosition = await determinePosition();
+    // print("current position got: $startPosition");
+
+    String emplacementField = state.destination!["emplacementField"];
 
     emit(DestinationState(destination: {
       ...state.destination!,
-      "destinationValue": value,
-      "startPoint": startPosition,
+      emplacementField: value,
+      // "startPoint": startPosition,
       "step": 1,
       'error': '',
+    }));
+  }
+
+  Future<void> onChangeField({required String field, required value}) async {
+    emit(DestinationState(destination: {
+      ...state.destination!,
+      field: value,
     }));
   }
 
