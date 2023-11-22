@@ -139,14 +139,18 @@ Widget destinationFormWidgetInputFields(context) {
           hint: "9, avenue de l'Equateur, Gombe, Kinshasa...",
           prefixIcon: prefixIconStartPoint(context),
         ),
+        const SizedBox(height: 10),
         Divider(
           color: Colors.grey.shade300.withOpacity(.9),
           height: 4,
         ),
-        inputField(context,
-            label: "Destination",
-            hint: "Kitambo, magasin, Ngaliema, Kinshasa...",
-            prefixIcon: prefixIconFinalPoint(context)),
+        const SizedBox(height: 16),
+        inputField(
+          context,
+          label: "Destination",
+          hint: "Kitambo, magasin, Ngaliema, Kinshasa...",
+          prefixIcon: prefixIconFinalPoint(context),
+        ),
       ],
     ),
   );
@@ -202,7 +206,7 @@ Widget prefixIconFinalPoint(context) {
 Widget inputField(context,
     {required String label, String? hint, Widget? prefixIcon}) {
   return Ink(
-    padding: const EdgeInsets.symmetric(vertical: 6),
+    // padding: const EdgeInsets.symmetric(vertical: 6),
     child: TextField(
       style: Theme.of(context).textTheme.bodyMedium,
       decoration: InputDecoration(
