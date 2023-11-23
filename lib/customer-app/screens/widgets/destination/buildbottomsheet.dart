@@ -153,9 +153,9 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
               context,
               text: "Annuler la course",
               onTap: () {},
-              bkgColor: Theme.of(context).colorScheme.primary,
-              textColor: Colors.white,
-              borderColor: Colors.transparent,
+              bkgColor: Colors.transparent,
+              textColor: Theme.of(context).colorScheme.primary,
+              borderColor: Theme.of(context).colorScheme.primary,
             ),
           ],
         ),
@@ -164,14 +164,15 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
   }
 
   Widget waittingAnimationWidget(context) {
-    return const SizedBox(
+    return SizedBox(
       height: 100,
       width: 100,
       child: SpinKitSpinningLines(
-        color: Colors.red,
-        duration: Duration(minutes: 10),
+        color: Colors.grey.shade200,
+        duration: const Duration(seconds: 5),
         lineWidth: 3,
         size: 200.0,
+        itemCount: 2,
         // controller: _controller,
       ),
     );
@@ -222,14 +223,14 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
                     driversWidget(
                       context,
                       imageAsset: 'assets/images/cars/car2.png',
-                      type: "Comfort",
+                      type: "Class",
                       serviceID: 2,
                       price:
                           "${state.destination!["currentService"]["totalAmount"] * AppConstants.comfortCar * AppConstants.usdToCdf} CDF",
                     ),
                     driversWidget(
                       context,
-                      imageAsset: 'assets/images/cars/car2.png',
+                      imageAsset: 'assets/images/cars/car3.png',
                       type: "Comfort",
                       serviceID: 3,
                       price:
@@ -239,6 +240,25 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
                 );
               }),
             ),
+            const SizedBox(height: 20),
+            BlocBuilder<DestinationCubit, DestinationState>(
+                builder: (context, state) {
+              if (state.destination!["selectedServiceID"] == 0) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: customButton(
+                  context,
+                  text: "Commandez",
+                  onTap: () {
+                    // BlocProvider.of<DestinationCubit>(context).sendRequest();
+                    BlocProvider.of<DestinationCubit>(context)
+                        .onChangeField(field: "step", value: 2);
+                  },
+                ),
+              );
+            })
           ],
         ),
       ),
