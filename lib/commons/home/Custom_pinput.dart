@@ -1,8 +1,10 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/controller/auth_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pinput/pinput.dart';
@@ -33,6 +35,9 @@ class _BoxPinputState extends State<BoxPinput> {
   }
 
   Widget build(BuildContext context) {
+    String phoneNumber = BlocProvider.of<LoginProcessCubit>(context)
+        .state
+        .usercontent!["Telephone"];
     final DefaultpinTheme = PinTheme(
       width: 60,
       height: 64,
@@ -58,7 +63,7 @@ class _BoxPinputState extends State<BoxPinput> {
       controller: controller,
       focusNode: focusNode,
       onCompleted: (String input) {
-        otpVerify(input);
+        otpVerify(input, phoneNumber);
       },
       defaultPinTheme: DefaultpinTheme.copyWith(
           decoration: BoxDecoration(

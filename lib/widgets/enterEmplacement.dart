@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/colors.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 
 Widget enterEmplacement() {
   return Positioned(

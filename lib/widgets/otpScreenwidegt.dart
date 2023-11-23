@@ -19,7 +19,8 @@ Widget otpScreenwidget() {
           textWidget(
               text: AppConstants.otpSending,
               fontSize: 20,
-              fontWeight: FontWeight.bold, color: Colors.black),
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
           const SizedBox(
             height: 15,
           ),

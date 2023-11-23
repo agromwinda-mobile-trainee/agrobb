@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 Widget buildProfileTile() {
   return Positioned(
       top: 60,
-      right: 20,
+      // right: 20,
       left: 20,
       child: Container(
           width: Get.width,
@@ -25,24 +25,24 @@ Widget buildProfileTile() {
               const SizedBox(
                 width: 15,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                      text: const TextSpan(children: [
-                    TextSpan(
-                        text: 'Bienvenu à bord',
-                        style: TextStyle(color: Colors.black, fontSize: 14)),
-                  ])),
-                  const Text(
-                    "Ou allez-vous ?",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              )
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     RichText(
+              //         text: const TextSpan(children: [
+              //       TextSpan(
+              //           text: 'Bienvenu à bord',
+              //           style: TextStyle(color: Colors.black, fontSize: 14)),
+              //     ])),
+              //     const Text(
+              //       "Ou allez-vous ?",
+              //       style: TextStyle(
+              //           color: Colors.black,
+              //           fontSize: 18,
+              //           fontWeight: FontWeight.bold),
+              //     )
+              //   ],
+              // )
             ],
           )));
 }

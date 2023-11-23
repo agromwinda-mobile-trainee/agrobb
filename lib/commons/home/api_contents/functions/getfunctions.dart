@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -14,6 +14,7 @@ sendCode(String phoneNumber) async {
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
+      savePhoneNumber(phoneNumber);
       Get.to(OtpScreen(phoneNumber));
     } else {}
   } catch (e) {
@@ -21,14 +22,17 @@ sendCode(String phoneNumber) async {
   }
 }
 
-otpVerify(String code) async {
+otpVerify(String code, String phoneNumber) async {
   try {
     var url = Uri.parse(
         "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
-    var response = await http.get(url);
+    var response =
+        await http.get(url, headers: {"content-type": "application/json"});
     print('response status: ${response.statusCode}');
     if (response.statusCode == 200) {
+      print('response : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
+      // savePhoneNumber(phoneNumber);
       // save credential on local storage
       Get.to(HomeScreen());
     } else {}
@@ -61,29 +65,64 @@ void saveToken(Map userProfile) async {
   var userdb = await Hive.openBox('userdb');
 
   userdb.put('token', jsonEncode(userProfile));
-  print('succes');
+  userdb.put('jwt', userProfile["hydra:member"][0]["jwt"]);
+  print('token saved: ${userProfile["hydra:member"][0]["jwt"]}');
 }
 
-Future<Map?>? getToken() async {
+void savePhoneNumber(String phoneNumber) async {
+  var userdb = await Hive.openBox('userdb');
+
+  userdb.put('phoneNumber', phoneNumber);
+  print('PhoneNumber saved: $phoneNumber');
+}
+
+Future<void> logout() async {
   try {
     var userdb = await Hive.openBox('userdb');
-    String? token = userdb.get('token');
-    bool data = await checkData();
-    if (data) {
-      final String token = userdb.get("token");
-      if (data == null) {
-        return {'code': 404, 'message': 'utilisateur non trouvé'};
-      }
-    } else {
-      return {
-        'code': 404,
-        'message': 'utilisateur non trouvé',
-      };
-    }
-    print('showtoken $token');
 
-    print(jsonDecode(token!).runtimeType);
-    return jsonDecode(token) as Map;
+    userdb.put('phoneNumber', null);
+    userdb.put('jwt', null);
+    userdb.put('token', null);
+    print('PhoneNumber & token removed');
+  } catch (error) {
+    log(error.toString());
+  }
+}
+
+Future<String?>? getPhoneNumber() async {
+  try {
+    var userdb = await Hive.openBox('userdb');
+    String? phoneNumber = userdb.get('phoneNumber');
+    return phoneNumber;
+  } catch (error) {
+    log(error.toString());
+    return null;
+  }
+}
+
+Future<String?> getToken() async {
+  try {
+    var userdb = await Hive.openBox('userdb');
+    String? token = userdb.get('jwt');
+    // bool data = await checkData();
+    // if (data) {
+    //   final String token = userdb.get("token");
+    //   if (data == null) {
+    //     return {'code': 404, 'message': 'utilisateur non trouvé'};
+    //   }
+    // } else {
+    //   return {
+    //     'code': 404,
+    //     'message': 'utilisateur non trouvé',
+    //   };
+    // }
+
+    // Map _token = jsonDecode(token!);
+
+    print('showtoken $token');
+    // print(_token["hydra:member"][0]["jwt"]);
+
+    return token;
 
     // if (token == null) {
     //   return null;
@@ -92,6 +131,7 @@ Future<Map?>? getToken() async {
     // return jsonDecode(token);
   } catch (e) {
     print('erreur $e');
+    return null;
   }
 }
 
@@ -230,5 +270,64 @@ Future<Map?> chooseDriver(int driverID) async {
   } catch (e) {
     print("erreur pick " + e.toString());
     return null;
+  }
+}
+
+Future<List?> getCommandes({required String token}) async {
+  try {
+    var url = Uri.parse('http://api.agrobeba.com/api/personal_requests');
+    var response = await http.get(url, headers: {
+      "content-type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log('reponse');
+      print(jsonDecode(response.body));
+      final Map data = jsonDecode(response.body);
+      return data["hydra:member"];
+    } else {
+      log("Request Failed: ${response.statusCode} - ${response.body}");
+      return null;
+    }
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return null;
+  }
+}
+
+Future<void> sendCurrentPosition({required Map data}) async {
+  try {
+    var url = Uri.parse('http://eppt.graciasgroup.com/api/sms/send');
+    var response = await http
+        .post(url,
+            headers: {
+              "content-type": "application/json",
+              // "Content-Length": "220",
+            },
+            body: jsonEncode(data))
+        .timeout(const Duration(seconds: 10));
+    log('Response status: ${response.statusCode}');
+  } catch (e) {
+    log("erreur on sendCurrentPosition : $e");
+  }
+}
+
+Future<int?>? confirmCommande({required String token, required id}) async {
+  try {
+    var url =
+        Uri.parse('http://api.agrobeba.com/api/personal_requests/$id/confirm');
+    var response = await http.get(url, headers: {
+      "content-type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+    print('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.statusCode;
+    }
+    return 400;
+  } catch (e) {
+    print("erreur pick " + e.toString());
+    return 500;
   }
 }

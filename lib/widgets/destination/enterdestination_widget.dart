@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
-import 'package:agrobeba/widgets/buildbottomsheet.dart';
+import 'package:agrobeba/widgets/destination/buildbottomsheet.dart';
 import 'package:agrobeba/widgets/buildriderconfirmation.dart';
 import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // # import 'package:google_maps_webservice/places.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
+import 'package:iconly/iconly.dart';
 
 import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
@@ -41,7 +42,7 @@ class _enterDestinationState extends State<enterDestination> {
       child: Column(
         children: [
           searchBoxField(context),
-          resultPlaces(context),
+          // resultPlaces(context),
         ],
       ),
     );
@@ -148,32 +149,128 @@ Widget searchBoxField(context) {
   );
 }
 
-Widget resultPlaces(context) {
+Widget resultPlaces(context,
+    {required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
     List placeList = state.destination!["places"];
-    if (placeList.isEmpty) {
-      return SizedBox();
+    bool gettingPlaces = state.destination!["gettingPlaces"];
+    Map emplacementForm = state.destination!["emplacementForm"];
+
+    if (gettingPlaces) {
+      return loader(context);
     }
-    return Container(
-      width: Get.width,
+
+    if (emplacementForm["destinationValue"].toString().isNotEmpty &&
+        emplacementForm["startPoint"].toString().isNotEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: customButton(
+                context,
+                text: "Annuler",
+                textColor: Theme.of(context).colorScheme.primary,
+                borderColor: Theme.of(context).colorScheme.primary,
+                bkgColor: Colors.transparent,
+                onTap: () => Get.back(),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: customButton(
+                context,
+                text: "Confirmer",
+                onTap: () {},
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (placeList.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
       child: Column(
           children: placeList
-              .map((e) => placeItem(context, label: e["name"], destinstion: e))
+              .map((e) => placeItem(
+                    context,
+                    label: e["name"],
+                    destination: e,
+                    destinationTextController: destinationTextController,
+                    startPointTextController: startPointTextController,
+                  ))
               .toList()),
     );
   });
 }
 
-Widget placeItem(context, {required String label, required Map destinstion}) {
-  return InkWell(
-    onTap: () {
-      BlocProvider.of<DestinationCubit>(context)
-          .saveDestinationValue(value: destinstion);
-      Get.bottomSheet(bottomcall(context));
-    },
-    child: Container(
-      child: Text(label),
+Widget placeItem(context,
+    {required String label,
+    required Map destination,
+    required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .saveEmplacementValue(value: destination);
+
+        if (state.destination!["emplacementField"] == "destinationValue") {
+          destinationTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        if (state.destination!["emplacementField"] == "startPoint") {
+          startPointTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        // Get.bottomSheet(bottomcall(context));
+      },
+      splashColor: Colors.grey.shade300,
+      child: Ink(
+        color: Colors.transparent,
+        child: ListTile(
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          subtitle: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+          ),
+          leading: placeItemLeading(context),
+          minLeadingWidth: 20,
+        ),
+      ),
+    );
+  });
+}
+
+Widget placeItemLeading(context) {
+  return Container(
+    height: 20,
+    width: 20,
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.grey,
+    ),
+    child: const Icon(
+      IconlyBold.location,
+      color: Colors.white70,
+      size: 14,
     ),
   );
 }
