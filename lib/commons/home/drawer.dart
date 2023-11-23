@@ -23,7 +23,7 @@ class _BuildDrawerState extends State<BuildDrawer> {
       {required String title,
       required Function onPressed,
       Color color = Colors.black,
-      double fontSize = 12,
+      double fontSize = 18,
       FontWeight fontWeight = FontWeight.w700,
       double height = 39,
       bool isVisible = false}) {
@@ -89,13 +89,50 @@ class _BuildDrawerState extends State<BuildDrawer> {
                 //     )),
                 buildDrawerItem(
                     title: 'mon compte', onPressed: () => Get.to(() => null)),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  indent: 8,
+                  endIndent: 140.0,
+                  height: 8,
+                  thickness: 3,
+                  color: Color.fromARGB(255, 92, 92, 92),
+                ),
                 buildDrawerItem(
                     title: 'Services', onPressed: () {}, isVisible: true),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 112, 112, 112),
+                ),
                 buildDrawerItem(title: 'moyens de paiement', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 90, 90, 90),
+                ),
                 buildDrawerItem(title: 'Codes promo', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 100, 100, 100),
+                ),
                 buildDrawerItem(title: 'Parametres', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 109, 108, 108),
+                ),
                 buildDrawerItem(title: 'conditions ', onPressed: () {}),
-                buildDrawerItem(title: 'se deconnecter', onPressed: () {}),
+                Divider(
+                  color: Color.fromARGB(255, 88, 88, 88),
+                ),
+                //buildDrawerItem(title: 'se deconnecter', onPressed: () {})
                 buildDrawerItem(
                     title: 'Retour',
                     onPressed: () {

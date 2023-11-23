@@ -30,7 +30,7 @@ void main() async {
   var directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path.toString());
   runApp(const MyApp());
-  // FlutterNativeSplash.remove();
+  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
