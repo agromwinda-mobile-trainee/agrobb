@@ -1,14 +1,9 @@
-import 'package:agrobeba/commons/home/otpscreen.dart';
+import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
+import 'package:agrobeba/customer-app/screens/widgets/textWidget.dart';
 import 'package:agrobeba/utils/app_constants.dart';
 import 'package:agrobeba/utils/colors.dart';
-import 'package:agrobeba/widgets/textWidget.dart';
-//import 'package:fl_country_code_picker/fl_country_code_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../commons/home/api_contents/functions/getfunctions.dart';
 
 Widget loginWidget(Function onSubmit) {
   return Padding(
@@ -56,9 +51,8 @@ Widget loginWidget(Function onSubmit) {
                       child: Container(
                         width: 1,
                         height: 55,
-                        color: Color.fromARGB(255, 241, 87, 87),
-                        child: Container(
-                            child: Row(
+                        color: const Color.fromARGB(255, 241, 87, 87),
+                        child: Row(
                           children: [
                             textWidget(
                                 text: 'Valider', color: Appcolors.redColor),
@@ -67,7 +61,7 @@ Widget loginWidget(Function onSubmit) {
                               color: Color.fromARGB(255, 241, 87, 87),
                             ),
                           ],
-                        )),
+                        ),
                       ),
                     )),
               ],
@@ -79,17 +73,17 @@ Widget loginWidget(Function onSubmit) {
           RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                  style: TextStyle(color: Colors.black, fontSize: 12),
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
                   children: [
                     const TextSpan(
-                      text: AppConstants.byCReating + "  ",
+                      text: "${AppConstants.byCReating}  ",
                     ),
                     TextSpan(
-                        text: AppConstants.termeServices + "  ",
+                        text: "${AppConstants.termeServices}  ",
                         style:
                             GoogleFonts.poppins(fontWeight: FontWeight.bold)),
                     const TextSpan(
-                      text: AppConstants.et + "  ",
+                      text: "${AppConstants.et}  ",
                     ),
                     TextSpan(
                         text: AppConstants.policy,

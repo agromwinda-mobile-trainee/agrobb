@@ -1,11 +1,8 @@
 import 'package:agrobeba/customer-app/screens/home.dart';
+import 'package:agrobeba/customer-app/screens/widgets/introwidget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/textWidget.dart';
 import 'package:agrobeba/utils/colors.dart';
-import 'package:agrobeba/widgets/introwidget.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-
-import '../../widgets/textWidget.dart';
 
 class Confimation extends StatelessWidget {
   const Confimation({super.key});

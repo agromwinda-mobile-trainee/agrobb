@@ -1,10 +1,7 @@
 import 'dart:developer';
-
-import 'package:agrobeba/customer-app/screens/home.dart';
-import 'package:agrobeba/widgets/welcomewidget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/welcomewidget.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import '../../api_contents/functions/getfunctions.dart';
 part 'login_process_state.dart';
 

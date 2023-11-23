@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 part 'destination_state.dart';
 
@@ -42,7 +41,6 @@ class DestinationCubit extends Cubit<DestinationState> {
       ...state.destination!,
       emplacementField: value,
       "emplacementForm": emplacementForm,
-      "step": 1,
       'error': '',
     }));
   }
@@ -56,38 +54,30 @@ class DestinationCubit extends Cubit<DestinationState> {
 
   Future<void> sendRequest() async {
     try {
-      // Active Loader
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": true,
       }));
+
       // Retrieve map data
-      final List? destination =
-          state.destination!['destinationValue']['coordinates'];
-      final Position? currentPosition = state.destination!["startPoint"];
-
-      // final Position startPosition = await determinePosition();
-      // print("current position got: ${Geolocator.getCurrentPosition()}");
-
-      // Prepare map data to request like
-      final Map endPoint = {
-        "longitude": destination![0],
-        "latitude": destination[1],
-      };
-      final Map startPoint = {
-        "longitude": currentPosition!.longitude,
-        "latitude": currentPosition.latitude,
+      final Map destinationCoordinates = {
+        "longitude": state.destination!['destinationValue']['coordinates'][0],
+        "latitude": state.destination!['destinationValue']['coordinates'][1],
       };
 
-      Map? currentService =
-          await sendCourseRequest(endPoint: endPoint, startPoint: startPoint);
+      final Map startPointCoordinates = {
+        "longitude": state.destination!['startPoint']['coordinates'][0],
+        "latitude": state.destination!['startPoint']['coordinates'][1],
+      };
 
-      // Save response if request is successful
+      Map? currentService = await sendCourseRequest(
+          endPoint: destinationCoordinates, startPoint: startPointCoordinates);
+
       if (currentService != null) {
         emit(DestinationState(destination: {
           ...state.destination!,
           'currentService': currentService,
-          'step': 2,
+          'step': 1,
           'loading': false,
           'error': '',
         }));
@@ -151,20 +141,22 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> onChooseDriver(int driverID) async {
+  Future<void> onChooseDriver(int serviceID) async {
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": true,
         'error': '',
       }));
-      Map? driver = await chooseDriver(driverID);
+
+      Map? driver = await chooseDriver(serviceID);
+
       if (driver != null) {
         emit(DestinationState(destination: {
           ...state.destination!,
           "driver": driver,
           "loading": false,
-          "step": 4,
+          "step": 2,
           "error": '',
         }));
         return;

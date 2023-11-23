@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 //import 'package:google_maps_webservice/places.dart';
 //import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../utils/colors.dart';
 import 'package:geocoding/geocoding.dart' as geoCoding;
 import 'package:agrobeba/customer-app/screens/home.dart';
 
@@ -46,8 +44,8 @@ Widget enterEmplacement() {
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(left: 10),
+          suffixIcon: const Padding(
+            padding: EdgeInsets.only(left: 10),
             child: Icon(
               Icons.search,
             ),
@@ -160,7 +158,7 @@ class _BuildSourcepartState extends State<BuildSourcepart> {
       child: Container(
         width: Get.width,
         height: 50,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
@@ -172,7 +170,7 @@ class _BuildSourcepartState extends State<BuildSourcepart> {
             ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             Text("De : "),
             Icon(
               Icons.location_on,

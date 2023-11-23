@@ -1,20 +1,8 @@
-import 'dart:convert';
-
-import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
-import 'package:agrobeba/widgets/notificationicon.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/buildbottomsheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:http/http.dart' as http;
-import 'package:iconly/iconly.dart';
-
-import '../../widgets/destination/buildbottomsheet.dart';
-import '../../widgets/currentlocationicon.dart';
-import '../../widgets/enterEmplacement.dart';
-import '../../widgets/widget_build_Tile.dart';
 import '../../commons/home/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late LatLng source;
-  Set<Marker> markers = Set<Marker>();
+  Set<Marker> markers = <Marker>{};
 
   String? _mapStyle;
 
@@ -49,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: BuildDrawer(),
+      drawer: const BuildDrawer(),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -75,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // noficationIcon(),
 
             iconMenu(context),
-            BuildBottomSheet(),
+            const BuildBottomSheet(),
           ],
         ),
       ),

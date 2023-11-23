@@ -1,6 +1,6 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/customer-app/screens/widgets/widget_build_Tile.dart';
 import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
-import 'package:agrobeba/widgets/widget_build_Tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

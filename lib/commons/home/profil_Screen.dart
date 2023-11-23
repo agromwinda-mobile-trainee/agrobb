@@ -1,12 +1,12 @@
 // ignore: file_names
 import 'package:agrobeba/customer-app/screens/home.dart';
+import 'package:agrobeba/customer-app/screens/widgets/setterButton.dart';
+import 'package:agrobeba/customer-app/screens/widgets/textFieldWidget.dart';
 import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:agrobeba/widgets/textFieldWidget.dart';
 import 'package:http/http.dart' as http;
-import '../../widgets/setterButton.dart';
 
 class ProfileSreen extends StatefulWidget {
   const ProfileSreen({super.key});

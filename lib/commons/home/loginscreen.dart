@@ -1,11 +1,7 @@
-import 'package:agrobeba/commons/home/otpscreen.dart';
-import 'package:agrobeba/widgets/loginWidget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/introwidget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/loginWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-
-import '../../widgets/introwidget.dart';
 import 'api_contents/functions/getfunctions.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -15,7 +11,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         width: Get.width,
         height: Get.height,
         child: Column(
