@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
+import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
 class BuildBottomSheet extends StatefulWidget {
   const BuildBottomSheet({super.key});
@@ -123,36 +124,74 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                   .onChangeField(field: "step", value: 0),
             ),
             destinationDetails(context),
-            driversWidget(context),
+            const SizedBox(height: 22),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: BlocBuilder<DestinationCubit, DestinationState>(
+                  builder: (context, state) {
+                return Row(
+                  children: [
+                    driversWidget(context,
+                        imageAsset: 'assets/images/cars/car1.png',
+                        type: "Standard",
+                        price:
+                            "${state.destination!["currentService"]["totalAmount"] * 2500} CDF"),
+                    driversWidget(context,
+                        imageAsset: 'assets/images/cars/car2.png',
+                        type: "Standard",
+                        price:
+                            "${state.destination!["currentService"]["totalAmount"] * 4600} CDF"),
+                  ],
+                );
+              }),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget driversWidget(context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200.withOpacity(.6),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SvgPicture.asset(
-            "assets/images/cars/car1.png",
-            semanticsLabel: 'Taxi standard',
-            width: 50,
-            height: 40,
-            fit: BoxFit.cover,
-          ),
-          Text(
-            "Standard",
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color),
-          )
-        ],
+  Widget driversWidget(context,
+      {required String imageAsset,
+      required String price,
+      required String type}) {
+    return ZoomTapAnimation(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade200.withOpacity(.6),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              imageAsset,
+              width: 60,
+              height: 40,
+            ),
+            Text(
+              type,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontSize: 12),
+              textAlign: TextAlign.start,
+            ),
+            Text(
+              price,
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.4,
+                  ),
+              textAlign: TextAlign.start,
+            ),
+          ],
+        ),
       ),
     );
   }
