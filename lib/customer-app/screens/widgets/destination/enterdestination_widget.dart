@@ -174,7 +174,8 @@ Widget resultPlaces(context,
               child: customButton(
                 context,
                 text: "Confirmer",
-                onTap: () {},
+                onTap: () =>
+                    BlocProvider.of<DestinationCubit>(context).sendRequest(),
               ),
             ),
           ],

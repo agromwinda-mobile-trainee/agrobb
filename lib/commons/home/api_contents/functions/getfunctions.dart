@@ -197,7 +197,7 @@ Future<List?> pickPlaces(String places) async {
 //send latlong for destination and depart point
 Future<Map?>? sendCourseRequest(
     {required Map endPoint, required Map startPoint}) async {
-  print("on send request");
+  log("on send request");
   print("startPoint: $startPoint");
   print("endPoint: $endPoint");
 
