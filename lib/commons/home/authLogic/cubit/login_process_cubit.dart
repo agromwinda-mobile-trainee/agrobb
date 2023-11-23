@@ -1,12 +1,15 @@
+import 'dart:developer';
+
+import 'package:agrobeba/customer-app/screens/home.dart';
+import 'package:agrobeba/widgets/welcomewidget.dart';
 import 'package:bloc/bloc.dart';
+import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-
 import '../../api_contents/functions/getfunctions.dart';
-
 part 'login_process_state.dart';
 
 class LoginProcessCubit extends Cubit<LoginProcessState> {
-  LoginProcessCubit() : super(LoginProcessState(usercontent: AuthModel()));
+  LoginProcessCubit() : super(LoginProcessState(usercontent: initialState()));
 
   void onChangeusercontent({required String field, required value}) async {
     emit(LoginProcessState(usercontent: {
@@ -16,21 +19,37 @@ class LoginProcessCubit extends Cubit<LoginProcessState> {
   }
 
   void checkUser() async {
-    final Map? userAuth = await getToken();
-    if (userAuth!['code'] == 500) {
+    final String? token = await getToken();
+    final String? phoneNumber = await getPhoneNumber();
+    if (token == null) {
       emit(LoginProcessState(usercontent: {
-        'statusCode': 500,
-        'error': userAuth['message'],
+        ...state.usercontent!,
+        'code': 500,
+        'error': "",
       }));
+      print("token not found");
       return;
+    } else {
+      print("check token: $token");
+
+      emit(LoginProcessState(usercontent: {
+        ...state.usercontent!,
+        "code": 200,
+        "token": token,
+        "phoneNumber": phoneNumber,
+      }));
     }
 
-    if (userAuth['code'] == 404) {
-      emit(LoginProcessState(usercontent: {
-        'statusCode': 404,
-        'error': userAuth['message'],
-      }));
-      return;
+    // Get.to(const HomeScreen());
+  }
+
+  void onLogout() async {
+    try {
+      await logout();
+      emit(LoginProcessState(usercontent: initialState()));
+      Get.offAll(const Welcome());
+    } catch (error) {
+      log(error.toString());
     }
   }
 }

@@ -1,6 +1,5 @@
 part of 'login_process_cubit.dart';
 
-@immutable
 class LoginProcessState {
   Map? usercontent;
   LoginProcessState({required this.usercontent});
@@ -8,6 +7,11 @@ class LoginProcessState {
 
 Map initialState() {
   return {
-    'Usertoken': [],
+    'role': 'customer',
+    'code': 0,
+    'token': '',
+    'Telephone': "",
+    'error': "",
+    'statusCode': 0,
   };
 }

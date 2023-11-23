@@ -1,6 +1,5 @@
 import 'dart:developer';
-
-import 'package:agrobeba/commons/home/home.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,4 +71,3 @@ class AuthController extends GetxController {
     //stp2 : check profil completed
   }
 }
-   

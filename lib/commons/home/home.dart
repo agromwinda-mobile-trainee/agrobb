@@ -11,7 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 
-import '../../widgets/buildbottomsheet.dart';
+//import '../../widgets/buildbottomsheet.dart';
 import '../../widgets/currentlocationicon.dart';
 import '../../widgets/enterEmplacement.dart';
 import '../../widgets/widget_build_Tile.dart';
@@ -82,9 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
           enterDestination(),
           // destinationInputField(context),
           showSourceField ? enterEmplacement() : Container(),
-          currentLocationIcon(),
+          currentLocationIcon(context),
           noficationIcon(),
-          buildBottomSheet(),
+          //buildBottomSheet(),
         ],
       ),
     );

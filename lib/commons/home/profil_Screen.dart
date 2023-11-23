@@ -1,21 +1,11 @@
-import 'dart:ffi';
-
-import 'package:agrobeba/commons/home/home.dart';
+// ignore: file_names
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/utils/colors.dart';
-import 'package:agrobeba/widgets/introwidget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:agrobeba/widgets/textFieldWidget.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-
 import '../../widgets/setterButton.dart';
 
 class ProfileSreen extends StatefulWidget {
@@ -57,7 +47,7 @@ class _ProfileSreenState extends State<ProfileSreen> {
         setState(() {
           isLoading = false;
         });
-        Get.to(() => HomeScreen());
+        Get.to(() => const HomeScreen());
       }
     } catch (e) {
       print('$e');

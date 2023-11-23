@@ -58,6 +58,10 @@ dependencies:
   searchfield: ^0.8.7
   flutter_bloc: ^8.1.3
   geolocator: ^10.1.0
+  zoom_tap_animation: ^1.1.0
+  iconly: ^1.0.1
+  flutter_native_splash: ^2.2.18
+
   #google_api_headers: ^1.6.0
   #fl_country_code_picker: ^0.1.5
 
