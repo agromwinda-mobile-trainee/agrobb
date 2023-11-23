@@ -1,4 +1,5 @@
 import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
+import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class BuildBottomSheet extends StatefulWidget {
   const BuildBottomSheet({super.key});
@@ -100,8 +102,69 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
           return courseDetails(context);
         }
 
+        if (state.destination!["step"] == 2) {
+          return waitingForDriverConfirmation(context);
+        }
+
         return const SizedBox.shrink();
       }),
+    );
+  }
+
+  Widget waitingForDriverConfirmation(context) {
+    return Container(
+      height: 400,
+      width: MediaQuery.of(context).size.width,
+      decoration: bottomSheetDecoration(context),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            destinationFormWidgetHead(
+              context,
+              title: "Commande envoyée",
+              onTap: () {},
+            ),
+            waittingAnimationWidget(context),
+            const SizedBox(height: 20),
+            Center(
+              child: Text(
+                "En attente de la confirmation d'un chauffeur...",
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 20),
+            customButton(
+              context,
+              text: "Annuler la course",
+              onTap: () {},
+              bkgColor: Theme.of(context).colorScheme.primary,
+              textColor: Colors.white,
+              borderColor: Colors.transparent,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget waittingAnimationWidget(context) {
+    return const SizedBox(
+      height: 100,
+      width: 100,
+      child: SpinKitSpinningLines(
+        color: Colors.red,
+        duration: Duration(microseconds: 500),
+        lineWidth: 3,
+        size: 50.0,
+        // controller: AnimationController(
+        //   vsync: this,
+        //   duration: const Duration(milliseconds: 1200),
+        // ),
+      ),
     );
   }
 
@@ -135,6 +198,7 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                       context,
                       imageAsset: 'assets/images/cars/car1.png',
                       type: "Standard",
+                      serviceID: 1,
                       price:
                           "${state.destination!["currentService"]["totalAmount"] * AppConstants.standardCar * AppConstants.usdToCdf} CDF",
                     ),
@@ -142,6 +206,7 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                       context,
                       imageAsset: 'assets/images/cars/car2.png',
                       type: "Comfort",
+                      serviceID: 2,
                       price:
                           "${state.destination!["currentService"]["totalAmount"] * AppConstants.comfortCar * AppConstants.usdToCdf} CDF",
                     ),
@@ -149,6 +214,7 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                       context,
                       imageAsset: 'assets/images/cars/car2.png',
                       type: "Comfort",
+                      serviceID: 3,
                       price:
                           "${state.destination!["currentService"]["totalAmount"] * AppConstants.classCar * AppConstants.usdToCdf} CDF",
                     ),
@@ -264,9 +330,11 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
         const SizedBox(width: 22),
         BlocBuilder<DestinationCubit, DestinationState>(
             builder: (context, state) {
+          String distance = state.destination!["currentService"]["service"]
+                  ["distance"] ??
+              "10";
           return Text(
-            state.destination!["currentService"]["service"]["distancePrice"] +
-                " km",
+            "$distance km",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   fontSize: 12,
