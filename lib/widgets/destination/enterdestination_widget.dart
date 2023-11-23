@@ -17,7 +17,9 @@ import 'package:geocoding/geocoding.dart' as geoCoding;
 
 import '../../commons/home/api_contents/functions/autolocation.dart';
 import '../../utils/colors.dart';
+import '../custom_button.dart';
 import '../enterEmplacement.dart';
+import '../loader.dart';
 
 class enterDestination extends StatefulWidget {
   const enterDestination({super.key});
@@ -126,14 +128,16 @@ Widget searchBoxField(context) {
       // }),
 
       onChanged: (value) {
-        BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
+        if (value.toString().length > 2) {
+          BlocProvider.of<DestinationCubit>(context).getPlaces(value: value);
+        }
       },
       style: GoogleFonts.poppins(
           fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
       decoration: const InputDecoration(
           hintText: 'Entrez votre Destination',
           prefixIcon: Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 10),
             child: Icon(
               Icons.search,
               color: Appcolors.redColor,
@@ -162,24 +166,210 @@ Widget resultPlaces(context) {
 }
 
 Widget placeItem(context, {required String label, required Map destinstion}) {
-  return InkWell(
-    onTap: () {
-      BlocProvider.of<DestinationCubit>(context)
-          .saveDestinationValue(value: destinstion);
-      Get.bottomSheet(bottomcall(context));
-    },
-    child: Container(
-      child: Text(label),
+  return SingleChildScrollView(
+    child: InkWell(
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .saveDestinationValue(value: destinstion);
+        Get.bottomSheet(bottomcall(context));
+      },
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label),
+            Divider(color: Colors.black),
+          ],
+        ),
+      ),
     ),
   );
 }
 
 Widget bottomcall(context) {
-  return Container(
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    int step = state.destination!["step"];
+    if (step == 1) {
+      return courseCommandeWidget(context);
+    }
+
+    if (step == 2) {
+      return courseDetailsWidget(context);
+    }
+
+    if (step == 3) {
+      return drivers(context);
+    }
+
+    if (step == 4) {
+      return waitingForDriver(context);
+    }
+
+    return const SizedBox.shrink();
+  });
+}
+
+Widget waitingForDriver(context) {
+  return Ink(
     width: Get.width,
-    height: Get.height * 0.5,
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-    decoration: BoxDecoration(
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: SingleChildScrollView(
+      child: Column(
+        children: [
+          courseDetailsItem(context,
+              text: "En attente d'une confirmation du taxi..."),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget drivers(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: BlocBuilder<DestinationCubit, DestinationState>(
+        builder: (context, state) {
+      List? drivers = state.destination!["drivers"];
+
+      if (drivers!.isEmpty) {
+        return const Center(child: Text("Recherche des taxi encours..."));
+      }
+
+      return SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Voiture(s) disponible",
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: Colors.black54,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+            if (state.destination!["error"] != '')
+              Text(
+                state.destination!["error"],
+                style: const TextStyle(color: Colors.red),
+              ),
+            Column(
+              children: drivers
+                  .map((driver) => courseDetailsItem(context,
+                      driver: driver,
+                      text: driver["names"] +
+                          ' à' +
+                          driver["distance"].toString() +
+                          'm'))
+                  .toList(),
+            ),
+          ],
+        ),
+      );
+    }),
+  );
+}
+
+Widget courseDetailsWidget(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        color: Colors.white),
+    child: SingleChildScrollView(
+      child: BlocBuilder<DestinationCubit, DestinationState>(
+          builder: (context, state) {
+        Map? courseDetails = state.destination!["currentService"];
+        return Column(
+          children: [
+            courseDetailsItem(context,
+                text: courseDetails!["totalAmount"].toString() +
+                    courseDetails["currency"].toString()),
+            courseDetailsItem(context, text: courseDetails["service"]["name"]),
+            courseDetailsItem(context, text: "Autres détails C"),
+            customButton(context,
+                text: "Commander un taxi",
+                icon: SvgPicture.asset(
+                  "assets/icons/location.svg",
+                  color: Colors.grey.shade100,
+                  height: 16,
+                ),
+                onTap: () => BlocProvider.of<DestinationCubit>(context)
+                    .findAvailableCar()),
+          ],
+        );
+      }),
+    ),
+  );
+}
+
+Widget courseDetailsItem(context, {required String text, Map? driver}) {
+  return InkWell(
+    onTap: () {
+      if (driver!.isNotEmpty) {
+        BlocProvider.of<DestinationCubit>(context).onChooseDriver(driver["id"]);
+        return;
+      }
+    },
+    child: Container(
+      width: Get.width,
+      height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                spreadRadius: 4,
+                blurRadius: 10)
+          ]),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.monetization_on,
+            color: Colors.grey,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            text,
+            style: const TextStyle(
+                color: Colors.black, fontSize: 12, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.start,
+            softWrap: true,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget courseCommandeWidget(context) {
+  return Ink(
+    width: Get.width,
+    height: 400,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8), topRight: Radius.circular(8)),
         color: Colors.white),
@@ -190,22 +380,22 @@ Widget bottomcall(context) {
         const SizedBox(
           height: 10,
         ),
-        Text(
-          "confirmer la course",
+        const Text(
+          "Confirmer la course",
           style: TextStyle(
-              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+              color: Colors.black54, fontSize: 22, fontWeight: FontWeight.w400),
         ),
-        SizedBox(
+        const SizedBox(
           height: 40,
         ),
-        BuildSourcepart(),
-        SizedBox(
+        const BuildSourcepart(),
+        const SizedBox(
           height: 20,
         ),
         Container(
           width: Get.width,
           height: 50,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
@@ -218,8 +408,8 @@ Widget bottomcall(context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("A : "),
-              Icon(
+              const Text("A : "),
+              const Icon(
                 Icons.location_on,
                 color: Color.fromARGB(255, 247, 77, 65),
               ),
@@ -227,7 +417,7 @@ Widget bottomcall(context) {
                 builder: (context, state) {
                   return Text(
                     state.destination!["destinationValue"]['name'],
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12,
                         fontWeight: FontWeight.w600),
@@ -241,28 +431,25 @@ Widget bottomcall(context) {
         const SizedBox(
           height: 15,
         ),
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              BlocProvider.of<DestinationCubit>(context).sendRequest();
-            },
-            icon: SvgPicture.asset(
-              "assets/icons/location.svg",
-              color: Color.fromARGB(255, 19, 17, 17),
-              height: 16,
-            ),
-            label: const Text("confirmer"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 250, 80, 80),
-              foregroundColor: Color.fromARGB(221, 10, 10, 10),
-              elevation: 0,
-              fixedSize: const Size(double.infinity, 40),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-            ),
+        BlocBuilder<DestinationCubit, DestinationState>(
+            builder: (context, state) {
+          if (!state.destination!['loading']) {
+            return const SizedBox.shrink();
+          }
+          return loader(context);
+        }),
+        const SizedBox(
+          height: 15,
+        ),
+        customButton(
+          context,
+          text: "Confirmer",
+          icon: SvgPicture.asset(
+            "assets/icons/location.svg",
+            color: Colors.grey.shade100,
+            height: 16,
           ),
+          onTap: () => BlocProvider.of<DestinationCubit>(context).sendRequest(),
         ),
       ],
     ),

@@ -9,7 +9,14 @@ class DestinationState {
 Map initialState() {
   return {
     'places': [],
+    'drivers': [],
+    'driver': {},
     'destinationValue': {},
-    'sendRequest':{},
+    'startPoint': null,
+    'sendRequest': {},
+    'currentService': {},
+    'step': 0,
+    'loading': false,
+    'error': '',
   };
 }

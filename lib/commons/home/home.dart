@@ -5,6 +5,7 @@ import 'package:agrobeba/widgets/notificationicon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -25,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late LatLng source;
+  Position? currentPosition;
   Set<Marker> markers = Set<Marker>();
 
   String? _mapStyle;
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _determinePosition();
     rootBundle.loadString('assets/map_style.txt').then((String) {
       _mapStyle = String;
     });
@@ -44,6 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
   );
 
   GoogleMapController? myMapController;
+  _determinePosition() async {
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      currentPosition = position;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           GoogleMap(
             markers: markers,
+            // {
+            //   Marker(
+            //     markerId: MarkerId("votre position"),
+            //     position: LatLng(
+            //         currentPosition!.latitude, currentPosition!.longitude),
+            //   ),
+            // },
+            //  markers: markers,
             zoomControlsEnabled: false,
             // mapType: MapType.terrain,
             onMapCreated: (GoogleMapController controller) {
