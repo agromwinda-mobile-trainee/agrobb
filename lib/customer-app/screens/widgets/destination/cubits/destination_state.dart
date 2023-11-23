@@ -16,6 +16,7 @@ Map initialState() {
       "destinationValue": "",
       "startPoint": "",
     },
+    'selectedServiceID': 0,
     'destinationValue': null,
     'startPoint': null,
     'emplacementField': '',

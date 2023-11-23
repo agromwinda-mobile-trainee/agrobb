@@ -18,14 +18,26 @@ class BuildBottomSheet extends StatefulWidget {
   State<BuildBottomSheet> createState() => _BuildBottomSheetState();
 }
 
-class _BuildBottomSheetState extends State<BuildBottomSheet> {
+class _BuildBottomSheetState extends State<BuildBottomSheet>
+    with SingleTickerProviderStateMixin {
   TextEditingController startPointTextController = TextEditingController();
   TextEditingController destinationTextController = TextEditingController();
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this, // the SingleTickerProviderStateMixin
+      duration: const Duration(seconds: 10),
+    );
+  }
 
   @override
   void dispose() {
     startPointTextController.dispose();
     destinationTextController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -157,13 +169,10 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
       width: 100,
       child: SpinKitSpinningLines(
         color: Colors.red,
-        duration: Duration(microseconds: 500),
+        duration: Duration(minutes: 10),
         lineWidth: 3,
-        size: 50.0,
-        // controller: AnimationController(
-        //   vsync: this,
-        //   duration: const Duration(milliseconds: 1200),
-        // ),
+        size: 200.0,
+        // controller: _controller,
       ),
     );
   }
@@ -174,26 +183,34 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
       width: MediaQuery.of(context).size.width,
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Flex(
           direction: Axis.vertical,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            destinationFormWidgetHead(
-              context,
-              title: "Détails de la course",
-              onTap: () => BlocProvider.of<DestinationCubit>(context)
-                  .onChangeField(field: "step", value: 0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: destinationFormWidgetHead(
+                context,
+                title: "Détails de la course",
+                onTap: () => BlocProvider.of<DestinationCubit>(context)
+                    .onChangeField(field: "step", value: 0),
+              ),
             ),
-            destinationDetails(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: destinationDetails(context),
+            ),
             const SizedBox(height: 22),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: BlocBuilder<DestinationCubit, DestinationState>(
                   builder: (context, state) {
                 return Row(
                   children: [
+                    const SizedBox(width: 20),
                     driversWidget(
                       context,
                       imageAsset: 'assets/images/cars/car1.png',
@@ -236,44 +253,59 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
     required int serviceID,
   }) {
     return ZoomTapAnimation(
-      onTap: () =>
-          BlocProvider.of<DestinationCubit>(context).onChooseDriver(serviceID),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(right: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200.withOpacity(.6),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              imageAsset,
-              width: 60,
-              height: 40,
-            ),
-            Text(
-              type,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(fontSize: 12),
-              textAlign: TextAlign.start,
-            ),
-            Text(
-              price,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.4,
-                  ),
-              textAlign: TextAlign.start,
-            ),
-          ],
-        ),
-      ),
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .onChangeField(field: "selectedServiceID", value: serviceID);
+      },
+      child: BlocBuilder<DestinationCubit, DestinationState>(
+          builder: (context, state) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            color: (state.destination!["selectedServiceID"] == serviceID)
+                ? Theme.of(context).colorScheme.primary
+                : Colors.grey.shade200.withOpacity(.6),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                imageAsset,
+                width: 60,
+                height: 40,
+              ),
+              Text(
+                type,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontSize: 12,
+                      color:
+                          (state.destination!["selectedServiceID"] == serviceID)
+                              ? Colors.white54
+                              : Colors.black,
+                    ),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                price,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.4,
+                      color:
+                          (state.destination!["selectedServiceID"] == serviceID)
+                              ? Colors.white
+                              : Colors.black,
+                    ),
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
