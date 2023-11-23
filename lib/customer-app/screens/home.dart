@@ -1,5 +1,9 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/buildbottomsheet.dart';
+import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
+import 'package:agrobeba/driver-app/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -38,35 +42,47 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const BuildDrawer(),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
-          children: [
-            GoogleMap(
-              markers: markers,
-              zoomControlsEnabled: false,
-              // mapType: MapType.terrain,
-              onMapCreated: (GoogleMapController controller) {
-                myMapController = controller;
-                myMapController!.setMapStyle(_mapStyle);
-              },
-              initialCameraPosition: _kGooglePlex,
-            ),
-            // buildProfileTile(),
+      body: BlocBuilder<LoginProcessCubit, LoginProcessState>(
+          builder: (context, state) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              GoogleMap(
+                markers: markers,
+                zoomControlsEnabled: false,
+                // mapType: MapType.terrain,
+                onMapCreated: (GoogleMapController controller) {
+                  myMapController = controller;
+                  myMapController!.setMapStyle(_mapStyle);
+                },
+                initialCameraPosition: _kGooglePlex,
+              ),
+              // buildProfileTile(),
 
-            // const enterDestination(),
-            // destinationInputField(context),
-            // showSourceField ? enterEmplacement() : Container(),
-            // currentLocationIcon(),
+              // const enterDestination(),
+              // destinationInputField(context),
+              // showSourceField ? enterEmplacement() : Container(),
+              // currentLocationIcon(),
 
-            // noficationIcon(),
+              // noficationIcon(),
 
-            iconMenu(context),
-            const BuildBottomSheet(),
-          ],
-        ),
-      ),
+              (state.usercontent!["role"] == "driver")
+                  ? awaitForCommandes(context)
+                  : const SizedBox.shrink(),
+
+              (state.usercontent!["role"] == "customer")
+                  ? iconMenu(context)
+                  : const SizedBox.shrink(),
+
+              (state.usercontent!["role"] == "customer")
+                  ? const BuildBottomSheet()
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

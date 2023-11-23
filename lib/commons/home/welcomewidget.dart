@@ -26,8 +26,8 @@ class _WelcomeState extends State<Welcome> {
         builder: (context, state) {
       int? statusCode = state.usercontent!['code'];
       String? role = state.usercontent!['role'];
-      if (statusCode == 200 && role == "customer") return const HomeScreen();
-      if (statusCode == 200 && role == "driver") return const HomeDriver();
+      if (statusCode == 200) return const HomeScreen();
+      // if (statusCode == 200 && role == "driver") return const HomeDriver();
       if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
         return const Welcomeboard();
       }

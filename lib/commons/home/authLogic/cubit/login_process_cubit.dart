@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:agrobeba/customer-app/screens/widgets/welcomewidget.dart';
+import 'package:agrobeba/commons/home/welcomewidget.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
 import '../../api_contents/functions/getfunctions.dart';
