@@ -83,6 +83,57 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
   }
 
   Widget destinationFormWidget(context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 200),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return ScaleTransition(scale: animation, child: child);
+      },
+      child: BlocBuilder<DestinationCubit, DestinationState>(
+          builder: (context, state) {
+        if (state.destination!["step"] == 0) {
+          return emplacement(context);
+        }
+
+        if (state.destination!["step"] == 1) {
+          return courseDetails(context);
+        }
+
+        return const SizedBox.shrink();
+      }),
+    );
+  }
+
+  Widget courseDetails(context) {
+    return Container(
+      height: MediaQuery.of(context).size.height - 250,
+      width: MediaQuery.of(context).size.width,
+      decoration: bottomSheetDecoration(context),
+      child: SingleChildScrollView(
+        child: Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            destinationFormWidgetHead(
+              context,
+              title: "Détails de la course",
+              onTap: () => BlocProvider.of<DestinationCubit>(context)
+                  .onChangeField(field: "step", value: 0),
+            ),
+            destinationFormWidgetInputFields(context),
+            const SizedBox(height: 20),
+            resultPlaces(
+              context,
+              destinationTextController: destinationTextController,
+              startPointTextController: startPointTextController,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget emplacement(context) {
     return Container(
       height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width,
@@ -94,7 +145,13 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            destinationFormWidgetHead(context),
+            destinationFormWidgetHead(context,
+                title: "Précisez l'emplacement",
+                onTap: () => {
+                      Get.back(),
+                      BlocProvider.of<DestinationCubit>(context)
+                          .onChangeField(field: "places", value: []),
+                    }),
             destinationFormWidgetInputFields(context),
             const SizedBox(height: 20),
             resultPlaces(
@@ -164,17 +221,14 @@ Decoration bottomSheetDecoration(context) {
   );
 }
 
-Widget destinationFormWidgetHead(context) {
+Widget destinationFormWidgetHead(context,
+    {required String title, required Function onTap}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 22),
     child: Row(
       children: [
         InkWell(
-          onTap: () => {
-            Get.back(),
-            BlocProvider.of<DestinationCubit>(context)
-                .onChangeField(field: "places", value: []),
-          },
+          onTap: () => onTap(),
           splashColor: Colors.grey.shade400,
           focusColor: Colors.grey.shade400,
           hoverColor: Colors.grey.shade400,
@@ -194,7 +248,7 @@ Widget destinationFormWidgetHead(context) {
         ),
         const SizedBox(width: 12),
         Text(
-          "Précisez l'emplacement",
+          title,
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 17,
