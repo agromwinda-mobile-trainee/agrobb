@@ -2,10 +2,10 @@ import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
+import 'package:agrobeba/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 
@@ -131,16 +131,27 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                   builder: (context, state) {
                 return Row(
                   children: [
-                    driversWidget(context,
-                        imageAsset: 'assets/images/cars/car1.png',
-                        type: "Standard",
-                        price:
-                            "${state.destination!["currentService"]["totalAmount"] * 2500} CDF"),
-                    driversWidget(context,
-                        imageAsset: 'assets/images/cars/car2.png',
-                        type: "Standard",
-                        price:
-                            "${state.destination!["currentService"]["totalAmount"] * 4600} CDF"),
+                    driversWidget(
+                      context,
+                      imageAsset: 'assets/images/cars/car1.png',
+                      type: "Standard",
+                      price:
+                          "${state.destination!["currentService"]["totalAmount"] * AppConstants.standardCar * AppConstants.usdToCdf} CDF",
+                    ),
+                    driversWidget(
+                      context,
+                      imageAsset: 'assets/images/cars/car2.png',
+                      type: "Comfort",
+                      price:
+                          "${state.destination!["currentService"]["totalAmount"] * AppConstants.comfortCar * AppConstants.usdToCdf} CDF",
+                    ),
+                    driversWidget(
+                      context,
+                      imageAsset: 'assets/images/cars/car2.png',
+                      type: "Comfort",
+                      price:
+                          "${state.destination!["currentService"]["totalAmount"] * AppConstants.classCar * AppConstants.usdToCdf} CDF",
+                    ),
                   ],
                 );
               }),
@@ -151,12 +162,16 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
     );
   }
 
-  Widget driversWidget(context,
-      {required String imageAsset,
-      required String price,
-      required String type}) {
+  Widget driversWidget(
+    context, {
+    required String imageAsset,
+    required String price,
+    required String type,
+    required int serviceID,
+  }) {
     return ZoomTapAnimation(
-      onTap: () {},
+      onTap: () =>
+          BlocProvider.of<DestinationCubit>(context).onChooseDriver(serviceID),
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(right: 10),
@@ -247,14 +262,18 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
           color: Colors.black87,
         ),
         const SizedBox(width: 22),
-        Text(
-          "1.4 km",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-        )
+        BlocBuilder<DestinationCubit, DestinationState>(
+            builder: (context, state) {
+          return Text(
+            state.destination!["currentService"]["service"]["distancePrice"] +
+                " km",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                ),
+          );
+        })
       ]),
     );
   }

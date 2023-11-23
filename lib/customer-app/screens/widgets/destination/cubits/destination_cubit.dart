@@ -142,20 +142,22 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> onChooseDriver(int driverID) async {
+  Future<void> onChooseDriver(int serviceID) async {
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": true,
         'error': '',
       }));
-      Map? driver = await chooseDriver(driverID);
+
+      Map? driver = await chooseDriver(serviceID);
+
       if (driver != null) {
         emit(DestinationState(destination: {
           ...state.destination!,
           "driver": driver,
           "loading": false,
-          "step": 4,
+          "step": 2,
           "error": '',
         }));
         return;
