@@ -1,4 +1,4 @@
-import 'package:agrobeba/widgets/destination/buildbottomsheet.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/buildbottomsheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/destination_cubit.dart';

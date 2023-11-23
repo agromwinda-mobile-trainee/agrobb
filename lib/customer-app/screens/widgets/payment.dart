@@ -1,7 +1,4 @@
-import 'package:agrobeba/widgets/textWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class buildPaymentCardWidget extends StatefulWidget {
   const buildPaymentCardWidget({super.key});

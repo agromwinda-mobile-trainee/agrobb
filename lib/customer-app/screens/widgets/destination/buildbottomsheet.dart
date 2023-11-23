@@ -1,8 +1,7 @@
-import 'package:agrobeba/widgets/currentlocationicon.dart';
-import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
-import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
-import 'package:agrobeba/widgets/destination/input_form_fields.dart';
-import 'package:agrobeba/widgets/loader.dart';
+import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';

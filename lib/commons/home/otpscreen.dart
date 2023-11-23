@@ -1,13 +1,8 @@
-import 'package:agrobeba/commons/home/loginscreen.dart';
 import 'package:agrobeba/controller/auth_controller.dart';
-import 'package:agrobeba/widgets/introwidget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:agrobeba/customer-app/screens/widgets/introwidget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/otpScreenwidegt.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-
-import '../../widgets/otpScreenwidegt.dart';
 
 class OtpScreen extends StatefulWidget {
   String phoneNumber;

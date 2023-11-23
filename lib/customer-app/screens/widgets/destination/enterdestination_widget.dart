@@ -1,23 +1,13 @@
-import 'dart:developer';
-
-import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
-import 'package:agrobeba/widgets/destination/buildbottomsheet.dart';
-import 'package:agrobeba/widgets/buildriderconfirmation.dart';
-import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
+import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-//import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // # import 'package:google_maps_webservice/places.dart';
-import 'package:geocoding/geocoding.dart' as geoCoding;
 import 'package:iconly/iconly.dart';
-
-import '../../commons/home/api_contents/functions/autolocation.dart';
-import '../../utils/colors.dart';
 import '../custom_button.dart';
 import '../enterEmplacement.dart';
 import '../loader.dart';

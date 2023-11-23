@@ -1,15 +1,11 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/commons/home/loginscreen.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/driver-app/screens/home.dart';
-import 'package:agrobeba/widgets/loginWidget.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
-import '../commons/home/authLogic/cubit/login_process_cubit.dart';
-import '../customer-app/screens/home.dart';
-import '../utils/colors.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -40,8 +36,6 @@ class _WelcomeState extends State<Welcome> {
   }
 }
 
-// textmoov
-
 class MovingText extends StatefulWidget {
   @override
   _MovingTextState createState() => _MovingTextState();
@@ -57,11 +51,11 @@ class _MovingTextState extends State<MovingText>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     );
 
     _offsetAnimation = Tween<Offset>(
-      begin: Offset(0.0, -1.0),
+      begin: const Offset(0.0, -1.0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -102,9 +96,9 @@ class _WelcomeboardState extends State<Welcomeboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 253, 250, 250),
+        backgroundColor: const Color.fromARGB(255, 253, 250, 250),
         body: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -120,7 +114,7 @@ class _WelcomeboardState extends State<Welcomeboard> {
                 FittedBox(
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(LoginScreen());
+                      Get.to(const LoginScreen());
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 20),
