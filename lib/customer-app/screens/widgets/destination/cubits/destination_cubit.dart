@@ -79,7 +79,7 @@ class DestinationCubit extends Cubit<DestinationState> {
         emit(DestinationState(destination: {
           ...state.destination!,
           'currentService': currentService,
-          'step': 2,
+          'step': 1,
           'loading': false,
           'error': '',
         }));

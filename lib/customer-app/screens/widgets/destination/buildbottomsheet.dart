@@ -120,6 +120,49 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
               onTap: () => BlocProvider.of<DestinationCubit>(context)
                   .onChangeField(field: "step", value: 0),
             ),
+            ListTile(
+              minLeadingWidth: 80,
+              leading: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(children: [
+                  const Icon(
+                    IconlyBroken.discovery,
+                    size: 12,
+                    color: Colors.black87,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    "1.4 km",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 12,
+                        ),
+                  )
+                ]),
+              ),
+              title: Text(
+                "Destination",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+              ),
+              subtitle: BlocBuilder<DestinationCubit, DestinationState>(
+                  builder: (context, state) {
+                return Text(
+                  state.destination!["destinationValue"]["name"].toString(),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontSize: 18,
+                      ),
+                );
+              }),
+            ),
             destinationFormWidgetInputFields(context),
             const SizedBox(height: 20),
             resultPlaces(
