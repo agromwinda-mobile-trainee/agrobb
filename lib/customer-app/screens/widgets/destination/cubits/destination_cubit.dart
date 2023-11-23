@@ -42,7 +42,6 @@ class DestinationCubit extends Cubit<DestinationState> {
       ...state.destination!,
       emplacementField: value,
       "emplacementForm": emplacementForm,
-      "step": 1,
       'error': '',
     }));
   }

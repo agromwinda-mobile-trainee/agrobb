@@ -52,7 +52,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Agrobeba',
         theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(textTheme),
+          textTheme: GoogleFonts.poppinsTextTheme(textTheme).copyWith(
+            bodyMedium: const TextStyle(color: Colors.black),
+            bodySmall: const TextStyle(color: Colors.black),
+            bodyLarge: const TextStyle(color: Colors.black),
+          ),
           colorScheme: const ColorScheme.light(
             background: Colors.white,
             primary: Color.fromRGBO(220, 80, 91, 1),

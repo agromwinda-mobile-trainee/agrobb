@@ -5,6 +5,7 @@ import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fie
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconly/iconly.dart';
 
 class BuildBottomSheet extends StatefulWidget {
@@ -105,10 +106,11 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
 
   Widget courseDetails(context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 250,
+      height: 400,
       width: MediaQuery.of(context).size.width,
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Flex(
           direction: Axis.vertical,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,59 +122,101 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
               onTap: () => BlocProvider.of<DestinationCubit>(context)
                   .onChangeField(field: "step", value: 0),
             ),
-            ListTile(
-              minLeadingWidth: 80,
-              leading: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(children: [
-                  const Icon(
-                    IconlyBroken.discovery,
-                    size: 12,
-                    color: Colors.black87,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    "1.4 km",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          fontSize: 12,
-                        ),
-                  )
-                ]),
-              ),
-              title: Text(
-                "Destination",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-              ),
-              subtitle: BlocBuilder<DestinationCubit, DestinationState>(
-                  builder: (context, state) {
-                return Text(
-                  state.destination!["destinationValue"]["name"].toString(),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        fontSize: 18,
-                      ),
-                );
-              }),
-            ),
-            destinationFormWidgetInputFields(context),
-            const SizedBox(height: 20),
-            resultPlaces(
-              context,
-              destinationTextController: destinationTextController,
-              startPointTextController: startPointTextController,
-            ),
+            destinationDetails(context),
+            driversWidget(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget driversWidget(context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade200.withOpacity(.6),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SvgPicture.asset(
+            "assets/images/cars/car1.png",
+            semanticsLabel: 'Taxi standard',
+            width: 50,
+            height: 40,
+            fit: BoxFit.cover,
+          ),
+          Text(
+            "Standard",
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget destinationDetails(context) {
+    return Flex(
+      direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Destination",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w600),
+            ),
+            BlocBuilder<DestinationCubit, DestinationState>(
+                builder: (context, state) {
+              return Text(
+                state.destination!["destinationValue"]?["name"] ??
+                    "Avenue de l'Equateur",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+              );
+            }),
+          ],
+        ),
+        const Expanded(child: SizedBox()),
+        distance(context),
+      ],
+    );
+  }
+
+  Widget distance(context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(children: [
+        const Icon(
+          IconlyBroken.discovery,
+          size: 12,
+          color: Colors.black87,
+        ),
+        const SizedBox(width: 22),
+        Text(
+          "1.4 km",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+              ),
+        )
+      ]),
     );
   }
 
