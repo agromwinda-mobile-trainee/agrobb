@@ -118,8 +118,29 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
           return waitingForDriverConfirmation(context);
         }
 
+        if (state.destination!["step"] == 3) {
+          return acceptedCommande(context);
+        }
+
         return const SizedBox.shrink();
       }),
+    );
+  }
+
+  Widget acceptedCommande(context) {
+    return Container(
+      height: 400,
+      width: MediaQuery.of(context).size.width,
+      decoration: bottomSheetDecoration(context),
+      child: SingleChildScrollView(
+        child: Column(children: [
+          destinationFormWidgetHead(
+            context,
+            title: "Informations du chauffeur",
+            onTap: () => Get.back(),
+          ),
+        ]),
+      ),
     );
   }
 
