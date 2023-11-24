@@ -47,7 +47,7 @@ class _ProfileSreenState extends State<ProfileSreen> {
         setState(() {
           isLoading = false;
         });
-        Get.to(() => const HomeScreen());
+        Get.to(() => const HomeCustomer());
       }
     } catch (e) {
       print('$e');

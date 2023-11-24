@@ -86,6 +86,30 @@ Widget awaitForCommandes(context) {
       child: BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
         List? commandes = state.driver!["commandes"];
 
+        if (state.driver!["acceptedCommande"] != null) {
+          Column(
+            children: [
+              Text(
+                "Vous avez accepté une course",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 20),
+              BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
+                return Text(
+                  "Identifiant de la commande: ${state.driver!["acceptedCommande"]?["id"] ?? "--"}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                );
+              }),
+              BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
+                return Text(
+                  "Numero du téléphone du client: ${state.driver!["acceptedCommande"]?["customer"]["phoneNumber"] ?? "--"}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                );
+              }),
+            ],
+          );
+        }
+
         if (commandes!.isEmpty) {
           return const Center(
             child: Text(

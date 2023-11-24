@@ -1,9 +1,5 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
-import 'package:agrobeba/customer-app/screens/home.dart';
-import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:agrobeba/utils/colors.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -23,14 +19,14 @@ class _BuildDrawerState extends State<BuildDrawer> {
       {required String title,
       required Function onPressed,
       Color color = Colors.black,
-      double fontSize = 12,
+      double fontSize = 18,
       FontWeight fontWeight = FontWeight.w700,
       double height = 39,
       bool isVisible = false}) {
     return SizedBox(
       height: height,
       child: ListTile(
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.all(0),
         // minVerticalPadding: 0,
         dense: true,
         onTap: () => onPressed(),
@@ -89,17 +85,54 @@ class _BuildDrawerState extends State<BuildDrawer> {
                 //     )),
                 buildDrawerItem(
                     title: 'mon compte', onPressed: () => Get.to(() => null)),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  indent: 8,
+                  endIndent: 140.0,
+                  height: 8,
+                  thickness: 3,
+                  color: Color.fromARGB(255, 92, 92, 92),
+                ),
                 buildDrawerItem(
                     title: 'Services', onPressed: () {}, isVisible: true),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 112, 112, 112),
+                ),
                 buildDrawerItem(title: 'moyens de paiement', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 90, 90, 90),
+                ),
                 buildDrawerItem(title: 'Codes promo', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 100, 100, 100),
+                ),
                 buildDrawerItem(title: 'Parametres', onPressed: () {}),
+                const SizedBox(
+                  height: 4,
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 109, 108, 108),
+                ),
                 buildDrawerItem(title: 'conditions ', onPressed: () {}),
-                buildDrawerItem(title: 'se deconnecter', onPressed: () {}),
+                const Divider(
+                  color: Color.fromARGB(255, 88, 88, 88),
+                ),
+                //buildDrawerItem(title: 'se deconnecter', onPressed: () {})
                 buildDrawerItem(
                     title: 'Retour',
                     onPressed: () {
-                      Get.to(HomeScreen());
+                      Get.back();
                     })
               ],
             ),
@@ -178,7 +211,7 @@ Widget switchMode(context) {
           groupValue: mode,
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
-                .onChangeusercontent(field: "role", value: "customer");
+                .onChangeusercontent(field: "isDriver", value: false);
           },
         ),
       ),
@@ -189,7 +222,7 @@ Widget switchMode(context) {
           groupValue: mode,
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
-                .onChangeusercontent(field: "role", value: "driver");
+                .onChangeusercontent(field: "isDriver", value: true);
           },
         ),
       ),

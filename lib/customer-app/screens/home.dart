@@ -5,14 +5,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../../commons/home/drawer.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeCustomer extends StatefulWidget {
+  const HomeCustomer({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeCustomer> createState() => _HomeCustomerState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeCustomerState extends State<HomeCustomer> {
   late LatLng source;
   Set<Marker> markers = <Marker>{};
 

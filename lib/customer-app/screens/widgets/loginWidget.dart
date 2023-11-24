@@ -35,6 +35,28 @@ Widget loginWidget(Function onSubmit) {
             child: Row(
               children: [
                 Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 1,
+                        height: 55,
+                        color: Color.fromARGB(255, 119, 119, 119),
+                        child: Container(
+                            child: Row(
+                          children: [
+                            textWidget(
+                                text: '  num Tel',
+                                color: Color.fromARGB(255, 78, 77, 77)),
+                            const Icon(
+                              Icons.done,
+                              color: Color.fromARGB(255, 241, 87, 87),
+                            ),
+                          ],
+                        )),
+                      ),
+                    )),
+                Expanded(
                     flex: 3,
                     child: TextField(
                       onSubmitted: (String? input) => sendCode(input!),
@@ -44,6 +66,7 @@ Widget loginWidget(Function onSubmit) {
                           hintText: AppConstants.numTel,
                           border: InputBorder.none),
                     )),
+<<<<<<< HEAD:lib/customer-app/screens/widgets/loginWidget.dart
                 Expanded(
                     flex: 1,
                     child: InkWell(
@@ -64,6 +87,8 @@ Widget loginWidget(Function onSubmit) {
                         ),
                       ),
                     )),
+=======
+>>>>>>> origin/Driver:lib/widgets/loginWidget.dart
               ],
             ),
           ),
