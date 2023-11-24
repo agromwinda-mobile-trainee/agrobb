@@ -66,29 +66,6 @@ Widget loginWidget(Function onSubmit) {
                           hintText: AppConstants.numTel,
                           border: InputBorder.none),
                     )),
-<<<<<<< HEAD:lib/customer-app/screens/widgets/loginWidget.dart
-                Expanded(
-                    flex: 1,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        width: 1,
-                        height: 55,
-                        color: const Color.fromARGB(255, 241, 87, 87),
-                        child: Row(
-                          children: [
-                            textWidget(
-                                text: 'Valider', color: Appcolors.redColor),
-                            const Icon(
-                              Icons.done,
-                              color: Color.fromARGB(255, 241, 87, 87),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-=======
->>>>>>> origin/Driver:lib/widgets/loginWidget.dart
               ],
             ),
           ),
