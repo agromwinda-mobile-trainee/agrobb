@@ -41,10 +41,6 @@ class DestinationCubit extends Cubit<DestinationState> {
       ...state.destination!,
       emplacementField: value,
       "emplacementForm": emplacementForm,
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/cubits/destination_cubit.dart
-=======
-      "step": 1,
->>>>>>> origin/Driver:lib/widgets/destination/cubits/destination_cubit.dart
       'error': '',
     }));
   }
