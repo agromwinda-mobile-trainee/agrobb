@@ -26,7 +26,7 @@ class _BuildDrawerState extends State<BuildDrawer> {
     return SizedBox(
       height: height,
       child: ListTile(
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.all(0),
         // minVerticalPadding: 0,
         dense: true,
         onTap: () => onPressed(),
@@ -211,7 +211,7 @@ Widget switchMode(context) {
           groupValue: mode,
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
-                .onChangeusercontent(field: "role", value: "customer");
+                .onChangeusercontent(field: "isDriver", value: false);
           },
         ),
       ),
@@ -222,7 +222,7 @@ Widget switchMode(context) {
           groupValue: mode,
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
-                .onChangeusercontent(field: "role", value: "driver");
+                .onChangeusercontent(field: "isDriver", value: true);
           },
         ),
       ),
