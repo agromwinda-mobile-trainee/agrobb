@@ -99,7 +99,7 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> findAvailableCar() async {
+  Future<void> waittingAvailableCar() async {
     try {
       emit(DestinationState(destination: {
         ...state.destination!,

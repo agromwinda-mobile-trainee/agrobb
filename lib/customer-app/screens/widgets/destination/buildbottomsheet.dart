@@ -3,6 +3,7 @@ import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
+import 'package:agrobeba/customer-app/screens/widgets/loader.dart';
 import 'package:agrobeba/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -587,6 +588,133 @@ Widget prefixIconFinalPoint(context) {
     child: const Icon(
       IconlyBold.location,
       color: Colors.white,
+      size: 14,
+    ),
+  );
+}
+
+Widget resultPlaces(context,
+    {required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    List placeList = state.destination!["places"];
+    bool gettingPlaces = state.destination!["gettingPlaces"];
+    Map emplacementForm = state.destination!["emplacementForm"];
+
+    if (gettingPlaces) {
+      return loader(context);
+    }
+
+    if (emplacementForm["destinationValue"].toString().isNotEmpty &&
+        emplacementForm["startPoint"].toString().isNotEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: customButton(
+                context,
+                text: "Annuler",
+                textColor: Theme.of(context).colorScheme.primary,
+                borderColor: Theme.of(context).colorScheme.primary,
+                bkgColor: Colors.transparent,
+                onTap: () => Get.back(),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: customButton(
+                context,
+                text: "Confirmer",
+                onTap: () =>
+                    BlocProvider.of<DestinationCubit>(context).sendRequest(),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (placeList.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+          children: placeList
+              .map((e) => placeItem(
+                    context,
+                    label: e["name"],
+                    destination: e,
+                    destinationTextController: destinationTextController,
+                    startPointTextController: startPointTextController,
+                  ))
+              .toList()),
+    );
+  });
+}
+
+Widget placeItem(context,
+    {required String label,
+    required Map destination,
+    required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .saveEmplacementValue(value: destination);
+
+        if (state.destination!["emplacementField"] == "destinationValue") {
+          destinationTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        if (state.destination!["emplacementField"] == "startPoint") {
+          startPointTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        // Get.bottomSheet(bottomcall(context));
+      },
+      splashColor: Colors.grey.shade300,
+      child: Ink(
+        color: Colors.transparent,
+        child: ListTile(
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          subtitle: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+          ),
+          leading: placeItemLeading(context),
+          minLeadingWidth: 20,
+        ),
+      ),
+    );
+  });
+}
+
+Widget placeItemLeading(context) {
+  return Container(
+    height: 20,
+    width: 20,
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.grey,
+    ),
+    child: const Icon(
+      IconlyBold.location,
+      color: Colors.white70,
       size: 14,
     ),
   );
