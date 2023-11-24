@@ -99,7 +99,7 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> waittingAvailableCar() async {
+  Future<void> waittingCarConfirmation() async {
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
@@ -108,26 +108,28 @@ class DestinationCubit extends Cubit<DestinationState> {
       }));
 
       int requestID = state.destination!["currentService"]["id"];
-      List? drivers = [];
+      Map? drivers;
 
-      do {
-        drivers = await findDrivers(requestID);
-        emit(DestinationState(destination: {
-          ...state.destination!,
-          "drivers": drivers ?? [],
-          "step": 3,
-          'error': '',
-        }));
+      if (state.destination!["driver"] == null) {
+        do {
+          drivers = await findDrivers(requestID);
+          emit(DestinationState(destination: {
+            ...state.destination!,
+            "driver": drivers,
+            // "step": 3,
+            'error': '',
+          }));
 
-        print("no cars found");
-        await Future.delayed(const Duration(seconds: 10));
-      } while (drivers!.isEmpty);
+          print("***no driver found yet: $drivers");
+          await Future.delayed(const Duration(seconds: 5));
+        } while (drivers!.isEmpty);
+      }
 
-      print("some cars found");
+      print("***driver found: $drivers");
       emit(DestinationState(destination: {
         ...state.destination!,
         "loading": false,
-        "drivers": drivers,
+        "driver": drivers,
         "step": 3,
         'error': '',
       }));

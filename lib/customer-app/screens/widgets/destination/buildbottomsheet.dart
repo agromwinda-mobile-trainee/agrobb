@@ -140,6 +140,36 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             title: "Informations du chauffeur",
             onTap: () => Get.back(),
           ),
+          BlocBuilder<DestinationCubit, DestinationState>(
+              builder: (context, state) {
+            Map? driver = state.destination!["driver"];
+            return ZoomTapAnimation(
+              onTap: () {},
+              child: ListTile(
+                title: Text(
+                  "Nom chauffeur: ${driver!.toString()}  ",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                subtitle: Text(
+                  "Numero Telephone",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            );
+          }),
+          ZoomTapAnimation(
+            onTap: () {},
+            child: ListTile(
+              title: Text(
+                "Marque voiture",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              subtitle: Text(
+                "Numero d'immatriculation",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          ),
         ]),
       ),
     );

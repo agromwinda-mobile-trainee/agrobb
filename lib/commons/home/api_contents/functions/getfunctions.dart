@@ -232,17 +232,18 @@ Future<Map?>? sendCourseRequest(
   }
 }
 
-Future<List?> findDrivers(int idRequest) async {
+Future<Map?> findDrivers(int idRequest) async {
+  print("*** find driver. Id request: $idRequest");
   try {
-    var url = Uri.parse(
-        'http://api.agrobeba.com/api/drivers/personal-requests/$idRequest');
+    var url =
+        Uri.parse('http://api.agrobeba.com/api/personal_requests/$idRequest');
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       log('reponse');
       print(jsonDecode(response.body));
-      final Map? data = jsonDecode(response.body) as Map;
-      return data!["data"];
+      final Map data = jsonDecode(response.body) as Map;
+      return data["data"];
     } else {
       log("Request Failed: ${response.statusCode} - ${response.body}");
       return null;
