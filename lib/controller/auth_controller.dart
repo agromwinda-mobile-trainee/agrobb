@@ -62,7 +62,7 @@ class AuthController extends GetxController {
           .get()
           .then((value) {
         if (value.exists) {
-          Get.to(() => const HomeDriver());
+          Get.to(() => const HomeCustomer());
         } else {
           Get.to(() => const ProfileSreen());
         }
