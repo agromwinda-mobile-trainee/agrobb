@@ -66,7 +66,6 @@ Widget loginWidget(Function onSubmit) {
                           hintText: AppConstants.numTel,
                           border: InputBorder.none),
                     )),
-<<<<<<< HEAD:lib/customer-app/screens/widgets/loginWidget.dart
                 Expanded(
                     flex: 1,
                     child: InkWell(
@@ -87,8 +86,6 @@ Widget loginWidget(Function onSubmit) {
                         ),
                       ),
                     )),
-=======
->>>>>>> origin/Driver:lib/widgets/loginWidget.dart
               ],
             ),
           ),

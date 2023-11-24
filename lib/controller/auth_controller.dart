@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/commons/home/profil_Screen.dart';
+import 'package:agrobeba/driver-app/screens/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,7 +62,7 @@ class AuthController extends GetxController {
           .get()
           .then((value) {
         if (value.exists) {
-          Get.to(() => const HomeCustomer());
+          Get.to(() => const HomeDriver());
         } else {
           Get.to(() => const ProfileSreen());
         }
