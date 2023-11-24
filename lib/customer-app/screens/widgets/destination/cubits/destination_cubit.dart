@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 part 'destination_state.dart';
 
 class DestinationCubit extends Cubit<DestinationState> {
@@ -50,6 +51,30 @@ class DestinationCubit extends Cubit<DestinationState> {
       ...state.destination!,
       field: value,
     }));
+  }
+
+  Future<void> onCancelCommande() async {
+    try {
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'step': 0,
+        'loading': false,
+        'selectedServiceID': 0,
+        'destinationValue': null,
+        'startPoint': null,
+        'emplacementField': '',
+        'sendRequest': {},
+        'currentService': {},
+      }));
+      Get.back();
+    } catch (error) {
+      log("cancle failled: $error");
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'error': "Annulation echouée !",
+      }));
+      return;
+    }
   }
 
   Future<void> sendRequest() async {

@@ -204,7 +204,9 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             customButton(
               context,
               text: "Annuler la course",
-              onTap: () {},
+              onTap: () {
+                BlocProvider.of<DestinationCubit>(context).onCancelCommande();
+              },
               bkgColor: Colors.transparent,
               textColor: Theme.of(context).colorScheme.primary,
               borderColor: Theme.of(context).colorScheme.primary,
