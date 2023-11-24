@@ -139,7 +139,7 @@ class _BuildDrawerState extends State<BuildDrawer> {
           ),
           Spacer(),
           Divider(),
-          switchMode(context),
+          // switchMode(context),
           Divider(
             color: Colors.grey.withOpacity(.2),
             height: 2,
