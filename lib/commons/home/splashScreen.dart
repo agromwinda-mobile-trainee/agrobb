@@ -1,6 +1,10 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/home.dart';
+<<<<<<< HEAD
 import 'package:agrobeba/commons/home/welcomewidget.dart';
+=======
+import 'package:agrobeba/widgets/welcomewidget.dart';
+>>>>>>> origin/Driver
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

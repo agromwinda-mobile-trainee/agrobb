@@ -1,7 +1,16 @@
 import 'dart:developer';
+<<<<<<< HEAD
 import 'package:agrobeba/commons/home/welcomewidget.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get/get.dart';
+=======
+
+import 'package:agrobeba/customer-app/screens/home.dart';
+import 'package:agrobeba/widgets/welcomewidget.dart';
+import 'package:bloc/bloc.dart';
+import 'package:get/get.dart';
+import 'package:meta/meta.dart';
+>>>>>>> origin/Driver
 import '../../api_contents/functions/getfunctions.dart';
 part 'login_process_state.dart';
 

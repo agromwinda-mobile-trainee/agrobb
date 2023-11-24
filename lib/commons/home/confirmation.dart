@@ -1,6 +1,9 @@
 import 'package:agrobeba/customer-app/screens/home.dart';
+<<<<<<< HEAD
 import 'package:agrobeba/customer-app/screens/widgets/introwidget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/textWidget.dart';
+=======
+>>>>>>> origin/Driver
 import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';
 

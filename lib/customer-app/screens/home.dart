@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/buildbottomsheet.dart';
 import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
@@ -7,6 +8,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
+=======
+import 'dart:convert';
+
+import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
+import 'package:agrobeba/widgets/notificationicon.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
+import 'package:iconly/iconly.dart';
+
+import '../../widgets/destination/buildbottomsheet.dart';
+import '../../widgets/currentlocationicon.dart';
+import '../../widgets/enterEmplacement.dart';
+import '../../widgets/widget_build_Tile.dart';
+>>>>>>> origin/Driver
 import '../../commons/home/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +38,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late LatLng source;
+<<<<<<< HEAD
   Set<Marker> markers = <Marker>{};
+=======
+  Set<Marker> markers = Set<Marker>();
+>>>>>>> origin/Driver
 
   String? _mapStyle;
 
@@ -41,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       drawer: const BuildDrawer(),
       body: BlocBuilder<LoginProcessCubit, LoginProcessState>(
           builder: (context, state) {
@@ -83,6 +108,38 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
       }),
+=======
+      drawer: BuildDrawer(),
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            GoogleMap(
+              markers: markers,
+              zoomControlsEnabled: false,
+              // mapType: MapType.terrain,
+              onMapCreated: (GoogleMapController controller) {
+                myMapController = controller;
+                myMapController!.setMapStyle(_mapStyle);
+              },
+              initialCameraPosition: _kGooglePlex,
+            ),
+            // buildProfileTile(),
+
+            // const enterDestination(),
+            // destinationInputField(context),
+            // showSourceField ? enterEmplacement() : Container(),
+            // currentLocationIcon(),
+
+            // noficationIcon(),
+
+            iconMenu(context),
+            BuildBottomSheet(),
+          ],
+        ),
+      ),
+>>>>>>> origin/Driver
     );
   }
 }

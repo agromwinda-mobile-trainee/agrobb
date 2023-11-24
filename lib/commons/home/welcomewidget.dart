@@ -1,13 +1,27 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/commons/home/loginscreen.dart';
+<<<<<<< HEAD:lib/commons/home/welcomewidget.dart
 import 'package:agrobeba/commons/home/routestack.dart';
 import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/driver-app/screens/home.dart';
 import 'package:agrobeba/utils/colors.dart';
+=======
+import 'package:agrobeba/driver-app/screens/home.dart';
+import 'package:agrobeba/widgets/loginWidget.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+>>>>>>> origin/Driver:lib/widgets/welcomewidget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+<<<<<<< HEAD:lib/commons/home/welcomewidget.dart
+=======
+import '../commons/home/authLogic/cubit/login_process_cubit.dart';
+import '../customer-app/screens/home.dart';
+import '../utils/colors.dart';
+
+>>>>>>> origin/Driver:lib/widgets/welcomewidget.dart
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
@@ -27,8 +41,13 @@ class _WelcomeState extends State<Welcome> {
         builder: (context, state) {
       int? statusCode = state.usercontent!['code'];
       String? role = state.usercontent!['role'];
+<<<<<<< HEAD:lib/commons/home/welcomewidget.dart
       if (statusCode == 200) return const RouteStack();
       // if (statusCode == 200 && role == "driver") return const HomeDriver();
+=======
+      if (statusCode == 200 && role == "customer") return const HomeScreen();
+      if (statusCode == 200 && role == "driver") return const HomeDriver();
+>>>>>>> origin/Driver:lib/widgets/welcomewidget.dart
       if (statusCode == 404 || statusCode == 400 || statusCode == 500) {
         return const Welcomeboard();
       }
