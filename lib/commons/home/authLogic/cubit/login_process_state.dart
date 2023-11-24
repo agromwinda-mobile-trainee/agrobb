@@ -7,7 +7,7 @@ class LoginProcessState {
 
 Map initialState() {
   return {
-    'role': 'customer',
+    'isDriver': false,
     'code': 0,
     'token': '',
     'Telephone': "",
