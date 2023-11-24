@@ -12,11 +12,12 @@ class DriverCubit extends Cubit<DriverState> {
   DriverCubit() : super(DriverState(driver: initialState()));
 
   void onSendPermanentRequests(String token, String phoneNumber) async {
+    print("Request request");
     try {
       List? commandes = [];
       Position? startPosition;
 
-      if (state.driver!["acceptedCommande"] != null) {
+      if (state.driver!["acceptedCommande"] == null) {
         do {
           startPosition = await Geolocator.getCurrentPosition();
           String message =
@@ -26,8 +27,8 @@ class DriverCubit extends Cubit<DriverState> {
               data: {"message": message, "phoneNumber": phoneNumber});
           commandes = await getCommandes(token: token);
 
-          log("current position got: $startPosition");
-          log("current commandes: $commandes");
+          print("current position got: $startPosition");
+          print("current commandes: $commandes");
 
           emit(DriverState(driver: {
             ...state.driver!,

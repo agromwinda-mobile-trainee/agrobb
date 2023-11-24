@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/widget_build_Tile.dart';
 import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../commons/home/api_contents/functions/getfunctions.dart';
 import '../../commons/home/drawer.dart';
 
 class HomeDriver extends StatefulWidget {
@@ -25,17 +28,27 @@ class _HomeDriverState extends State<HomeDriver> {
       _mapStyle = String;
     });
 
-    String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
-        .state
-        .usercontent!["token"];
-    String phoneNumber =
-        BlocProvider.of<LoginProcessCubit>(context, listen: true)
-            .state
-            .usercontent!["Telephone"];
+    // String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+    //     .state
+    //     .usercontent!["token"];
+    // String phoneNumber =
+    //     BlocProvider.of<LoginProcessCubit>(context, listen: true)
+    //         .state
+    //         .usercontent!["Telephone"];
+    initDriver();
+    //  BlocProvider.of<DriverCubit>(context)
+    //       .onSendPermanentRequests('token', 'phoneNumber');
+    super.initState();
+  }
+
+  Future<void> initDriver() async {
+    final String? token = await getToken();
+    final String? phoneNumber = await getPhoneNumber();
+    print("homeDriver" + token!);
+    print(phoneNumber!);
 
     BlocProvider.of<DriverCubit>(context)
         .onSendPermanentRequests(token, phoneNumber);
-    super.initState();
   }
 
   final CameraPosition _kGooglePlex = const CameraPosition(
@@ -84,7 +97,7 @@ Widget awaitForCommandes(context) {
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
       child: BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
-        List? commandes = state.driver!["commandes"];
+        List? commandes = state.driver!["drivers"] ?? [];
 
         if (state.driver!["acceptedCommande"] != null) {
           Column(
@@ -122,7 +135,7 @@ Widget awaitForCommandes(context) {
         return Column(
           children: commandes
               .map((commande) => ListTile(
-                    title: Text("Course + ${commande["id"]}"),
+                    title: Text("Course + ${commande["id"] ?? "DefaultID"}"),
                     onTap: () => BlocProvider.of<DriverCubit>(context)
                         .onConfirmeCommande(token: token, commande: commande),
                   ))
