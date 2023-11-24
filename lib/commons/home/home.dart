@@ -1,21 +1,14 @@
-import 'dart:convert';
-
-import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
-import 'package:agrobeba/widgets/notificationicon.dart';
+import 'package:agrobeba/commons/home/drawer.dart';
+import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
+import 'package:agrobeba/customer-app/screens/widgets/enterEmplacement.dart';
+import 'package:agrobeba/customer-app/screens/widgets/notificationicon.dart';
+import 'package:agrobeba/customer-app/screens/widgets/widget_build_Tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:http/http.dart' as http;
-
 //import '../../widgets/buildbottomsheet.dart';
 import '../../widgets/currentlocationicon.dart';
-import '../../widgets/enterEmplacement.dart';
-import '../../widgets/widget_build_Tile.dart';
-import 'drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -57,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: BuildDrawer(),
+      drawer: const BuildDrawer(),
       body: Stack(
         children: [
           GoogleMap(
@@ -79,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
             initialCameraPosition: _kGooglePlex,
           ),
           buildProfileTile(),
-          enterDestination(),
+          const enterDestination(),
           // destinationInputField(context),
           showSourceField ? enterEmplacement() : Container(),
           currentLocationIcon(context),

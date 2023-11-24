@@ -61,9 +61,9 @@ class AuthController extends GetxController {
           .get()
           .then((value) {
         if (value.exists) {
-          Get.to(() => HomeScreen());
+          Get.to(() => const HomeCustomer());
         } else {
-          Get.to(() => ProfileSreen());
+          Get.to(() => const ProfileSreen());
         }
       });
     }

@@ -1,26 +1,15 @@
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
 import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
 import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
 import 'package:agrobeba/utils/app_constants.dart';
-=======
-import 'package:agrobeba/widgets/currentlocationicon.dart';
-import 'package:agrobeba/widgets/destination/cubits/destination_cubit.dart';
-import 'package:agrobeba/widgets/destination/enterdestination_widget.dart';
-import 'package:agrobeba/widgets/destination/input_form_fields.dart';
-import 'package:agrobeba/widgets/loader.dart';
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-=======
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
 
 class BuildBottomSheet extends StatefulWidget {
   const BuildBottomSheet({super.key});
@@ -29,7 +18,6 @@ class BuildBottomSheet extends StatefulWidget {
   State<BuildBottomSheet> createState() => _BuildBottomSheetState();
 }
 
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
 class _BuildBottomSheetState extends State<BuildBottomSheet>
     with SingleTickerProviderStateMixin {
   TextEditingController startPointTextController = TextEditingController();
@@ -44,20 +32,12 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
       duration: const Duration(seconds: 10),
     );
   }
-=======
-class _BuildBottomSheetState extends State<BuildBottomSheet> {
-  TextEditingController startPointTextController = TextEditingController();
-  TextEditingController destinationTextController = TextEditingController();
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
 
   @override
   void dispose() {
     startPointTextController.dispose();
     destinationTextController.dispose();
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
     _controller.dispose();
-=======
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
     super.dispose();
   }
 
@@ -119,7 +99,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
   }
 
   Widget destinationFormWidget(context) {
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -420,8 +399,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
   }
 
   Widget emplacement(context) {
-=======
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
     return Container(
       height: MediaQuery.of(context).size.height - 250,
       width: MediaQuery.of(context).size.width,
@@ -433,7 +410,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
             destinationFormWidgetHead(context,
                 title: "Précisez l'emplacement",
                 onTap: () => {
@@ -441,9 +417,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet> {
                       BlocProvider.of<DestinationCubit>(context)
                           .onChangeField(field: "places", value: []),
                     }),
-=======
-            destinationFormWidgetHead(context),
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
             destinationFormWidgetInputFields(context),
             const SizedBox(height: 20),
             resultPlaces(
@@ -513,26 +486,14 @@ Decoration bottomSheetDecoration(context) {
   );
 }
 
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
 Widget destinationFormWidgetHead(context,
     {required String title, required Function onTap}) {
-=======
-Widget destinationFormWidgetHead(context) {
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 22),
     child: Row(
       children: [
         InkWell(
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
           onTap: () => onTap(),
-=======
-          onTap: () => {
-            Get.back(),
-            BlocProvider.of<DestinationCubit>(context)
-                .onChangeField(field: "places", value: []),
-          },
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
           splashColor: Colors.grey.shade400,
           focusColor: Colors.grey.shade400,
           hoverColor: Colors.grey.shade400,
@@ -552,11 +513,7 @@ Widget destinationFormWidgetHead(context) {
         ),
         const SizedBox(width: 12),
         Text(
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/buildbottomsheet.dart
           title,
-=======
-          "Précisez l'emplacement",
->>>>>>> origin/Driver:lib/widgets/destination/buildbottomsheet.dart
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 17,

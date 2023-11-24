@@ -1,12 +1,6 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
-<<<<<<< HEAD
-import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/widget_build_Tile.dart';
 import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
-=======
-import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
-import 'package:agrobeba/widgets/widget_build_Tile.dart';
->>>>>>> origin/Driver
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +86,6 @@ Widget awaitForCommandes(context) {
       child: BlocBuilder<DriverCubit, DriverState>(builder: (context, state) {
         List? commandes = state.driver!["commandes"];
 
-<<<<<<< HEAD
         if (state.driver!["acceptedCommande"] != null) {
           Column(
             children: [
@@ -117,8 +110,6 @@ Widget awaitForCommandes(context) {
           );
         }
 
-=======
->>>>>>> origin/Driver
         if (commandes!.isEmpty) {
           return const Center(
             child: Text(

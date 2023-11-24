@@ -16,10 +16,7 @@ Map initialState() {
       "destinationValue": "",
       "startPoint": "",
     },
-<<<<<<< HEAD:lib/customer-app/screens/widgets/destination/cubits/destination_state.dart
     'selectedServiceID': 0,
-=======
->>>>>>> origin/Driver:lib/widgets/destination/cubits/destination_state.dart
     'destinationValue': null,
     'startPoint': null,
     'emplacementField': '',

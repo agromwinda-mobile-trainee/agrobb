@@ -13,7 +13,7 @@ class RouteStack extends StatelessWidget {
         builder: (context, state) {
       bool isDriver = state.usercontent!['isDriver'];
 
-      return isDriver ? const HomeDriver() : const HomeScreen();
+      return isDriver ? const HomeDriver() : const HomeCustomer();
     });
   }
 }

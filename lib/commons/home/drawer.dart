@@ -1,9 +1,5 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
-import 'package:agrobeba/customer-app/screens/home.dart';
-import 'package:agrobeba/commons/home/profil_Screen.dart';
 import 'package:agrobeba/utils/colors.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -129,14 +125,14 @@ class _BuildDrawerState extends State<BuildDrawer> {
                   color: Color.fromARGB(255, 109, 108, 108),
                 ),
                 buildDrawerItem(title: 'conditions ', onPressed: () {}),
-                Divider(
+                const Divider(
                   color: Color.fromARGB(255, 88, 88, 88),
                 ),
                 //buildDrawerItem(title: 'se deconnecter', onPressed: () {})
                 buildDrawerItem(
                     title: 'Retour',
                     onPressed: () {
-                      Get.to(HomeScreen());
+                      Get.back();
                     })
               ],
             ),

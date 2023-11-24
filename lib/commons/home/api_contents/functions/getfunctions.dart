@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:agrobeba/customer-app/screens/home.dart';
+import 'package:agrobeba/commons/home/routestack.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +34,7 @@ otpVerify(String code, String phoneNumber) async {
       saveToken(jsonDecode(response.body));
       // savePhoneNumber(phoneNumber);
       // save credential on local storage
-      Get.to(HomeScreen());
+      Get.to(const RouteStack());
     } else {}
   } catch (e) {
     print("$e");
@@ -54,7 +54,7 @@ customCreate(String firstname, String lastname) async {
     );
     print('response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      Get.to(HomeScreen());
+      Get.to(const RouteStack());
     } else {}
   } catch (e) {
     print('$e');
@@ -182,14 +182,14 @@ Future<List?> pickPlaces(String places) async {
     if (response.statusCode == 200) {
       log('reponse');
       print(jsonDecode(response.body));
-      final Map? data = jsonDecode(response.body) as Map;
-      return data!["data"];
+      final Map data = jsonDecode(response.body) as Map;
+      return data["data"];
     } else {
       log("Erreur");
       return null;
     }
   } catch (e) {
-    print("erreur pick " + e.toString());
+    log("erreur pick $e");
     return null;
   }
 }

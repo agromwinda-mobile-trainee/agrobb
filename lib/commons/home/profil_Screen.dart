@@ -1,21 +1,12 @@
 // ignore: file_names
 import 'package:agrobeba/customer-app/screens/home.dart';
-<<<<<<< HEAD
 import 'package:agrobeba/customer-app/screens/widgets/setterButton.dart';
 import 'package:agrobeba/customer-app/screens/widgets/textFieldWidget.dart';
-=======
->>>>>>> origin/Driver
 import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-<<<<<<< HEAD
 import 'package:http/http.dart' as http;
-=======
-import 'package:agrobeba/widgets/textFieldWidget.dart';
-import 'package:http/http.dart' as http;
-import '../../widgets/setterButton.dart';
->>>>>>> origin/Driver
 
 class ProfileSreen extends StatefulWidget {
   const ProfileSreen({super.key});
@@ -56,7 +47,7 @@ class _ProfileSreenState extends State<ProfileSreen> {
         setState(() {
           isLoading = false;
         });
-        Get.to(() => const HomeScreen());
+        Get.to(() => const HomeCustomer());
       }
     } catch (e) {
       print('$e');
