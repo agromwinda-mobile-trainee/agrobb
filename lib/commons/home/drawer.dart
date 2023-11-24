@@ -199,16 +199,16 @@ class _BuildDrawerState extends State<BuildDrawer> {
 }
 
 Widget switchMode(context) {
-  String mode = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+  bool isDriver = BlocProvider.of<LoginProcessCubit>(context, listen: true)
       .state
-      .usercontent!["role"];
+      .usercontent!["isDriver"];
   return Column(
     children: <Widget>[
       ListTile(
         title: const Text('Passager'),
         leading: Radio<String>(
           value: "customer",
-          groupValue: mode,
+          groupValue: isDriver ? 'Conducteur' : "Passager",
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
                 .onChangeusercontent(field: "isDriver", value: false);
@@ -219,7 +219,7 @@ Widget switchMode(context) {
         title: const Text('Conducteur'),
         leading: Radio<String>(
           value: "driver",
-          groupValue: mode,
+          groupValue: isDriver ? 'Conducteur' : "Passager",
           onChanged: (String? value) {
             BlocProvider.of<LoginProcessCubit>(context)
                 .onChangeusercontent(field: "isDriver", value: true);
