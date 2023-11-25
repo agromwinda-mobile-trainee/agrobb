@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BuildBottomSheet extends StatefulWidget {
   const BuildBottomSheet({super.key});
@@ -136,11 +137,15 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(
         child: Column(children: [
-          destinationFormWidgetHead(
-            context,
-            title: "Informations du chauffeur",
-            onTap: () => Get.back(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: destinationFormWidgetHead(
+              context,
+              title: "Informations du chauffeur",
+              onTap: () => Get.back(),
+            ),
           ),
+          const SizedBox(width: 20),
           BlocBuilder<DestinationCubit, DestinationState>(
               builder: (context, state) {
             Map? driver = state.destination!["driver"];
@@ -148,30 +153,83 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
               onTap: () {},
               child: ListTile(
                 title: Text(
-                  "Nom chauffeur: ${driver!.toString()}  ",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  "${driver!['providerAccept']['firstname']} ${driver['providerAccept']['lastname']}",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
                 subtitle: Text(
-                  "Numero Telephone",
+                  "${driver['providerAccept']['phoneNumber']}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
             );
           }),
-          ZoomTapAnimation(
-            onTap: () {},
-            child: ListTile(
-              title: Text(
-                "Marque voiture",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              subtitle: Text(
-                "Numero d'immatriculation",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
-          ),
+          const SizedBox(width: 20),
+          BlocBuilder<DestinationCubit, DestinationState>(
+              builder: (context, state) {
+            Map? driver = state.destination!["driver"];
+
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    imageDriverItem(
+                      context,
+                      imageUrl: driver!['providerAccept']['imagePath'],
+                    ),
+                    const SizedBox(width: 20),
+                    imageDriverItem(
+                      context,
+                      imageUrl: driver['providerAccept']['carImagePath'],
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                ZoomTapAnimation(
+                  onTap: () {},
+                  child: ListTile(
+                    title: Text(
+                      "Marque voiture",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    subtitle: Text(
+                      "${driver['providerAccept']['imatriculationNumber']}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
         ]),
+      ),
+    );
+  }
+
+  Widget imageDriverItem(context, {required String imageUrl}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            const SpinKitFadingFour(
+          color: Colors.white,
+          duration: Duration(seconds: 5),
+          // itemBuilder: (context, index) {
+          //   return SizedBox();
+          // },
+          size: 50.0,
+        ),
+        errorWidget: (context, url, error) => const Icon(
+          Icons.error,
+          size: 14,
+          color: Colors.black,
+        ),
       ),
     );
   }
