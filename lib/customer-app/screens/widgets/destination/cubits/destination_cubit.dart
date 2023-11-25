@@ -145,26 +145,32 @@ class DestinationCubit extends Cubit<DestinationState> {
         print("search driver confirmation");
         do {
           drivers = await findDrivers(requestID);
-          emit(DestinationState(destination: {
-            ...state.destination!,
-            "driver": drivers?["confirm"] ? drivers : null,
-            // "step": 3,
-            'error': '',
-          }));
 
-          print("***no driver found yet: $drivers");
+          if (drivers!["confirm"]) {
+            print("***driver found: ${drivers['providerAccept']}");
+            emit(DestinationState(destination: {
+              ...state.destination!,
+              "loading": false,
+              "driver": drivers,
+              "step": 3,
+              'error': '',
+            }));
+          }
+
+          print(
+              "***no driver found yet. Confirmation Status: ${drivers['confirm']}");
           await Future.delayed(const Duration(seconds: 5));
-        } while (drivers!.isEmpty);
+        } while (state.destination!["driver"] == null);
       }
 
-      print("***driver found: $drivers");
-      emit(DestinationState(destination: {
-        ...state.destination!,
-        "loading": false,
-        "driver": drivers,
-        "step": 3,
-        'error': '',
-      }));
+      // print("***driver found: $drivers");
+      // emit(DestinationState(destination: {
+      //   ...state.destination!,
+      //   "loading": false,
+      //   "driver": drivers,
+      //   "step": 3,
+      //   'error': '',
+      // }));
     } catch (e) {
       log("error on finding car: $e ");
       emit(DestinationState(destination: {
