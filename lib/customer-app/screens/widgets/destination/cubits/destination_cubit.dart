@@ -130,6 +130,7 @@ class DestinationCubit extends Cubit<DestinationState> {
   }
 
   Future<void> waittingCarConfirmation() async {
+    print("waitting for card confirmation");
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
@@ -141,6 +142,7 @@ class DestinationCubit extends Cubit<DestinationState> {
       Map? drivers;
 
       if (state.destination!["driver"] == null) {
+        print("search driver confirmation");
         do {
           drivers = await findDrivers(requestID);
           emit(DestinationState(destination: {

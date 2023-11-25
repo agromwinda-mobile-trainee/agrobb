@@ -307,7 +307,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
                   context,
                   text: "Commandez",
                   onTap: () {
-                    // BlocProvider.of<DestinationCubit>(context).sendRequest();
+                    BlocProvider.of<DestinationCubit>(context)
+                        .waittingCarConfirmation();
                     BlocProvider.of<DestinationCubit>(context)
                         .onChangeField(field: "step", value: 2);
                   },

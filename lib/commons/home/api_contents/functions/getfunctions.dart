@@ -246,7 +246,7 @@ Future<Map?> findDrivers(int idRequest) async {
       final Map data = jsonDecode(response.body) as Map;
       return data;
     } else {
-      log("Request Failed: ${response.statusCode} - ${response.body}");
+      print("Request Failed: ${response.statusCode} - ${response.body}");
       return null;
     }
   } catch (e) {
