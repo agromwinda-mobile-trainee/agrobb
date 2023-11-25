@@ -118,7 +118,11 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
         }
 
         if (state.destination!["step"] == 2) {
-          return waitingForDriverConfirmation(context);
+          return waitingForDriverConfirmation(
+            context,
+            startPointTextController: startPointTextController,
+            endPointTextController: destinationTextController,
+          );
         }
 
         if (state.destination!["step"] == 3) {
@@ -143,6 +147,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
               context,
               title: "Informations du chauffeur",
               onTap: () => Get.back(),
+              // onTap: () => BlocProvider.of<DestinationCubit>(context)
+              //     .onChangeField(field: "step", value: 1)
             ),
           ),
           const SizedBox(width: 20),
@@ -234,7 +240,9 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
     );
   }
 
-  Widget waitingForDriverConfirmation(context) {
+  Widget waitingForDriverConfirmation(context,
+      {required TextEditingController startPointTextController,
+      required TextEditingController endPointTextController}) {
     return Container(
       height: 400,
       width: MediaQuery.of(context).size.width,
@@ -265,6 +273,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
               context,
               text: "Annuler la course",
               onTap: () {
+                startPointTextController.dispose();
+                endPointTextController.dispose();
                 BlocProvider.of<DestinationCubit>(context).onCancelCommande();
               },
               bkgColor: Colors.transparent,
