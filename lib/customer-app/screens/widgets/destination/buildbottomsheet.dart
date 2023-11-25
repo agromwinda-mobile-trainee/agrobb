@@ -1,7 +1,8 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
 import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
-import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
+// import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
 import 'package:agrobeba/customer-app/screens/widgets/loader.dart';
 import 'package:agrobeba/utils/app_constants.dart';
@@ -640,6 +641,9 @@ Widget resultPlaces(context,
 
     if (emplacementForm["destinationValue"].toString().isNotEmpty &&
         emplacementForm["startPoint"].toString().isNotEmpty) {
+      String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+          .state
+          .usercontent!["token"];
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Flex(
@@ -660,8 +664,8 @@ Widget resultPlaces(context,
               child: customButton(
                 context,
                 text: "Confirmer",
-                onTap: () =>
-                    BlocProvider.of<DestinationCubit>(context).sendRequest(),
+                onTap: () => BlocProvider.of<DestinationCubit>(context)
+                    .sendRequest(token: token),
               ),
             ),
           ],

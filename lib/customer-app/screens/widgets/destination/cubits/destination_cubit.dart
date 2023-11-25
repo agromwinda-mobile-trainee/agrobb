@@ -18,9 +18,11 @@ class DestinationCubit extends Cubit<DestinationState> {
     // PickPlaces()
     List? places = await pickPlaces(value);
 
+    print("place picked: $places");
+
     emit(DestinationState(destination: {
       ...state.destination!,
-      "places": places ?? [],
+      "places": places,
       "gettingPlaces": false,
     }));
   }
@@ -77,7 +79,8 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> sendRequest() async {
+  Future<void> sendRequest({required String token}) async {
+    print("send request. Token: $token");
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
@@ -96,7 +99,9 @@ class DestinationCubit extends Cubit<DestinationState> {
       };
 
       Map? currentService = await sendCourseRequest(
-          endPoint: destinationCoordinates, startPoint: startPointCoordinates);
+          token: token,
+          endPoint: destinationCoordinates,
+          startPoint: startPointCoordinates);
 
       if (currentService != null) {
         emit(DestinationState(destination: {

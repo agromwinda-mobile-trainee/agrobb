@@ -189,14 +189,16 @@ Future<List?> pickPlaces(String places) async {
       return null;
     }
   } catch (e) {
-    log("erreur pick $e");
+    print("erreur pick $e");
     return null;
   }
 }
 
 //send latlong for destination and depart point
 Future<Map?>? sendCourseRequest(
-    {required Map endPoint, required Map startPoint}) async {
+    {required Map endPoint,
+    required Map startPoint,
+    required String token}) async {
   log("on send request");
   print("startPoint: $startPoint");
   print("endPoint: $endPoint");
@@ -208,8 +210,7 @@ Future<Map?>? sendCourseRequest(
             headers: {
               "content-type": "application/json",
               // "Content-Length": "220",
-              "Authorization":
-                  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpYXQiOjE2OTIwMDY4NDcsImV4cCI6MTY5MjA5MzI0NywiaWQiOjMwLCJjb2RlIjozMCwibmFtZXMiOiJCSU9MQSBNYXR1IENhcmVsIiwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9GSU5BTkNFX0NBQ0hFUiIsIlJPTEVfU1VQUE9SVCIsIlJPTEVfSEVMUF9ERVNLIiwiUk9MRV9DT09SRE9OQVRPUiIsIlJPTEVfU1RBRkYiLCJST0xFX1VTRVIiXX0.q0b68RDvkBSE3l6UTdcmUUPs3E13nWmW2HON9s_JSFvMR0FqWtjTFcjxMezM28OC9Xslywrl_UWhzDITQRR3DA "
+              "Authorization": "Bearer $token",
             },
             body: jsonEncode({
               "service": "/api/personal_services/1",
