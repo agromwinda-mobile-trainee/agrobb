@@ -10,15 +10,15 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'commons/home/loginscreen.dart';
-import 'commons/home/profil_Screen.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'commons/home/loginscreen.dart';
+// import 'commons/home/profil_Screen.dart';
 import 'controller/auth_controller.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,7 +28,7 @@ void main() async {
   var directory = await getApplicationDocumentsDirectory();
   Hive.init(directory.path.toString());
   runApp(const MyApp());
-  FlutterNativeSplash.remove();
+  // FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
