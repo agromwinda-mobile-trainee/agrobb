@@ -190,7 +190,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             destinationFormWidgetHead(
               context,
               title: "Commande envoyée",
-              onTap: () {},
+              onTap: () => BlocProvider.of<DestinationCubit>(context)
+                  .onChangeField(field: "step", value: 1),
             ),
             waittingAnimationWidget(context),
             const SizedBox(height: 20),
