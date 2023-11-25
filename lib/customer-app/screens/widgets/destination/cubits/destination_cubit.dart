@@ -147,7 +147,7 @@ class DestinationCubit extends Cubit<DestinationState> {
           drivers = await findDrivers(requestID);
           emit(DestinationState(destination: {
             ...state.destination!,
-            "driver": drivers,
+            "driver": drivers?["confirm"] ? drivers : null,
             // "step": 3,
             'error': '',
           }));
