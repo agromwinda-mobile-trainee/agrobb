@@ -1,4 +1,5 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/commons/home/widgets/widgets.dart';
 import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
 import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
@@ -283,21 +284,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget waittingAnimationWidget(context) {
-    return SizedBox(
-      height: 100,
-      width: 100,
-      child: SpinKitSpinningLines(
-        color: Colors.grey.shade200,
-        duration: const Duration(seconds: 5),
-        lineWidth: 3,
-        size: 200.0,
-        itemCount: 2,
-        // controller: _controller,
       ),
     );
   }
@@ -592,61 +578,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
       ),
     );
   }
-}
-
-Decoration bottomSheetDecoration(context) {
-  return BoxDecoration(
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.5),
-        blurRadius: 50,
-        spreadRadius: 2,
-      ),
-    ],
-    color: Colors.white,
-    borderRadius: const BorderRadius.only(
-      topRight: Radius.circular(25),
-      topLeft: Radius.circular(25),
-    ),
-  );
-}
-
-Widget destinationFormWidgetHead(context,
-    {required String title, required Function onTap}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 22),
-    child: Row(
-      children: [
-        InkWell(
-          onTap: () => onTap(),
-          splashColor: Colors.grey.shade400,
-          focusColor: Colors.grey.shade400,
-          hoverColor: Colors.grey.shade400,
-          highlightColor: Colors.grey.shade400,
-          child: Ink(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: const Icon(
-              IconlyLight.arrow_left,
-              color: Colors.black,
-              size: 22,
-              semanticLabel: "Retour",
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-              ),
-        ),
-      ],
-    ),
-  );
 }
 
 Widget prefixIconStartPoint(context) {

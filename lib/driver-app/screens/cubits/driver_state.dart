@@ -11,5 +11,7 @@ Map initialState() {
     'currentPosition': {},
     'commandes': [],
     'acceptedCommande': null,
+    'showDetailsCommande': false,
+    'commandeID': '',
   };
 }

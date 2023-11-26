@@ -37,8 +37,8 @@ class DriverCubit extends Cubit<DriverState> {
             "currentPosition": startPosition
           }));
 
-          print("no cars found");
-          await Future.delayed(const Duration(seconds: 5));
+          // print("no commandes found");
+          await Future.delayed(const Duration(seconds: 15));
         } while (state.driver!["acceptedCommande"] == null);
       }
 
@@ -54,6 +54,7 @@ class DriverCubit extends Cubit<DriverState> {
 
   void onConfirmeCommande(
       {required String token, required Map commande}) async {
+    print("Confirm commande: ${commande['id'].toString()}");
     try {
       int? resultCode = await confirmCommande(id: commande["id"], token: token);
 
@@ -63,7 +64,24 @@ class DriverCubit extends Cubit<DriverState> {
             (resultCode == 200 || resultCode == 201) ? commande : null,
       }));
     } catch (error) {
-      log(error.toString());
+      print(error.toString());
     }
+  }
+
+  void onChangeField({required String field, required String value}) {
+    emit(DriverState(driver: {
+      ...state.driver!,
+      field: value,
+    }));
+  }
+
+  void onShowCommandeDetails(
+      {required bool showDetailsCommande, required String commandeID}) {
+    print("show commande: $commandeID - $showDetailsCommande");
+    emit(DriverState(driver: {
+      ...state.driver!,
+      'showDetailsCommande': showDetailsCommande,
+      'commandeID': commandeID,
+    }));
   }
 }
