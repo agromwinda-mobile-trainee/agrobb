@@ -11,9 +11,9 @@ class RouteStack extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginProcessCubit, LoginProcessState>(
         builder: (context, state) {
-      bool isDriver = state.usercontent!['isDriver'];
+      // bool isDriver = state.usercontent!['isDriver'];
 
-      return isDriver ? const HomeDriver() : const HomeCustomer();
+      return const HomeCustomer();
     });
   }
 }

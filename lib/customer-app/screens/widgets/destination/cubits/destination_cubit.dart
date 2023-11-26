@@ -20,10 +20,12 @@ class DestinationCubit extends Cubit<DestinationState> {
 
     print("place picked: $places");
 
+    String emplacementField = state.destination!["emplacementField"];
     emit(DestinationState(destination: {
       ...state.destination!,
-      "places": places,
+      "places": places ?? [],
       "gettingPlaces": false,
+      emplacementField: '',
     }));
   }
 
