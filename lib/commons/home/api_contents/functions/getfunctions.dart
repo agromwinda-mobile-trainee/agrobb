@@ -325,9 +325,12 @@ Future<int?>? confirmCommande({required String token, required id}) async {
       "Authorization": "Bearer $token"
     });
     print('Response status: ${response.statusCode}');
+    print('Response status: ${response.body}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.statusCode;
     }
+    print('Response status: ${response.body}');
+
     return 400;
   } catch (e) {
     print("erreur pick " + e.toString());
