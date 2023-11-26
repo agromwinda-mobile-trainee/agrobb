@@ -17,7 +17,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
-    authController.phoneAuth(widget.phoneNumber);
+    // authController.phoneAuth(widget.phoneNumber);
   }
 
   @override

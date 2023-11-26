@@ -699,6 +699,8 @@ Widget prefixIconFinalPoint(context) {
 Widget resultPlaces(context,
     {required TextEditingController startPointTextController,
     required TextEditingController destinationTextController}) {
+  String token =
+      BlocProvider.of<LoginProcessCubit>(context).state.usercontent!["token"];
   return BlocBuilder<DestinationCubit, DestinationState>(
       builder: (context, state) {
     List placeList = state.destination!["places"];
@@ -711,35 +713,41 @@ Widget resultPlaces(context,
 
     if (emplacementForm["destinationValue"].toString().isNotEmpty &&
         emplacementForm["startPoint"].toString().isNotEmpty) {
-      String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
-          .state
-          .usercontent!["token"];
-      return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Flex(
-          direction: Axis.horizontal,
-          children: [
-            Expanded(
-              child: customButton(
-                context,
-                text: "Annuler",
-                textColor: Theme.of(context).colorScheme.primary,
-                borderColor: Theme.of(context).colorScheme.primary,
-                bkgColor: Colors.transparent,
-                onTap: () => Get.back(),
-              ),
+      // String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+      //     .state
+      //     .usercontent!["token"];
+      return Column(
+        children: [
+          if (state.destination!["loading"]) loader(context),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Flex(
+              direction: Axis.horizontal,
+              children: [
+                Expanded(
+                  child: customButton(
+                    context,
+                    text: "Annuler",
+                    textColor: Theme.of(context).colorScheme.primary,
+                    borderColor: Theme.of(context).colorScheme.primary,
+                    bkgColor: Colors.transparent,
+                    onTap: () => Get.back(),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: customButton(
+                    context,
+                    text: "Confirmer",
+                    onTap: () => BlocProvider.of<DestinationCubit>(context)
+                        .sendRequest(token: token),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: customButton(
-                context,
-                text: "Confirmer",
-                onTap: () => BlocProvider.of<DestinationCubit>(context)
-                    .sendRequest(token: token),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 

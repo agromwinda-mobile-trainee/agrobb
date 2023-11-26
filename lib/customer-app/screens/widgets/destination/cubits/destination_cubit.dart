@@ -82,13 +82,15 @@ class DestinationCubit extends Cubit<DestinationState> {
   }
 
   Future<void> sendRequest({required String token}) async {
-    print("send request. Token: $token");
-    try {
-      emit(DestinationState(destination: {
-        ...state.destination!,
-        "loading": true,
-      }));
+    emit(DestinationState(destination: {
+      ...state.destination!,
+      "loading": true,
+    }));
 
+    final String? _token = await getToken();
+    print("send request. Token: $_token");
+
+    try {
       // Retrieve map data
       final Map destinationCoordinates = {
         "longitude": state.destination!['destinationValue']['coordinates'][0],
@@ -101,7 +103,7 @@ class DestinationCubit extends Cubit<DestinationState> {
       };
 
       Map? currentService = await sendCourseRequest(
-          token: token,
+          token: _token!,
           endPoint: destinationCoordinates,
           startPoint: startPointCoordinates);
 

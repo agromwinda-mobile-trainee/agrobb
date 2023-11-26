@@ -7,18 +7,24 @@ import 'package:http/http.dart' as http;
 import '../../otpscreen.dart';
 
 sendCode(String phoneNumber) async {
-  // print(phoneNumber.runtimeType);
+  print("****send phonenumber");
   try {
     var url = Uri.parse(
         'http://api.agrobeba.com/api/customers/opts/send-code?phonenumber=$phoneNumber');
     var response = await http.get(url);
-    print('Response status: ${response.statusCode}');
+    print('*****Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
+      print('**** Send PhoneNumber Response: ${response.body}');
       savePhoneNumber(phoneNumber);
       Get.to(OtpScreen(phoneNumber));
-    } else {}
+    } else {
+      print('*****Response status: ${response.statusCode}');
+      print('**** Send PhoneNumber Response: ${response.body}');
+      Get.snackbar("Erreur d'Authentification !", "");
+    }
   } catch (e) {
     print(' erreur $e');
+    Get.snackbar("Erreur d'Authentification !", "");
   }
 }
 
@@ -38,9 +44,11 @@ otpVerify(String code, String phoneNumber) async {
       Get.to(const RouteStack());
     } else {
       print("****otp failled: ${response.body}");
+      Get.snackbar("Code de verification erroné", "");
     }
   } catch (e) {
     print("****Error on verify otp: $e");
+    Get.snackbar("Erreur de verification du code", "");
   }
 }
 
@@ -69,7 +77,7 @@ void saveToken(Map userProfile) async {
 
   userdb.put('token', jsonEncode(userProfile));
   userdb.put('jwt', userProfile["hydra:member"][0]["jwt"]);
-  print('token saved: ${userProfile["hydra:member"][0]["jwt"]}');
+  print('***token saved: ${userProfile["hydra:member"][0]["jwt"]}');
 }
 
 void savePhoneNumber(String phoneNumber) async {
