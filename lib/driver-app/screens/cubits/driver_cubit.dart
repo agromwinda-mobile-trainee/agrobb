@@ -12,14 +12,15 @@ class DriverCubit extends Cubit<DriverState> {
   DriverCubit() : super(DriverState(driver: initialState()));
 
   void onSendPermanentRequests(String token, String phoneNumber) async {
-    print("Request request");
+    print("*** Send permanent requests: $phoneNumber");
     try {
       List? commandes = [];
       Position? startPosition;
 
       if (state.driver!["acceptedCommande"] == null) {
         do {
-          startPosition = await Geolocator.getCurrentPosition();
+          // startPosition = await Geolocator.getCurrentPosition();
+          startPosition = await determinePosition();
           String message =
               'agrobeba send -L ${startPosition.longitude} -l ${startPosition.latitude} -v "3.83" -f "0" ';
 
@@ -37,8 +38,8 @@ class DriverCubit extends Cubit<DriverState> {
           }));
 
           print("no cars found");
-          await Future.delayed(const Duration(seconds: 10));
-        } while (true);
+          await Future.delayed(const Duration(seconds: 5));
+        } while (state.driver!["acceptedCommande"] == null);
       }
 
       // emit(DriverState(driver: {
@@ -47,7 +48,7 @@ class DriverCubit extends Cubit<DriverState> {
       //   'commandes': commandes ?? [],
       // }));
     } catch (error) {
-      log("error on permanent requests: $error");
+      print("error on permanent requests: $error");
     }
   }
 
