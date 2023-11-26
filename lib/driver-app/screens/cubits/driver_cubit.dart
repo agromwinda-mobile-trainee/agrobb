@@ -58,11 +58,12 @@ class DriverCubit extends Cubit<DriverState> {
     try {
       int? resultCode = await confirmCommande(id: commande["id"], token: token);
 
-      emit(DriverState(driver: {
-        ...state.driver!,
-        "acceptedCommande":
-            (resultCode == 200 || resultCode == 201) ? commande : null,
-      }));
+      if (resultCode == 200 || resultCode == 201) {
+        emit(DriverState(driver: {
+          ...state.driver!,
+          "acceptedCommande": commande,
+        }));
+      }
     } catch (error) {
       print(error.toString());
     }

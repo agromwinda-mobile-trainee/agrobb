@@ -103,28 +103,67 @@ Widget awaitForCommandes(context) {
           List? commandes = state.driver!["drivers"] ?? [];
 
           if (state.driver!["acceptedCommande"] != null) {
-            Column(
-              children: [
-                Text(
-                  "Vous avez accepté une course",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 20),
-                BlocBuilder<DriverCubit, DriverState>(
-                    builder: (context, state) {
-                  return Text(
-                    "Identifiant de la commande: ${state.driver!["acceptedCommande"]?["id"] ?? "--"}",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  );
-                }),
-                BlocBuilder<DriverCubit, DriverState>(
-                    builder: (context, state) {
-                  return Text(
-                    "Numero du téléphone du client: ${state.driver!["acceptedCommande"]?["customer"]["phoneNumber"] ?? "--"}",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  );
-                }),
-              ],
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Vous avez accepté une course",
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 18,
+                        ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(height: 20),
+                  BlocBuilder<DriverCubit, DriverState>(
+                      builder: (context, state) {
+                    return ListTile(
+                      title: Text(
+                        "${state.driver!["acceptedCommande"]["startPoint"]['longitude']} * ${state.driver!["acceptedCommande"]["startPoint"]['latitude']}",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      subtitle: Text(
+                        "${state.driver!["acceptedCommande"]["endPoint"]['longitude']} * ${state.driver!["acceptedCommande"]["endPoint"]['latitude']}",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 16,
+                            ),
+                      ),
+                      trailing: distance(
+                          context,
+                          state.driver!["acceptedCommande"]["totalAmount"]
+                              .toString()),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
+                    );
+                  }),
+                  BlocBuilder<DriverCubit, DriverState>(
+                      builder: (context, state) {
+                    return ListTile(
+                      title: Text(
+                        "Client",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      subtitle: Text(
+                        "${state.driver!["acceptedCommande"]["customer"]["phoneNumber"]}",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 16,
+                            ),
+                      ),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
+                    );
+                  }),
+                ],
+              ),
             );
           }
 
@@ -226,7 +265,7 @@ Widget awaitForCommandes(context) {
                                           BlocProvider.of<DriverCubit>(context)
                                               .onConfirmeCommande(
                                                   token: token,
-                                                  commande: commande["id"]))
+                                                  commande: commande))
                               ],
                             ),
                           ),
