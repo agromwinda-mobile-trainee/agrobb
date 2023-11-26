@@ -11,21 +11,21 @@ class DestinationCubit extends Cubit<DestinationState> {
   DestinationCubit() : super(DestinationState(destination: initialState()));
 
   Future<void> getPlaces({required String value}) async {
+    String emplacementField = state.destination!["emplacementField"];
     emit(DestinationState(destination: {
       ...state.destination!,
       "gettingPlaces": true,
+      emplacementField: '',
     }));
     // PickPlaces()
     List? places = await pickPlaces(value);
 
     print("place picked: $places");
-
-    String emplacementField = state.destination!["emplacementField"];
     emit(DestinationState(destination: {
       ...state.destination!,
       "places": places ?? [],
       "gettingPlaces": false,
-      emplacementField: '',
+      // emplacementField: '',
     }));
   }
 

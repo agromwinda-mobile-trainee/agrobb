@@ -23,21 +23,24 @@ sendCode(String phoneNumber) async {
 }
 
 otpVerify(String code, String phoneNumber) async {
+  print("***** on verify otp--");
   try {
     var url = Uri.parse(
         "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
     var response =
         await http.get(url, headers: {"content-type": "application/json"});
-    print('response status: ${response.statusCode}');
+    print('**** response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      print('response : ${jsonDecode(response.body)}');
+      print('*** otp verified : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
       // savePhoneNumber(phoneNumber);
       // save credential on local storage
       Get.to(const RouteStack());
-    } else {}
+    } else {
+      print("****otp failled: ${response.body}");
+    }
   } catch (e) {
-    print("$e");
+    print("****Error on verify otp: $e");
   }
 }
 

@@ -44,11 +44,15 @@ class AuthController extends GetxController {
   }
 
   verifyOtp(String otpNumber) async {
-    log('called');
-    PhoneAuthCredential credential =
-        PhoneAuthProvider.credential(verificationId: verId, smsCode: otpNumber);
-    log('loggedId');
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
+      log('called');
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verId, smsCode: otpNumber);
+      print('loggedId');
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (error) {
+      print("Error on otp verify: $error");
+    }
   }
 
   decideRoute() {
