@@ -9,7 +9,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget loginWidget(Function onSubmit,) {
+Widget loginWidget(Function onSubmit) {
+  String fieldValue = "";
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -38,37 +39,41 @@ Widget loginWidget(Function onSubmit,) {
                 borderRadius: BorderRadius.circular(8)),
             child: Row(
               children: [
-                // Expanded(
-                //     flex: 1,
-                //     child: InkWell(
-                //       onTap: () {},
-                //       child: Container(
-                //         width: 1,
-                //         height: 55,
-                //         color: Color.fromARGB(255, 119, 119, 119),
-                //         child: Container(
-                //             child: Row(
-                //           children: [
-                //             textWidget(
-                //                 text: '  num Tel',
-                //                 color: Color.fromARGB(255, 78, 77, 77)),
-                //             const Icon(
-                //               Icons.done,
-                //               color: Color.fromARGB(255, 241, 87, 87),
-                //             ),
-                //           ],
-                //         )),
-                //       ),
-                //     )),
                 Expanded(
-                    // flex: 3,
+                    flex: 1,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        width: 1,
+                        height: 55,
+                        color: Colors.white,
+                        child: Container(
+                            child: Row(
+                          children: const [
+                            // textWidget(
+                            //     text: '  num Tel',
+                            //     color: Color.fromARGB(255, 78, 77, 77)),
+                            // const Icon(
+                            //   Icons.done,
+                            //   color: Color.fromARGB(255, 241, 87, 87),
+                            // ),
+                          ],
+                        )),
+                      ),
+                    )),
+                Expanded(
+                    flex: 4,
                     child: TextField(
-                  decoration: InputDecoration(
-                      helperStyle: GoogleFonts.poppins(
-                          fontSize: 12, fontWeight: FontWeight.normal),
-                      hintText: AppConstants.numTel,
-                      border: InputBorder.none),
-                )),
+                      onChanged: ((value) {
+                        fieldValue = value;
+                      }),
+                      // onSubmitted: (String? input) => sendCode(input!),
+                      decoration: InputDecoration(
+                          helperStyle: GoogleFonts.poppins(
+                              fontSize: 12, fontWeight: FontWeight.normal),
+                          hintText: AppConstants.numTel,
+                          border: InputBorder.none),
+                    )),
                 // Expanded(
                 //     flex: 1,
                 //     child: InkWell(
@@ -93,7 +98,7 @@ Widget loginWidget(Function onSubmit,) {
             ),
           ),
           const SizedBox(
-            height: 60,
+            height: 30,
           ),
           // RichText(
           //     textAlign: TextAlign.center,
@@ -119,10 +124,8 @@ Widget loginWidget(Function onSubmit,) {
           FittedBox(
             child: GestureDetector(
               onTap: () {
-                // onSubmitted:
-                print("200000");
-                (String? input) => sendCode(input!);
-                Get.to(OtpScreen(phoneNumber));
+                print("done done");
+                sendCode(fieldValue);
               },
               child: Container(
                 margin: const EdgeInsets.only(bottom: 20, left: 90),
