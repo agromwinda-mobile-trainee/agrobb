@@ -222,6 +222,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
       ),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
+        width: 60,
+        height: 60,
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             const SpinKitFadingFour(
           color: Colors.white,
@@ -231,11 +233,7 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
           // },
           size: 50.0,
         ),
-        errorWidget: (context, url, error) => const Icon(
-          Icons.error,
-          size: 14,
-          color: Colors.black,
-        ),
+        errorWidget: (context, url, error) => Container(),
       ),
     );
   }
