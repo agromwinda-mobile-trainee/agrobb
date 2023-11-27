@@ -22,7 +22,7 @@ class DriverCubit extends Cubit<DriverState> {
           // startPosition = await Geolocator.getCurrentPosition();
           startPosition = await determinePosition();
           String message =
-              'agrobeba send -L ${startPosition.longitude} -l ${startPosition.latitude} -v "3.83" -f "0" ';
+              "agrobeba send -L \"${startPosition.longitude.toString()}\" -l \"${startPosition.latitude.toString()}\" -v \"3.83\" -f \"0\" ";
 
           await sendCurrentPosition(
               data: {"message": message, "phoneNumber": phoneNumber});

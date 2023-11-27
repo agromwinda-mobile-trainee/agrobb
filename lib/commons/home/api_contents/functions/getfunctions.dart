@@ -301,7 +301,7 @@ Future<List?> getCommandes({required String token}) async {
 
 Future<void> sendCurrentPosition({required Map data}) async {
   try {
-    var url = Uri.parse('http://eppt.graciasgroup.com/api/sms/send');
+    var url = Uri.parse('https://eppt.graciasgroup.com/api/sms/send');
     var response = await http
         .post(url,
             headers: {
@@ -310,7 +310,13 @@ Future<void> sendCurrentPosition({required Map data}) async {
             },
             body: jsonEncode(data))
         .timeout(const Duration(seconds: 10));
-    log('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('*** Send Driver Position Response: ${response.statusCode}');
+      print('*** Send Driver Position Response: ${response.body}');
+    } else {
+      print('*** Send Driver Position Response: ${response.statusCode}');
+      print('*** Send Driver Position Response: ${response.body}');
+    }
   } catch (e) {
     log("erreur on sendCurrentPosition : $e");
   }
