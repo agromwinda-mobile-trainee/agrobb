@@ -12,18 +12,26 @@ import 'package:google_fonts/google_fonts.dart';
 Widget loginWidget(Function onSubmit) {
   String fieldValue = "";
   return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  textWidget(
+                      text: AppConstants.slog,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ]),
+          ),
+
           textWidget(text: AppConstants.hello, color: Colors.black),
-          textWidget(
-              text: AppConstants.slog,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black),
           const SizedBox(
-            height: 24,
+            height: 33,
           ),
           Container(
             height: 50,
@@ -98,7 +106,7 @@ Widget loginWidget(Function onSubmit) {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 60,
           ),
           // RichText(
           //     textAlign: TextAlign.center,
@@ -128,7 +136,7 @@ Widget loginWidget(Function onSubmit) {
                 sendCode(fieldValue);
               },
               child: Container(
-                margin: const EdgeInsets.only(bottom: 20, left: 90),
+                margin: const EdgeInsets.only(bottom: 20, left: 20),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 26,
                   vertical: 16,
@@ -140,7 +148,7 @@ Widget loginWidget(Function onSubmit) {
                 child: Row(
                   children: const [
                     Text(
-                      'valider',
+                      'Recevoir le code',
                       style: TextStyle(color: Colors.white),
                       //  style: Appcolors.whiteColor,
                       //  Theme.of(context).textTheme.labelLarge?.copyWith(

@@ -9,14 +9,22 @@ Widget otpScreenwidget() {
   return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          textWidget(text: AppConstants.phoneVerif, color: Colors.black),
           textWidget(
               text: AppConstants.otpSending,
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                textWidget(text: AppConstants.phoneVerif, color: Colors.black),
+              ],
+            ),
+          ),
           const SizedBox(
             height: 15,
           ),
