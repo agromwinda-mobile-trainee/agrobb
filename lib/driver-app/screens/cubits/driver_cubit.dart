@@ -12,16 +12,17 @@ class DriverCubit extends Cubit<DriverState> {
   DriverCubit() : super(DriverState(driver: initialState()));
 
   void onSendPermanentRequests(String token, String phoneNumber) async {
-    print("Request request");
+    print("*** Send permanent requests: $phoneNumber");
     try {
       List? commandes = [];
       Position? startPosition;
 
       if (state.driver!["acceptedCommande"] == null) {
         do {
-          startPosition = await Geolocator.getCurrentPosition();
+          // startPosition = await Geolocator.getCurrentPosition();
+          startPosition = await determinePosition();
           String message =
-              'agrobeba send -L ${startPosition.longitude} -l ${startPosition.latitude} -v "3.83" -f "0" ';
+              "agrobeba send -L \"${startPosition.longitude.toString()}\" -l \"${startPosition.latitude.toString()}\" -v \"3.83\" -f \"0\" ";
 
           await sendCurrentPosition(
               data: {"message": message, "phoneNumber": phoneNumber});
@@ -36,9 +37,9 @@ class DriverCubit extends Cubit<DriverState> {
             "currentPosition": startPosition
           }));
 
-          print("no cars found");
-          await Future.delayed(const Duration(seconds: 10));
-        } while (true);
+          // print("no commandes found");
+          await Future.delayed(const Duration(seconds: 15));
+        } while (state.driver!["acceptedCommande"] == null);
       }
 
       // emit(DriverState(driver: {
@@ -47,22 +48,41 @@ class DriverCubit extends Cubit<DriverState> {
       //   'commandes': commandes ?? [],
       // }));
     } catch (error) {
-      log("error on permanent requests: $error");
+      print("error on permanent requests: $error");
     }
   }
 
   void onConfirmeCommande(
       {required String token, required Map commande}) async {
+    print("Confirm commande: ${commande['id'].toString()}");
     try {
       int? resultCode = await confirmCommande(id: commande["id"], token: token);
 
-      emit(DriverState(driver: {
-        ...state.driver!,
-        "acceptedCommande":
-            (resultCode == 200 || resultCode == 201) ? commande : null,
-      }));
+      if (resultCode == 200 || resultCode == 201) {
+        emit(DriverState(driver: {
+          ...state.driver!,
+          "acceptedCommande": commande,
+        }));
+      }
     } catch (error) {
-      log(error.toString());
+      print(error.toString());
     }
+  }
+
+  void onChangeField({required String field, required String value}) {
+    emit(DriverState(driver: {
+      ...state.driver!,
+      field: value,
+    }));
+  }
+
+  void onShowCommandeDetails(
+      {required bool showDetailsCommande, required String commandeID}) {
+    print("show commande: $commandeID - $showDetailsCommande");
+    emit(DriverState(driver: {
+      ...state.driver!,
+      'showDetailsCommande': showDetailsCommande,
+      'commandeID': commandeID,
+    }));
   }
 }

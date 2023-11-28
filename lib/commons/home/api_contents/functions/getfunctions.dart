@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:agrobeba/commons/home/routestack.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -189,14 +190,16 @@ Future<List?> pickPlaces(String places) async {
       return null;
     }
   } catch (e) {
-    log("erreur pick $e");
+    print("erreur pick $e");
     return null;
   }
 }
 
 //send latlong for destination and depart point
 Future<Map?>? sendCourseRequest(
-    {required Map endPoint, required Map startPoint}) async {
+    {required Map endPoint,
+    required Map startPoint,
+    required String token}) async {
   log("on send request");
   print("startPoint: $startPoint");
   print("endPoint: $endPoint");
@@ -208,8 +211,7 @@ Future<Map?>? sendCourseRequest(
             headers: {
               "content-type": "application/json",
               // "Content-Length": "220",
-              "Authorization":
-                  "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFZERTQSJ9.eyJpYXQiOjE2OTIwMDY4NDcsImV4cCI6MTY5MjA5MzI0NywiaWQiOjMwLCJjb2RlIjozMCwibmFtZXMiOiJCSU9MQSBNYXR1IENhcmVsIiwicm9sZXMiOlsiUk9MRV9NQU5BR0VSIiwiUk9MRV9GSU5BTkNFX0NBQ0hFUiIsIlJPTEVfU1VQUE9SVCIsIlJPTEVfSEVMUF9ERVNLIiwiUk9MRV9DT09SRE9OQVRPUiIsIlJPTEVfU1RBRkYiLCJST0xFX1VTRVIiXX0.q0b68RDvkBSE3l6UTdcmUUPs3E13nWmW2HON9s_JSFvMR0FqWtjTFcjxMezM28OC9Xslywrl_UWhzDITQRR3DA "
+              "Authorization": "Bearer $token",
             },
             body: jsonEncode({
               "service": "/api/personal_services/1",
@@ -232,19 +234,20 @@ Future<Map?>? sendCourseRequest(
   }
 }
 
-Future<List?> findDrivers(int idRequest) async {
+Future<Map?> findDrivers(int idRequest) async {
+  print("*** find driver. Id request: $idRequest");
   try {
-    var url = Uri.parse(
-        'http://api.agrobeba.com/api/drivers/personal-requests/$idRequest');
+    var url =
+        Uri.parse('http://api.agrobeba.com/api/personal_requests/$idRequest');
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       log('reponse');
       print(jsonDecode(response.body));
-      final Map? data = jsonDecode(response.body) as Map;
-      return data!["data"];
+      final Map data = jsonDecode(response.body) as Map;
+      return data;
     } else {
-      log("Request Failed: ${response.statusCode} - ${response.body}");
+      print("Request Failed: ${response.statusCode} - ${response.body}");
       return null;
     }
   } catch (e) {
@@ -287,7 +290,7 @@ Future<List?> getCommandes({required String token}) async {
       final Map data = jsonDecode(response.body);
       return data["hydra:member"];
     } else {
-      log("Request Failed: ${response.statusCode} - ${response.body}");
+      print("Request Failed: ${response.statusCode} - ${response.body}");
       return null;
     }
   } catch (e) {
@@ -298,7 +301,7 @@ Future<List?> getCommandes({required String token}) async {
 
 Future<void> sendCurrentPosition({required Map data}) async {
   try {
-    var url = Uri.parse('http://eppt.graciasgroup.com/api/sms/send');
+    var url = Uri.parse('https://eppt.graciasgroup.com/api/sms/send');
     var response = await http
         .post(url,
             headers: {
@@ -307,7 +310,13 @@ Future<void> sendCurrentPosition({required Map data}) async {
             },
             body: jsonEncode(data))
         .timeout(const Duration(seconds: 10));
-    log('Response status: ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print('*** Send Driver Position Response: ${response.statusCode}');
+      print('*** Send Driver Position Response: ${response.body}');
+    } else {
+      print('*** Send Driver Position Response: ${response.statusCode}');
+      print('*** Send Driver Position Response: ${response.body}');
+    }
   } catch (e) {
     log("erreur on sendCurrentPosition : $e");
   }
@@ -322,12 +331,52 @@ Future<int?>? confirmCommande({required String token, required id}) async {
       "Authorization": "Bearer $token"
     });
     print('Response status: ${response.statusCode}');
+    print('Response status: ${response.body}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.statusCode;
     }
+    print('Response status: ${response.body}');
+
     return 400;
   } catch (e) {
     print("erreur pick " + e.toString());
     return 500;
   }
 }
+
+// Future<Position> determinePosition() async {
+//   bool serviceEnabled;
+//   LocationPermission permission;
+
+//   // Test if location services are enabled.
+//   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//   if (!serviceEnabled) {
+//     // Location services are not enabled don't continue
+//     // accessing the position and request users of the
+//     // App to enable the location services.
+//     return Future.error('Location services are disabled.');
+//   }
+
+//   permission = await Geolocator.checkPermission();
+//   if (permission == LocationPermission.denied) {
+//     permission = await Geolocator.requestPermission();
+//     if (permission == LocationPermission.denied) {
+//       // Permissions are denied, next time you could try
+//       // requesting permissions again (this is also where
+//       // Android's shouldShowRequestPermissionRationale
+//       // returned true. According to Android guidelines
+//       // your App should show an explanatory UI now.
+//       return Future.error('Location permissions are denied');
+//     }
+//   }
+
+//   if (permission == LocationPermission.deniedForever) {
+//     // Permissions are denied forever, handle appropriately.
+//     return Future.error(
+//         'Location permissions are permanently denied, we cannot request permissions.');
+//   }
+
+//   // When we reach here, permissions are granted and we can
+//   // continue accessing the position of the device.
+//   return await Geolocator.getCurrentPosition();
+// }

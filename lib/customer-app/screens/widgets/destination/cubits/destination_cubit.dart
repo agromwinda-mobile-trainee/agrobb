@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 part 'destination_state.dart';
 
 class DestinationCubit extends Cubit<DestinationState> {
@@ -17,9 +18,11 @@ class DestinationCubit extends Cubit<DestinationState> {
     // PickPlaces()
     List? places = await pickPlaces(value);
 
+    print("place picked: $places");
+
     emit(DestinationState(destination: {
       ...state.destination!,
-      "places": places ?? [],
+      "places": places,
       "gettingPlaces": false,
     }));
   }
@@ -52,7 +55,32 @@ class DestinationCubit extends Cubit<DestinationState> {
     }));
   }
 
-  Future<void> sendRequest() async {
+  Future<void> onCancelCommande() async {
+    try {
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'step': 0,
+        'loading': false,
+        'selectedServiceID': 0,
+        'destinationValue': null,
+        'startPoint': null,
+        'emplacementField': '',
+        'sendRequest': {},
+        'currentService': {},
+      }));
+      Get.back();
+    } catch (error) {
+      log("cancle failled: $error");
+      emit(DestinationState(destination: {
+        ...state.destination!,
+        'error': "Annulation echouée !",
+      }));
+      return;
+    }
+  }
+
+  Future<void> sendRequest({required String token}) async {
+    print("send request. Token: $token");
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
@@ -71,7 +99,9 @@ class DestinationCubit extends Cubit<DestinationState> {
       };
 
       Map? currentService = await sendCourseRequest(
-          endPoint: destinationCoordinates, startPoint: startPointCoordinates);
+          token: token,
+          endPoint: destinationCoordinates,
+          startPoint: startPointCoordinates);
 
       if (currentService != null) {
         emit(DestinationState(destination: {
@@ -99,7 +129,8 @@ class DestinationCubit extends Cubit<DestinationState> {
     }
   }
 
-  Future<void> findAvailableCar() async {
+  Future<void> waittingCarConfirmation() async {
+    print("waitting for card confirmation");
     try {
       emit(DestinationState(destination: {
         ...state.destination!,
@@ -108,29 +139,38 @@ class DestinationCubit extends Cubit<DestinationState> {
       }));
 
       int requestID = state.destination!["currentService"]["id"];
-      List? drivers = [];
+      Map? drivers;
 
-      do {
-        drivers = await findDrivers(requestID);
-        emit(DestinationState(destination: {
-          ...state.destination!,
-          "drivers": drivers ?? [],
-          "step": 3,
-          'error': '',
-        }));
+      if (state.destination!["driver"] == null) {
+        print("search driver confirmation");
+        do {
+          drivers = await findDrivers(requestID);
 
-        print("no cars found");
-        await Future.delayed(const Duration(seconds: 10));
-      } while (drivers!.isEmpty);
+          if (drivers!["confirm"]) {
+            print("***driver found: ${drivers['providerAccept']}");
+            emit(DestinationState(destination: {
+              ...state.destination!,
+              "loading": false,
+              "driver": drivers,
+              "step": 3,
+              'error': '',
+            }));
+          }
 
-      print("some cars found");
-      emit(DestinationState(destination: {
-        ...state.destination!,
-        "loading": false,
-        "drivers": drivers,
-        "step": 3,
-        'error': '',
-      }));
+          print(
+              "***no driver found yet. Confirmation Status: ${drivers['confirm']}");
+          await Future.delayed(const Duration(seconds: 5));
+        } while (state.destination!["driver"] == null);
+      }
+
+      // print("***driver found: $drivers");
+      // emit(DestinationState(destination: {
+      //   ...state.destination!,
+      //   "loading": false,
+      //   "driver": drivers,
+      //   "step": 3,
+      //   'error': '',
+      // }));
     } catch (e) {
       log("error on finding car: $e ");
       emit(DestinationState(destination: {

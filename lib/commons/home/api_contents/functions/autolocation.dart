@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 /// When the location services are not enabled or permissions
 /// are denied the `Future` will return an error.
 Future<Position> determinePosition() async {
+  print("on check permission");
   bool serviceEnabled;
   LocationPermission permission;
 

@@ -1,6 +1,7 @@
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/commons/home/loginscreen.dart';
 import 'package:agrobeba/commons/home/routestack.dart';
+import 'package:agrobeba/customer-app/screens/home.dart';
 import 'package:agrobeba/driver-app/screens/home.dart';
 import 'package:agrobeba/utils/colors.dart';
 import 'package:flutter/material.dart';

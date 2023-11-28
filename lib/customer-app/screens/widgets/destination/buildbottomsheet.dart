@@ -1,8 +1,11 @@
+import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
+import 'package:agrobeba/commons/home/widgets/widgets.dart';
 import 'package:agrobeba/customer-app/screens/widgets/currentlocationicon.dart';
 import 'package:agrobeba/customer-app/screens/widgets/custom_button.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/cubits/destination_cubit.dart';
-import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
+// import 'package:agrobeba/customer-app/screens/widgets/destination/enterdestination_widget.dart';
 import 'package:agrobeba/customer-app/screens/widgets/destination/input_form_fields.dart';
+import 'package:agrobeba/customer-app/screens/widgets/loader.dart';
 import 'package:agrobeba/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:zoom_tap_animation/zoom_tap_animation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BuildBottomSheet extends StatefulWidget {
   const BuildBottomSheet({super.key});
@@ -115,7 +119,15 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
         }
 
         if (state.destination!["step"] == 2) {
-          return waitingForDriverConfirmation(context);
+          return waitingForDriverConfirmation(
+            context,
+            startPointTextController: startPointTextController,
+            endPointTextController: destinationTextController,
+          );
+        }
+
+        if (state.destination!["step"] == 3) {
+          return acceptedCommande(context);
         }
 
         return const SizedBox.shrink();
@@ -123,7 +135,115 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
     );
   }
 
-  Widget waitingForDriverConfirmation(context) {
+  Widget acceptedCommande(context) {
+    return Container(
+      height: 400,
+      width: MediaQuery.of(context).size.width,
+      decoration: bottomSheetDecoration(context),
+      child: SingleChildScrollView(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: destinationFormWidgetHead(
+              context,
+              title: "Informations du chauffeur",
+              onTap: () => Get.back(),
+              // onTap: () => BlocProvider.of<DestinationCubit>(context)
+              //     .onChangeField(field: "step", value: 1)
+            ),
+          ),
+          const SizedBox(width: 20),
+          BlocBuilder<DestinationCubit, DestinationState>(
+              builder: (context, state) {
+            Map? driver = state.destination!["driver"];
+            return ZoomTapAnimation(
+              onTap: () {},
+              child: ListTile(
+                title: Text(
+                  "${driver!['providerAccept']['firstname']} ${driver['providerAccept']['lastname']}",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                subtitle: Text(
+                  "${driver['providerAccept']['phoneNumber']}",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
+            );
+          }),
+          const SizedBox(width: 20),
+          BlocBuilder<DestinationCubit, DestinationState>(
+              builder: (context, state) {
+            Map? driver = state.destination!["driver"];
+
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    imageDriverItem(
+                      context,
+                      imageUrl: driver!['providerAccept']['imagePath'],
+                    ),
+                    const SizedBox(width: 20),
+                    imageDriverItem(
+                      context,
+                      imageUrl: driver['providerAccept']['carImagePath'],
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                ZoomTapAnimation(
+                  onTap: () {},
+                  child: ListTile(
+                    title: Text(
+                      "Marque voiture",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    subtitle: Text(
+                      "${driver['providerAccept']['imatriculationNumber']}",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ]),
+      ),
+    );
+  }
+
+  Widget imageDriverItem(context, {required String imageUrl}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            const SpinKitFadingFour(
+          color: Colors.white,
+          duration: Duration(seconds: 5),
+          // itemBuilder: (context, index) {
+          //   return SizedBox();
+          // },
+          size: 50.0,
+        ),
+        errorWidget: (context, url, error) => const Icon(
+          Icons.error,
+          size: 14,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget waitingForDriverConfirmation(context,
+      {required TextEditingController startPointTextController,
+      required TextEditingController endPointTextController}) {
     return Container(
       height: 400,
       width: MediaQuery.of(context).size.width,
@@ -137,7 +257,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             destinationFormWidgetHead(
               context,
               title: "Commande envoyée",
-              onTap: () {},
+              onTap: () => BlocProvider.of<DestinationCubit>(context)
+                  .onChangeField(field: "step", value: 1),
             ),
             waittingAnimationWidget(context),
             const SizedBox(height: 20),
@@ -152,28 +273,17 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
             customButton(
               context,
               text: "Annuler la course",
-              onTap: () {},
+              onTap: () {
+                startPointTextController.dispose();
+                endPointTextController.dispose();
+                BlocProvider.of<DestinationCubit>(context).onCancelCommande();
+              },
               bkgColor: Colors.transparent,
               textColor: Theme.of(context).colorScheme.primary,
               borderColor: Theme.of(context).colorScheme.primary,
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget waittingAnimationWidget(context) {
-    return SizedBox(
-      height: 100,
-      width: 100,
-      child: SpinKitSpinningLines(
-        color: Colors.grey.shade200,
-        duration: const Duration(seconds: 5),
-        lineWidth: 3,
-        size: 200.0,
-        itemCount: 2,
-        // controller: _controller,
       ),
     );
   }
@@ -252,7 +362,8 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
                   context,
                   text: "Commandez",
                   onTap: () {
-                    // BlocProvider.of<DestinationCubit>(context).sendRequest();
+                    BlocProvider.of<DestinationCubit>(context)
+                        .waittingCarConfirmation();
                     BlocProvider.of<DestinationCubit>(context)
                         .onChangeField(field: "step", value: 2);
                   },
@@ -469,61 +580,6 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
   }
 }
 
-Decoration bottomSheetDecoration(context) {
-  return BoxDecoration(
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black.withOpacity(0.5),
-        blurRadius: 50,
-        spreadRadius: 2,
-      ),
-    ],
-    color: Colors.white,
-    borderRadius: const BorderRadius.only(
-      topRight: Radius.circular(25),
-      topLeft: Radius.circular(25),
-    ),
-  );
-}
-
-Widget destinationFormWidgetHead(context,
-    {required String title, required Function onTap}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 22),
-    child: Row(
-      children: [
-        InkWell(
-          onTap: () => onTap(),
-          splashColor: Colors.grey.shade400,
-          focusColor: Colors.grey.shade400,
-          hoverColor: Colors.grey.shade400,
-          highlightColor: Colors.grey.shade400,
-          child: Ink(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: const Icon(
-              IconlyLight.arrow_left,
-              color: Colors.black,
-              size: 22,
-              semanticLabel: "Retour",
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-              ),
-        ),
-      ],
-    ),
-  );
-}
-
 Widget prefixIconStartPoint(context) {
   return Container(
     height: 20,
@@ -566,6 +622,136 @@ Widget prefixIconFinalPoint(context) {
     child: const Icon(
       IconlyBold.location,
       color: Colors.white,
+      size: 14,
+    ),
+  );
+}
+
+Widget resultPlaces(context,
+    {required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    List placeList = state.destination!["places"];
+    bool gettingPlaces = state.destination!["gettingPlaces"];
+    Map emplacementForm = state.destination!["emplacementForm"];
+
+    if (gettingPlaces) {
+      return loader(context);
+    }
+
+    if (emplacementForm["destinationValue"].toString().isNotEmpty &&
+        emplacementForm["startPoint"].toString().isNotEmpty) {
+      String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
+          .state
+          .usercontent!["token"];
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: customButton(
+                context,
+                text: "Annuler",
+                textColor: Theme.of(context).colorScheme.primary,
+                borderColor: Theme.of(context).colorScheme.primary,
+                bkgColor: Colors.transparent,
+                onTap: () => Get.back(),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: customButton(
+                context,
+                text: "Confirmer",
+                onTap: () => BlocProvider.of<DestinationCubit>(context)
+                    .sendRequest(token: token),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (placeList.isEmpty) {
+      return const SizedBox();
+    }
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+          children: placeList
+              .map((e) => placeItem(
+                    context,
+                    label: e["name"],
+                    destination: e,
+                    destinationTextController: destinationTextController,
+                    startPointTextController: startPointTextController,
+                  ))
+              .toList()),
+    );
+  });
+}
+
+Widget placeItem(context,
+    {required String label,
+    required Map destination,
+    required TextEditingController startPointTextController,
+    required TextEditingController destinationTextController}) {
+  return BlocBuilder<DestinationCubit, DestinationState>(
+      builder: (context, state) {
+    return InkWell(
+      onTap: () {
+        BlocProvider.of<DestinationCubit>(context)
+            .saveEmplacementValue(value: destination);
+
+        if (state.destination!["emplacementField"] == "destinationValue") {
+          destinationTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        if (state.destination!["emplacementField"] == "startPoint") {
+          startPointTextController.value = TextEditingValue(text: label);
+          return;
+        }
+
+        // Get.bottomSheet(bottomcall(context));
+      },
+      splashColor: Colors.grey.shade300,
+      child: Ink(
+        color: Colors.transparent,
+        child: ListTile(
+          title: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          subtitle: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+          ),
+          leading: placeItemLeading(context),
+          minLeadingWidth: 20,
+        ),
+      ),
+    );
+  });
+}
+
+Widget placeItemLeading(context) {
+  return Container(
+    height: 20,
+    width: 20,
+    decoration: const BoxDecoration(
+      shape: BoxShape.circle,
+      color: Colors.grey,
+    ),
+    child: const Icon(
+      IconlyBold.location,
+      color: Colors.white70,
       size: 14,
     ),
   );

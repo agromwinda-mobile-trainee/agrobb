@@ -15,6 +15,8 @@ class HomeCustomer extends StatefulWidget {
 class _HomeCustomerState extends State<HomeCustomer> {
   late LatLng source;
   Set<Marker> markers = <Marker>{};
+  // final List<GoogleMapController> _controller =
+  //     Map<GoogleMapController>;
 
   String? _mapStyle;
 
@@ -27,7 +29,7 @@ class _HomeCustomerState extends State<HomeCustomer> {
   }
 
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(-4.325, 15.322222),
+    target: LatLng(-4.306306306306306, 15.304467688275901),
     //target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -45,8 +47,9 @@ class _HomeCustomerState extends State<HomeCustomer> {
           children: [
             GoogleMap(
               markers: markers,
-              zoomControlsEnabled: false,
-              // mapType: MapType.terrain,
+              // zoomControlsEnabled: false,
+
+              mapType: MapType.terrain,
               onMapCreated: (GoogleMapController controller) {
                 myMapController = controller;
                 myMapController!.setMapStyle(_mapStyle);

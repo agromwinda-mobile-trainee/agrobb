@@ -11,7 +11,7 @@ Map initialState() {
     'gettingPlaces': false,
     'places': [],
     'drivers': [],
-    'driver': {},
+    'driver': null,
     'emplacementForm': {
       "destinationValue": "",
       "startPoint": "",
