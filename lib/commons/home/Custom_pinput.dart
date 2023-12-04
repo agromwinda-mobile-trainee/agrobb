@@ -63,7 +63,7 @@ class _BoxPinputState extends State<BoxPinput> {
       controller: controller,
       focusNode: focusNode,
       onCompleted: (String input) {
-        otpVerify(input, phoneNumber);
+        otpVerifyDriver(input, phoneNumber);
       },
       defaultPinTheme: DefaultpinTheme.copyWith(
           decoration: BoxDecoration(

@@ -59,7 +59,7 @@ Widget loginWidget(Function onSubmit) {
                 Expanded(
                     flex: 3,
                     child: TextField(
-                      onSubmitted: (String? input) => sendCode(input!),
+                      onSubmitted: (String? input) => sendCodeDriver(input!),
                       decoration: InputDecoration(
                           helperStyle: GoogleFonts.poppins(
                               fontSize: 12, fontWeight: FontWeight.normal),

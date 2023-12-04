@@ -7,11 +7,11 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import '../../otpscreen.dart';
 
-sendCode(String phoneNumber) async {
+sendCodeDriver(String phoneNumber) async {
   // print(phoneNumber.runtimeType);
   try {
     var url = Uri.parse(
-        'http://api.agrobeba.com/api/customers/opts/send-code?phonenumber=$phoneNumber');
+        'http://api.agrobeba.com/api/customers/opts/send-code/drivers?phonenumber=$phoneNumber');
     var response = await http.get(url);
     print('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -23,10 +23,10 @@ sendCode(String phoneNumber) async {
   }
 }
 
-otpVerify(String code, String phoneNumber) async {
+otpVerifyDriver(String code, String phoneNumber) async {
   try {
     var url = Uri.parse(
-        "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
+        "http://api.agrobeba.com/api/customers/opts/verify-code/drivers?code=$code");
     var response =
         await http.get(url, headers: {"content-type": "application/json"});
     print('response status: ${response.statusCode}');

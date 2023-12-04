@@ -83,7 +83,9 @@ Widget iconMenu(context) {
       splashColor: Colors.white38,
       child: Ink(
         decoration: const BoxDecoration(
-            color: Colors.transparent, shape: BoxShape.circle),
+          color: Colors.transparent,
+          shape: BoxShape.circle,
+        ),
         child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
