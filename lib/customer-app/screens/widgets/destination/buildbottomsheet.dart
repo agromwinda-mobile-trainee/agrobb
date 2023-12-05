@@ -136,104 +136,169 @@ class _BuildBottomSheetState extends State<BuildBottomSheet>
 
   Widget acceptedCommande(context) {
     return Container(
-      height: 400,
+      height: 600,
       width: MediaQuery.of(context).size.width,
       decoration: bottomSheetDecoration(context),
       child: SingleChildScrollView(
-        child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: destinationFormWidgetHead(
-              context,
-              title: "Informations du chauffeur",
-              onTap: () => Get.back(),
-              // onTap: () => BlocProvider.of<DestinationCubit>(context)
-              //     .onChangeField(field: "step", value: 1)
-            ),
-          ),
-          const SizedBox(width: 20),
-          BlocBuilder<DestinationCubit, DestinationState>(
-              builder: (context, state) {
-            Map? driver = state.destination!["driver"];
-            return ZoomTapAnimation(
-              onTap: () {},
-              child: ListTile(
-                title: Text(
-                  "${driver!['providerAccept']['firstname']} ${driver['providerAccept']['lastname']}",
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                subtitle: Text(
-                  "${driver['providerAccept']['phoneNumber']}",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 0),
+            //   child: destinationFormWidgetHead(
+            //     context,
+            //     title: "Les détails de votre course",
+            //     onTap: () => Get.back(),
+            //     // onTap: () => BlocProvider.of<DestinationCubit>(context)
+            //     //     .onChangeField(field: "step", value: 1)
+            //   ),
+            // ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              height: 8,
+              width: 40,
+              decoration: BoxDecoration(
+                color: Colors.blueGrey.shade300.withOpacity(.22),
+                borderRadius: BorderRadius.circular(5),
               ),
-            );
-          }),
-          const SizedBox(width: 20),
-          BlocBuilder<DestinationCubit, DestinationState>(
-              builder: (context, state) {
-            Map? driver = state.destination!["driver"];
-
-            return Column(
-              children: [
-                Row(
+              child: const SizedBox(height: 8),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 4, bottom: 30),
+              child: Text(
+                "Les détails de votre course",
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+              ),
+            ),
+            const SizedBox(width: 20),
+            BlocBuilder<DestinationCubit, DestinationState>(
+                builder: (context, state) {
+              Map? driver = state.destination!["driver"];
+              return SizedBox(
+                height: 140,
+                child: Stack(
                   children: [
                     imageDriverItem(
                       context,
-                      imageUrl: driver!['providerAccept']['imagePath'],
+                      imageUrl: driver!['providerAccept']['carImageName'],
+                      height: 120,
+                      width: 100,
+                      radius: 20,
                     ),
-                    const SizedBox(width: 20),
-                    imageDriverItem(
-                      context,
-                      imageUrl: driver['providerAccept']['carImagePath'],
-                    ),
+                    Positioned(
+                      bottom: 10,
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 160,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            driver['providerAccept']['driverLicense'],
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Colors.white70,
+                                    ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
-                const SizedBox(width: 20),
-                ZoomTapAnimation(
-                  onTap: () {},
-                  child: ListTile(
-                    title: Text(
-                      "Marque voiture",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    subtitle: Text(
-                      "${driver['providerAccept']['imatriculationNumber']}",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
-        ]),
+              );
+            }),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BlocBuilder<DestinationCubit, DestinationState>(
+                      builder: (context, state) {
+                    Map? driver = state.destination!["driver"];
+                    return ZoomTapAnimation(
+                      onTap: () {},
+                      child: ListTile(
+                        leading: driverAvatar(
+                            driver!['providerAccept']['imageName']),
+                        // minLeadingWidth: 100,
+                        contentPadding: EdgeInsets.zero,
+                        horizontalTitleGap: 0,
+                        title: Text(
+                          "${driver['providerAccept']['firstname']} ${driver['providerAccept']['lastname']}",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
+                                  ),
+                        ),
+                        subtitle: Text(
+                          "${driver['providerAccept']['phoneNumber']}",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
+                                  ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(width: 20),
+          ],
+        ),
       ),
     );
   }
 
-  Widget imageDriverItem(context, {required String imageUrl}) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(10),
+  Widget driverAvatar(imageUrl) {
+    return CircleAvatar(
+      radius: 15,
+      backgroundColor: Colors.blueGrey.shade300.withOpacity(.22),
+      backgroundImage: NetworkImage(
+        imageUrl,
       ),
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        width: 60,
-        height: 60,
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            const SpinKitFadingFour(
-          color: Colors.white,
-          duration: Duration(seconds: 5),
-          // itemBuilder: (context, index) {
-          //   return SizedBox();
-          // },
-          size: 50.0,
+    );
+  }
+
+  Widget imageDriverItem(context,
+      {required String imageUrl,
+      double? width,
+      double? height,
+      required double radius}) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(radius),
         ),
-        errorWidget: (context, url, error) => Container(),
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
+          // width: width ?? 60,
+          height: height ?? 60,
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (context, url, downloadProgress) =>
+              const SpinKitFadingFour(
+            color: Colors.white,
+            duration: Duration(seconds: 5),
+            // itemBuilder: (context, index) {
+            //   return SizedBox();
+            // },
+            size: 50.0,
+          ),
+          errorWidget: (context, url, error) => Container(),
+        ),
       ),
     );
   }
