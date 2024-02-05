@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,21 +43,38 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAsfrIVZyLEhEMbErvCtUjiys9Vd03j_V8',
+    appId: '1:956760737493:web:7c1a692b139bd7dfc1c45c',
+    messagingSenderId: '956760737493',
+    projectId: 'agrobebadb',
+    authDomain: 'agrobebadb.firebaseapp.com',
+    storageBucket: 'agrobebadb.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDec6DePIKAA3F_iOKwgH-zposn80IK3wg',
-    appId: '1:302230492775:android:0f0378b280dc184a3aa6c2',
-    messagingSenderId: '302230492775',
-    projectId: 'agrobeba-2b2a0',
-    storageBucket: 'agrobeba-2b2a0.appspot.com',
+    apiKey: 'AIzaSyCDDMaFQcPE7zSNK5Een2zWkGmOluQSAfo',
+    appId: '1:956760737493:android:f8fc73e01486e517c1c45c',
+    messagingSenderId: '956760737493',
+    projectId: 'agrobebadb',
+    storageBucket: 'agrobebadb.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB3MUMMVNwsQpddy0C3TSinstHGXQUrUtE',
-    appId: '1:302230492775:ios:f734cc5a86bba1ed3aa6c2',
-    messagingSenderId: '302230492775',
-    projectId: 'agrobeba-2b2a0',
-    storageBucket: 'agrobeba-2b2a0.appspot.com',
-    iosClientId: '302230492775-i2fgqfjjq77721q2vrqhq3nuc8ij933a.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBoMD7Q6g98toIKhSq3mvh8NgnSg4bswpI',
+    appId: '1:956760737493:ios:b2312f785aca1c0dc1c45c',
+    messagingSenderId: '956760737493',
+    projectId: 'agrobebadb',
+    storageBucket: 'agrobebadb.appspot.com',
+    iosBundleId: 'com.example.agrobeba',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBoMD7Q6g98toIKhSq3mvh8NgnSg4bswpI',
+    appId: '1:956760737493:ios:b2312f785aca1c0dc1c45c',
+    messagingSenderId: '956760737493',
+    projectId: 'agrobebadb',
+    storageBucket: 'agrobebadb.appspot.com',
     iosBundleId: 'com.example.agrobeba',
   );
 }
