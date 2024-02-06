@@ -7,47 +7,47 @@ import 'package:http/http.dart' as http;
 import '../../otpscreen.dart';
 
 sendCode(String phoneNumber) async {
-  print("****send phonenumber");
+  log("****send phonenumber");
   try {
     var url = Uri.parse(
         'http://api.agrobeba.com/api/customers/opts/send-code?phonenumber=$phoneNumber');
     var response = await http.get(url);
-    print('*****Response status: ${response.statusCode}');
+    log('*****Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      print('**** Send PhoneNumber Response: ${response.body}');
+      log('**** Send PhoneNumber Response: ${response.body}');
       savePhoneNumber(phoneNumber);
       Get.to(OtpScreen(phoneNumber));
     } else {
-      print('*****Response status: ${response.statusCode}');
-      print('**** Send PhoneNumber Response: ${response.body}');
+      log('*****Response status: ${response.statusCode}');
+      log('**** Send PhoneNumber Response: ${response.body}');
       Get.snackbar("Erreur d'Authentification !", "");
     }
   } catch (e) {
-    print(' erreur $e');
+    log(' erreur $e');
     Get.snackbar("Erreur d'Authentification !", "");
   }
 }
 
 otpVerify(String code, String phoneNumber) async {
-  print("***** on verify otp--");
+  log("***** on verify otp--");
   try {
     var url = Uri.parse(
         "http://api.agrobeba.com/api/customers/opts/verify-code?code=$code");
     var response =
         await http.get(url, headers: {"content-type": "application/json"});
-    print('**** response status: ${response.statusCode}');
+    log('**** response status: ${response.statusCode}');
     if (response.statusCode == 200) {
-      print('*** otp verified : ${jsonDecode(response.body)}');
+      log('*** otp verified : ${jsonDecode(response.body)}');
       saveToken(jsonDecode(response.body));
       // savePhoneNumber(phoneNumber);
       // save credential on local storage
       Get.to(const RouteStack());
     } else {
-      print("****otp failled: ${response.body}");
+      log("****otp failled: ${response.body}");
       Get.snackbar("Code de verification erroné", "");
     }
   } catch (e) {
-    print("****Error on verify otp: $e");
+    log("****Error on verify otp: $e");
     Get.snackbar("Erreur de verification du code", "");
   }
 }
@@ -63,12 +63,12 @@ customCreate(String firstname, String lastname) async {
         'lastname': '$lastname'
       },
     );
-    print('response status: ${response.statusCode}');
+    log('response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       Get.to(const RouteStack());
     } else {}
   } catch (e) {
-    print('$e');
+    log('$e');
   }
 }
 
@@ -77,14 +77,14 @@ void saveToken(Map userProfile) async {
 
   userdb.put('token', jsonEncode(userProfile));
   userdb.put('jwt', userProfile["hydra:member"][0]["jwt"]);
-  print('***token saved: ${userProfile["hydra:member"][0]["jwt"]}');
+  log('***token saved: ${userProfile["hydra:member"][0]["jwt"]}');
 }
 
 void savePhoneNumber(String phoneNumber) async {
   var userdb = await Hive.openBox('userdb');
 
   userdb.put('phoneNumber', phoneNumber);
-  print('PhoneNumber saved: $phoneNumber');
+  log('PhoneNumber saved: $phoneNumber');
 }
 
 Future<void> logout() async {
@@ -94,7 +94,7 @@ Future<void> logout() async {
     userdb.put('phoneNumber', null);
     userdb.put('jwt', null);
     userdb.put('token', null);
-    print('PhoneNumber & token removed');
+    log('PhoneNumber & token removed');
   } catch (error) {
     log(error.toString());
   }
@@ -130,8 +130,8 @@ Future<String?> getToken() async {
 
     // Map _token = jsonDecode(token!);
 
-    print('showtoken $token');
-    // print(_token["hydra:member"][0]["jwt"]);
+    log('showtoken $token');
+    // log(_token["hydra:member"][0]["jwt"]);
 
     return token;
 
@@ -141,7 +141,7 @@ Future<String?> getToken() async {
 
     // return jsonDecode(token);
   } catch (e) {
-    print('erreur $e');
+    log('erreur $e');
     return null;
   }
 }
@@ -189,18 +189,18 @@ Future<List?> pickPlaces(String places) async {
     var url = Uri.parse(
         'http://places.graciasgroup.com/places?page=1&search=$places');
     var response = await http.get(url);
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200) {
       log('reponse');
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       final Map data = jsonDecode(response.body) as Map;
       return data["data"];
     } else {
-      log("Erreur");
+      log(response.body.toString());
       return null;
     }
   } catch (e) {
-    print("erreur pick $e");
+    log("erreur to pick places: $e");
     return null;
   }
 }
@@ -211,8 +211,8 @@ Future<Map?>? sendCourseRequest(
     required Map startPoint,
     required String token}) async {
   log("on send request");
-  print("startPoint: $startPoint");
-  print("endPoint: $endPoint");
+  log("startPoint: $startPoint");
+  log("endPoint: $endPoint");
 
   try {
     var url = Uri.parse('http://api.agrobeba.com/api/personal_requests');
@@ -230,38 +230,38 @@ Future<Map?>? sendCourseRequest(
               "startPoint": startPoint,
             }))
         .timeout(const Duration(seconds: 5));
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       return jsonDecode(response.body) as Map;
     } else {
-      print("Fail on send service-request: ${response.body} ");
+      log("Fail on send service-request: ${response.body} ");
       return null;
     }
   } catch (e) {
-    print("erreur on send service-request: $e");
+    log("erreur on send service-request: $e");
     return null;
   }
 }
 
 Future<Map?> findDrivers(int idRequest) async {
-  print("*** find driver. Id request: $idRequest");
+  log("*** find driver. Id request: $idRequest");
   try {
     var url =
         Uri.parse('http://api.agrobeba.com/api/personal_requests/$idRequest');
     var response = await http.get(url);
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       log('reponse');
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       final Map data = jsonDecode(response.body) as Map;
       return data;
     } else {
-      print("Request Failed: ${response.statusCode} - ${response.body}");
+      log("Request Failed: ${response.statusCode} - ${response.body}");
       return null;
     }
   } catch (e) {
-    print("erreur pick " + e.toString());
+    log("erreur pick " + e.toString());
     return null;
   }
 }
@@ -270,10 +270,10 @@ Future<Map?> chooseDriver(int driverID) async {
   try {
     var url = Uri.parse('http://api.agrobeba.com/api/drivers/$driverID/choose');
     var response = await http.get(url);
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       log('reponse');
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       final Map? data = jsonDecode(response.body) as Map;
       return data!;
     } else {
@@ -281,7 +281,7 @@ Future<Map?> chooseDriver(int driverID) async {
       return null;
     }
   } catch (e) {
-    print("erreur pick " + e.toString());
+    log("erreur pick " + e.toString());
     return null;
   }
 }
@@ -293,10 +293,10 @@ Future<List?> getCommandes({required String token}) async {
       "content-type": "application/json",
       "Authorization": "Bearer $token"
     });
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       log('reponse');
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       final Map data = jsonDecode(response.body);
       return data["hydra:member"];
     } else {
@@ -304,7 +304,7 @@ Future<List?> getCommandes({required String token}) async {
       return null;
     }
   } catch (e) {
-    print("erreur pick " + e.toString());
+    log("erreur pick " + e.toString());
     return null;
   }
 }
@@ -334,13 +334,13 @@ Future<int?>? confirmCommande({required String token, required id}) async {
       "content-type": "application/json",
       "Authorization": "Bearer $token"
     });
-    print('Response status: ${response.statusCode}');
+    log('Response status: ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response.statusCode;
     }
     return 400;
   } catch (e) {
-    print("erreur pick " + e.toString());
+    log("erreur pick " + e.toString());
     return 500;
   }
 }
