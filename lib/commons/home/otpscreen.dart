@@ -4,9 +4,10 @@ import 'package:agrobeba/customer-app/screens/widgets/otpScreenwidegt.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
   String phoneNumber;
-  OtpScreen(this.phoneNumber);
+  OtpScreen(this.phoneNumber, {super.key});
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -39,14 +40,14 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: Container(
                       width: 45,
                       height: 45,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.black),
-                      child: Icon(Icons.arrow_back, color: Colors.white),
+                      child: const Icon(Icons.arrow_back, color: Colors.white),
                     ),
                   ))
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 45,
           ),
           otpScreenwidget(),

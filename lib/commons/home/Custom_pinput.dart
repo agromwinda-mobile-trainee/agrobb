@@ -21,7 +21,6 @@ class BoxPinput extends StatefulWidget {
 }
 
 class _BoxPinputState extends State<BoxPinput> {
-  @override
   final controller = TextEditingController();
   final focusNode = FocusNode();
 
@@ -38,13 +37,14 @@ class _BoxPinputState extends State<BoxPinput> {
     String phoneNumber = BlocProvider.of<LoginProcessCubit>(context)
         .state
         .usercontent!["Telephone"];
+    // ignore: non_constant_identifier_names
     final DefaultpinTheme = PinTheme(
       width: 60,
       height: 64,
       textStyle: GoogleFonts.poppins(
-          fontSize: 20, color: Color.fromARGB(70, 69, 66, 1)),
+          fontSize: 20, color: const Color.fromARGB(70, 69, 66, 1)),
       decoration: BoxDecoration(
-          color: Color.fromRGBO(232, 235, 241, 0.37),
+          color: const Color.fromRGBO(232, 235, 241, 0.37),
           borderRadius: BorderRadius.circular(8)),
     );
     final cursor = Align(
@@ -52,9 +52,9 @@ class _BoxPinputState extends State<BoxPinput> {
       child: Container(
         width: 21,
         height: 1,
-        margin: EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-            color: Color.fromRGBO(137, 146, 160, 1),
+            color: const Color.fromRGBO(137, 146, 160, 1),
             borderRadius: BorderRadius.circular(8)),
       ),
     );
@@ -76,7 +76,7 @@ class _BoxPinputState extends State<BoxPinput> {
               blurRadius: 16)
         ],
       )),
-      separator: SizedBox(width: 14),
+      separator: const SizedBox(width: 14),
       focusedPinTheme: DefaultpinTheme.copyWith(
           decoration: BoxDecoration(
               color: Colors.white,
