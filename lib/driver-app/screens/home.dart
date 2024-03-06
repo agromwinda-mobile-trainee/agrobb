@@ -1,12 +1,14 @@
-import 'dart:ffi';
+import 'dart:developer';
 
 import 'package:agrobeba/commons/home/authLogic/cubit/login_process_cubit.dart';
 import 'package:agrobeba/customer-app/screens/widgets/widget_build_Tile.dart';
 import 'package:agrobeba/driver-app/screens/cubits/driver_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../../commons/home/api_contents/functions/getfunctions.dart';
 import '../../commons/home/drawer.dart';
 
@@ -19,8 +21,10 @@ class HomeDriver extends StatefulWidget {
 
 class _HomeDriverState extends State<HomeDriver> {
   late LatLng source;
-  Set<Marker> markers = Set<Marker>();
+  Set<Marker> markers = <Marker>{};
   String? _mapStyle;
+  final Stream<QuerySnapshot> _errandStream =
+      FirebaseFirestore.instance.collection('errand').snapshots();
 
   @override
   void initState() {
@@ -44,8 +48,8 @@ class _HomeDriverState extends State<HomeDriver> {
   Future<void> initDriver() async {
     final String? token = await getToken();
     final String? phoneNumber = await getPhoneNumber();
-    print("homeDriver" + token!);
-    print(phoneNumber!);
+    log("homeDriver" + token!);
+    log(phoneNumber!);
 
     BlocProvider.of<DriverCubit>(context)
         .onSendPermanentRequests(token, phoneNumber);
@@ -62,7 +66,7 @@ class _HomeDriverState extends State<HomeDriver> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: BuildDrawer(),
+      drawer: const BuildDrawer(),
       body: Stack(
         children: [
           GoogleMap(
@@ -76,8 +80,70 @@ class _HomeDriverState extends State<HomeDriver> {
             initialCameraPosition: _kGooglePlex,
           ),
           buildProfileTile(),
-          awaitForCommandes(context),
+          // awaitForCommandes(context),
+          commandesWidget(context),
         ],
+      ),
+    );
+  }
+
+  Widget commandesWidget(context) {
+    return Positioned(
+      bottom: 0,
+      child: Container(
+        height: 400,
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: _errandStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text(
+                  'Something went wrong',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.black,
+                      ),
+                );
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text(
+                  "Loading",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.black,
+                      ),
+                );
+              }
+
+              return SizedBox(
+                height: 380,
+                child: ListView(
+                  children:
+                      snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data =
+                        document.data()! as Map<String, dynamic>;
+                    return ListTile(
+                      title: Text(
+                        data["startPoint"],
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.black,
+                            ),
+                      ),
+                      subtitle: Text(
+                        data["endsPoint"],
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.black,
+                            ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+            }),
       ),
     );
   }
