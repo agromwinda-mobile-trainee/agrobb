@@ -48,9 +48,10 @@ class _HomeDriverState extends State<HomeDriver> {
   Future<void> initDriver() async {
     final String? token = await getToken();
     final String? phoneNumber = await getPhoneNumber();
-    log("homeDriver" + token!);
+    log("homeDriver${token!}");
     log(phoneNumber!);
 
+    // ignore: use_build_context_synchronously
     BlocProvider.of<DriverCubit>(context)
         .onSendPermanentRequests(token, phoneNumber);
   }
