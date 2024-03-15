@@ -7,10 +7,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../commons/home/api_contents/functions/getfunctions.dart';
 import '../../commons/home/drawer.dart';
+import '../../customer-app/screens/widgets/custom_button.dart';
 
 class HomeDriver extends StatefulWidget {
   const HomeDriver({super.key});
@@ -23,8 +26,11 @@ class _HomeDriverState extends State<HomeDriver> {
   late LatLng source;
   Set<Marker> markers = <Marker>{};
   String? _mapStyle;
-  final Stream<QuerySnapshot> _errandStream =
-      FirebaseFirestore.instance.collection('errand').snapshots();
+  final Stream<QuerySnapshot> _errandStream = FirebaseFirestore.instance
+      .collection('errand')
+      // .orderBy("createdAt", descending: true)
+      .where("status", isEqualTo: "encours")
+      .snapshots();
 
   @override
   void initState() {
@@ -68,22 +74,24 @@ class _HomeDriverState extends State<HomeDriver> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const BuildDrawer(),
-      body: Stack(
-        children: [
-          GoogleMap(
-            markers: markers,
-            zoomControlsEnabled: false,
-            // mapType: MapType.terrain,
-            onMapCreated: (GoogleMapController controller) {
-              myMapController = controller;
-              myMapController!.setMapStyle(_mapStyle);
-            },
-            initialCameraPosition: _kGooglePlex,
-          ),
-          buildProfileTile(),
-          // awaitForCommandes(context),
-          commandesWidget(context),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            GoogleMap(
+              markers: markers,
+              zoomControlsEnabled: false,
+              // mapType: MapType.terrain,
+              onMapCreated: (GoogleMapController controller) {
+                myMapController = controller;
+                myMapController!.setMapStyle(_mapStyle);
+              },
+              initialCameraPosition: _kGooglePlex,
+            ),
+            buildProfileTile(),
+            // awaitForCommandes(context),
+            commandesWidget(context),
+          ],
+        ),
       ),
     );
   }
@@ -97,17 +105,31 @@ class _HomeDriverState extends State<HomeDriver> {
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
         ),
         child: StreamBuilder<QuerySnapshot>(
             stream: _errandStream,
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {
-                return Text(
-                  'Something went wrong',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.black,
-                      ),
+                return Column(
+                  children: [
+                    Text(
+                      'Something went wrong',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black,
+                          ),
+                    ),
+                    Text(
+                      snapshot.error.toString(),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black,
+                          ),
+                    ),
+                  ],
                 );
               }
 
@@ -120,25 +142,76 @@ class _HomeDriverState extends State<HomeDriver> {
                 );
               }
 
-              return SizedBox(
+              return Container(
                 height: 380,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: ListView(
                   children:
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
-                    return ListTile(
-                      title: Text(
-                        data["startPoint"],
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.black,
+                    return InkWell(
+                      onTap: () {
+                        Get.bottomSheet(
+                          bottomsheet(context, data: data),
+                          elevation: 1,
+                          isDismissible: true,
+                          enterBottomSheetDuration:
+                              const Duration(milliseconds: 300),
+                          exitBottomSheetDuration:
+                              const Duration(milliseconds: 300),
+                        );
+                      },
+                      child: Ink(
+                        color: Colors.transparent,
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.blueGrey.shade100.withOpacity(.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Icon(
+                                  UniconsLine.map_pin_alt,
+                                  size: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  data["startPoint"],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: Colors.black,
+                                      ),
+                                ),
+                              ],
                             ),
-                      ),
-                      subtitle: Text(
-                        data["endsPoint"],
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.black,
+                            subtitle: Row(
+                              children: [
+                                Icon(
+                                  UniconsLine.location_arrow,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  data["endsPoint"],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                        color: Colors.black,
+                                      ),
+                                ),
+                              ],
                             ),
+                          ),
+                        ),
                       ),
                     );
                   }).toList(),
@@ -148,6 +221,102 @@ class _HomeDriverState extends State<HomeDriver> {
       ),
     );
   }
+}
+
+Widget bottomsheet(context, {required Map data}) {
+  return Container(
+    padding: const EdgeInsets.all(20),
+    height: 260,
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.secondary,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+    child: Column(children: [
+      ListTile(
+        title: Row(
+          children: [
+            Icon(
+              UniconsLine.map_pin_alt,
+              size: 16,
+              color: Colors.grey.shade600,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              data["startPoint"],
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+          ],
+        ),
+        subtitle: Row(
+          children: [
+            Icon(
+              UniconsLine.location_arrow,
+              size: 16,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              data["endsPoint"],
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+          ],
+        ),
+      ),
+      Divider(
+        height: 4,
+        color: Colors.white.withOpacity(.85),
+      ),
+      ListTile(
+        title: Row(
+          children: [
+            Icon(
+              UniconsLine.location_arrow,
+              size: 16,
+              color: Colors.grey.shade600,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              data["distance"],
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+          ],
+        ),
+        subtitle: Row(
+          children: [
+            Icon(
+              UniconsLine.bill,
+              size: 16,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              data["price"] + " Fc",
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 20),
+      customButton(
+        context,
+        text: "Prendre la course",
+        onTap: () {},
+        bkgColor: Theme.of(context).colorScheme.primary,
+        textColor: Colors.white,
+      ),
+    ]),
+  );
 }
 
 Widget awaitForCommandes(context) {
