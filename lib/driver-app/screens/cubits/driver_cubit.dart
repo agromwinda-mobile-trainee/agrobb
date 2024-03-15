@@ -2,10 +2,12 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:agrobeba/commons/home/api_contents/functions/getfunctions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agrobeba/commons/home/api_contents/functions/autolocation.dart';
+import 'package:get/get.dart';
 part 'driver_state.dart';
 
 class DriverCubit extends Cubit<DriverState> {
@@ -51,18 +53,31 @@ class DriverCubit extends Cubit<DriverState> {
     }
   }
 
-  void onConfirmeCommande(
-      {required String token, required Map commande}) async {
+  void onConfirmeCommande(context,
+      {required Map commande}) async {
     try {
-      int? resultCode = await confirmCommande(id: commande["id"], token: token);
+      CollectionReference errands =
+          FirebaseFirestore.instance.collection('errand');
+      errands
+          .doc(commande['id'])
+          .update({'status': 'encours'})
+          .then((value) => log("Errand Updated"))
+          .catchError((error) => log("Failed to update errand: $error"));
 
       emit(DriverState(driver: {
         ...state.driver!,
-        "acceptedCommande":
-            (resultCode == 200 || resultCode == 201) ? commande : null,
+        "acceptedCommande": commande,
       }));
+      Get.back();
+
+      // int? resultCode = await confirmCommande(id: commande["id"], token: token);
+      // emit(DriverState(driver: {
+      //   ...state.driver!,
+      //   "acceptedCommande":
+      //       (resultCode == 200 || resultCode == 201) ? commande : null,
+      // }));
     } catch (error) {
-      log(error.toString());
+      log("error onConfirmCommande: ${error.toString()}");
     }
   }
 }

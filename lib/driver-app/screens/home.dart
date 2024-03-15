@@ -28,8 +28,7 @@ class _HomeDriverState extends State<HomeDriver> {
   String? _mapStyle;
   final Stream<QuerySnapshot> _errandStream = FirebaseFirestore.instance
       .collection('errand')
-      // .orderBy("createdAt", descending: true)
-      .where("status", isEqualTo: "encours")
+      .where("status", isEqualTo: "waiting")
       .snapshots();
 
   @override
@@ -37,17 +36,7 @@ class _HomeDriverState extends State<HomeDriver> {
     rootBundle.loadString('assets/map_style.txt').then((String) {
       _mapStyle = String;
     });
-
-    // String token = BlocProvider.of<LoginProcessCubit>(context, listen: true)
-    //     .state
-    //     .usercontent!["token"];
-    // String phoneNumber =
-    //     BlocProvider.of<LoginProcessCubit>(context, listen: true)
-    //         .state
-    //         .usercontent!["Telephone"];
     initDriver();
-    //  BlocProvider.of<DriverCubit>(context)
-    //       .onSendPermanentRequests('token', 'phoneNumber');
     super.initState();
   }
 
@@ -56,10 +45,6 @@ class _HomeDriverState extends State<HomeDriver> {
     final String? phoneNumber = await getPhoneNumber();
     log("homeDriver${token!}");
     log(phoneNumber!);
-
-    // ignore: use_build_context_synchronously
-    BlocProvider.of<DriverCubit>(context)
-        .onSendPermanentRequests(token, phoneNumber);
   }
 
   final CameraPosition _kGooglePlex = const CameraPosition(
@@ -110,120 +95,207 @@ class _HomeDriverState extends State<HomeDriver> {
             topRight: Radius.circular(20),
           ),
         ),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: _errandStream,
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Column(
-                  children: [
-                    Text(
-                      'Something went wrong',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.black,
-                          ),
-                    ),
-                    Text(
-                      snapshot.error.toString(),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.black,
-                          ),
-                    ),
-                  ],
-                );
-              }
+        child: BlocBuilder<DriverCubit, DriverState>(
+          builder: (context, state) {
+            Map? acceptedCommande = state.driver!['acceptedCommande'];
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text(
-                  "Loading",
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.black,
-                      ),
-                );
-              }
-
-              return Container(
-                height: 380,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: ListView(
-                  children:
-                      snapshot.data!.docs.map((DocumentSnapshot document) {
-                    Map<String, dynamic> data =
-                        document.data()! as Map<String, dynamic>;
-                    return InkWell(
-                      onTap: () {
-                        Get.bottomSheet(
-                          bottomsheet(context, data: data),
-                          elevation: 1,
-                          isDismissible: true,
-                          enterBottomSheetDuration:
-                              const Duration(milliseconds: 300),
-                          exitBottomSheetDuration:
-                              const Duration(milliseconds: 300),
-                        );
-                      },
-                      child: Ink(
-                        color: Colors.transparent,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.blueGrey.shade100.withOpacity(.2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListTile(
-                            title: Row(
-                              children: [
-                                Icon(
-                                  UniconsLine.map_pin_alt,
-                                  size: 16,
-                                  color: Colors.grey.shade600,
+            if (acceptedCommande != null) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Commande encours",
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.black87,
+                          fontSize: 22,
+                        ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(height: 10),
+                  ListTile(
+                    title: Row(
+                      children: [
+                        Icon(
+                          UniconsLine.map_pin_alt,
+                          size: 16,
+                          color: Colors.grey.shade600,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          acceptedCommande["startPoint"],
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Row(
+                      children: [
+                        Icon(
+                          UniconsLine.location_arrow,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          acceptedCommande["endsPoint"],
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+            return StreamBuilder<QuerySnapshot>(
+                stream: _errandStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    log("*error: ${snapshot.error.toString()}");
+                    return Column(
+                      children: [
+                        Text(
+                          'Something went wrong',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.black,
+                                  ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            snapshot.error.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
                                 ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  data["startPoint"],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        color: Colors.black,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Row(
-                              children: [
-                                Icon(
-                                  UniconsLine.location_arrow,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  data["endsPoint"],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        color: Colors.black,
-                                      ),
-                                ),
-                              ],
-                            ),
                           ),
                         ),
-                      ),
+                      ],
                     );
-                  }).toList(),
-                ),
-              );
-            }),
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text(
+                      "Loading",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black,
+                          ),
+                    );
+                  }
+
+                  List commandesList = snapshot.data!.docs;
+                  commandesList.sort((a, b) {
+                    Map item1 = a.data() as Map<String, dynamic>;
+                    Map item2 = b.data() as Map<String, dynamic>;
+                    return item1['createdAt'].compareTo(item2['createdAt']);
+                  });
+
+                  return Container(
+                    height: 380,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    // snapshot.data!.docs
+                    child: ListView(
+                      children: commandesList.reversed.map<Widget>(
+                        (document) {
+                          Map<String, dynamic> data =
+                              document.data() as Map<String, dynamic>;
+                          data["id"] = document.id;
+
+                          // Map<String, dynamic> data =
+                          //     document.data()! as Map<String, dynamic>;
+                          // data["id"] = document.id;
+
+                          return InkWell(
+                            onTap: () {
+                              Get.bottomSheet(
+                                bottomsheet(context, commandes: data),
+                                elevation: 1,
+                                isDismissible: true,
+                                enterBottomSheetDuration:
+                                    const Duration(milliseconds: 300),
+                                exitBottomSheetDuration:
+                                    const Duration(milliseconds: 300),
+                              );
+                            },
+                            child: Ink(
+                              color: Colors.transparent,
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 20),
+                                decoration: BoxDecoration(
+                                  color:
+                                      Colors.blueGrey.shade100.withOpacity(.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ListTile(
+                                  title: Row(
+                                    children: [
+                                      Icon(
+                                        UniconsLine.map_pin_alt,
+                                        size: 16,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        data["startPoint"],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              color: Colors.black,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      Icon(
+                                        UniconsLine.location_arrow,
+                                        size: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        data["endsPoint"],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                              color: Colors.black,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  );
+                });
+          },
+        ),
       ),
     );
   }
 }
 
-Widget bottomsheet(context, {required Map data}) {
+Widget bottomsheet(context, {required Map commandes}) {
+  String token =
+      BlocProvider.of<LoginProcessCubit>(context).state.usercontent!["token"];
   return Container(
     padding: const EdgeInsets.all(20),
     height: 260,
@@ -245,7 +317,7 @@ Widget bottomsheet(context, {required Map data}) {
             ),
             const SizedBox(width: 10),
             Text(
-              data["startPoint"],
+              commandes["startPoint"],
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                   ),
@@ -261,7 +333,7 @@ Widget bottomsheet(context, {required Map data}) {
             ),
             const SizedBox(width: 10),
             Text(
-              data["endsPoint"],
+              commandes["endsPoint"],
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                   ),
@@ -283,7 +355,7 @@ Widget bottomsheet(context, {required Map data}) {
             ),
             const SizedBox(width: 10),
             Text(
-              data["distance"],
+              commandes["distance"],
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                   ),
@@ -299,7 +371,7 @@ Widget bottomsheet(context, {required Map data}) {
             ),
             const SizedBox(width: 10),
             Text(
-              data["price"] + " Fc",
+              commandes["price"] + " Fc",
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                   ),
@@ -311,7 +383,10 @@ Widget bottomsheet(context, {required Map data}) {
       customButton(
         context,
         text: "Prendre la course",
-        onTap: () {},
+        onTap: () {
+          BlocProvider.of<DriverCubit>(context)
+              .onConfirmeCommande(context, commande: commandes);
+        },
         bkgColor: Theme.of(context).colorScheme.primary,
         textColor: Colors.white,
       ),
@@ -373,7 +448,7 @@ Widget awaitForCommandes(context) {
               .map((commande) => ListTile(
                     title: Text("Course + ${commande["id"] ?? "DefaultID"}"),
                     onTap: () => BlocProvider.of<DriverCubit>(context)
-                        .onConfirmeCommande(token: token, commande: commande),
+                        .onConfirmeCommande(context, commande: commande),
                   ))
               .toList(),
         );
