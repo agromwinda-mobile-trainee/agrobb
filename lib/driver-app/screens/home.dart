@@ -85,7 +85,7 @@ class _HomeDriverState extends State<HomeDriver> {
     return Positioned(
       bottom: 0,
       child: Container(
-        height: 400,
+        height: 500,
         width: MediaQuery.of(context).size.width,
         alignment: Alignment.center,
         decoration: const BoxDecoration(
@@ -100,56 +100,179 @@ class _HomeDriverState extends State<HomeDriver> {
             Map? acceptedCommande = state.driver!['acceptedCommande'];
 
             if (acceptedCommande != null) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Commande encours",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.black87,
-                          fontSize: 22,
-                        ),
-                    textAlign: TextAlign.left,
-                  ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Icon(
-                          UniconsLine.map_pin_alt,
-                          size: 16,
-                          color: Colors.grey.shade600,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          acceptedCommande["startPoint"],
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ],
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Vous avez accepté une course",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black54,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                      textAlign: TextAlign.left,
                     ),
-                    subtitle: Row(
-                      children: [
-                        Icon(
-                          UniconsLine.location_arrow,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          acceptedCommande["endsPoint"],
-                          style:
-                              Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                    color: Colors.black,
-                                  ),
-                        ),
-                      ],
+                    const SizedBox(height: 20),
+                    Text(
+                      "Course encours",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black87,
+                            fontSize: 22,
+                          ),
+                      textAlign: TextAlign.left,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.map_pin_alt,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            acceptedCommande["startPoint"],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.location_arrow,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            acceptedCommande["endsPoint"],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 4,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.location_arrow,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            acceptedCommande["distance"],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.bill,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            acceptedCommande["price"] + " Fc",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Informations du client",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Colors.black87,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.user,
+                            size: 16,
+                            color: Colors.grey.shade600,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            "Eddy Kuluta",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Icon(
+                            UniconsLine.phone,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '+243 825 937 168',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.black,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    customButton(
+                      context,
+                      text: "Annuler la course",
+                      onTap: () {
+                        // BlocProvider.of<DriverCubit>(context)
+                        //     .onConfirmeCommande(context, commande: commandes);
+                      },
+                      bkgColor: Theme.of(context).colorScheme.primary,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
               );
             }
             return StreamBuilder<QuerySnapshot>(
@@ -349,7 +472,7 @@ Widget bottomsheet(context, {required Map commandes}) {
         title: Row(
           children: [
             Icon(
-              UniconsLine.location_arrow,
+              UniconsLine.exchange,
               size: 16,
               color: Colors.grey.shade600,
             ),
