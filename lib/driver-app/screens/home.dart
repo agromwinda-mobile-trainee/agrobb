@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:unicons/unicons.dart';
 
-import '../../commons/home/api_contents/functions/getfunctions.dart';
 import '../../commons/home/drawer.dart';
 import '../../customer-app/screens/widgets/custom_button.dart';
 
@@ -36,16 +35,17 @@ class _HomeDriverState extends State<HomeDriver> {
     rootBundle.loadString('assets/map_style.txt').then((String) {
       _mapStyle = String;
     });
-    initDriver();
+    // initDriver();
+    BlocProvider.of<DriverCubit>(context).checkDriverAvailability();
     super.initState();
   }
 
-  Future<void> initDriver() async {
-    final String? token = await getToken();
-    final String? phoneNumber = await getPhoneNumber();
-    log("homeDriver${token!}");
-    log(phoneNumber!);
-  }
+  // Future<void> initDriver() async {
+  //   final String? token = await getToken();
+  //   final String? phoneNumber = await getPhoneNumber();
+  //   log("homeDriver${token!}");
+  //   log(phoneNumber!);
+  // }
 
   final CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(-4.325, 15.322222),

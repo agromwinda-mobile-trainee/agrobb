@@ -80,4 +80,9 @@ class DriverCubit extends Cubit<DriverState> {
       log("error onConfirmCommande: ${error.toString()}");
     }
   }
+
+  Future<void> checkDriverAvailability() async {
+    // fetch driverCollection
+    // update state
+  }
 }
