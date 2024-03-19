@@ -43,24 +43,19 @@ class DriverCubit extends Cubit<DriverState> {
           await Future.delayed(const Duration(seconds: 10));
         } while (true);
       }
-
-      // emit(DriverState(driver: {
-      //   ...state.driver!,
-      //   'currentPosition': startPosition,
-      //   'commandes': commandes ?? [],
-      // }));
     } catch (error) {
       log("error on permanent requests: $error");
     }
   }
 
-  void onConfirmeCommande(context, {required Map commande}) async {
+  void onConfirmeCommande(context,
+      {required Map commande, required String driverRef}) async {
     try {
       CollectionReference errands =
           FirebaseFirestore.instance.collection('errand');
       errands
           .doc(commande['id'])
-          .update({'status': 'during', 'driver_ref': 'fake_ref'})
+          .update({'status': 'during', 'driver_ref': driverRef})
           .then((value) => log("Errand Updated"))
           .catchError((error) => log("Failed to update errand: $error"));
 
@@ -81,8 +76,50 @@ class DriverCubit extends Cubit<DriverState> {
     }
   }
 
-  Future<void> checkDriverAvailability() async {
-    // fetch driverCollection
-    // update state
+  Future<void> checkDriverAvailability({required String driverRef}) async {
+    try {
+      log("onCheckDriverAvailability: $driverRef");
+      emit(DriverState(driver: {
+        ...state.driver!,
+        'checkDriverAvailability': true,
+      }));
+
+      FirebaseFirestore.instance
+          .collection('errand')
+          .where('driver_ref', isEqualTo: driverRef)
+          .where('status', isEqualTo: 'during')
+          .get()
+          .then((snapshot) {
+        final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
+            snapshot.docs;
+        if (docs.isNotEmpty) {
+          final Map<String, dynamic> errand = {
+            ...docs[0].data(),
+            'id': docs[0].id
+          };
+
+          log("errand found: ${errand.toString()}");
+
+          emit(DriverState(driver: {
+            ...state.driver!,
+            "acceptedCommande": errand,
+            "checkDriverAvailability": false,
+          }));
+        }
+      }).catchError((onError) {
+        log("error on fetch driver's errand: ${onError.toString()}");
+
+        emit(DriverState(driver: {
+          ...state.driver!,
+          'checkDriverAvailability': false,
+        }));
+      });
+    } catch (error) {
+      log("Error on checkDriverAvailability: ${error.toString()}");
+      emit(DriverState(driver: {
+        ...state.driver!,
+        'checkDriverAvailability': false,
+      }));
+    }
   }
 }

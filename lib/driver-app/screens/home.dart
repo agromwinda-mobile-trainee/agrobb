@@ -36,7 +36,11 @@ class _HomeDriverState extends State<HomeDriver> {
       _mapStyle = String;
     });
     // initDriver();
-    BlocProvider.of<DriverCubit>(context).checkDriverAvailability();
+    BlocProvider.of<DriverCubit>(context).checkDriverAvailability(
+        driverRef: BlocProvider.of<LoginProcessCubit>(context)
+            .state
+            .usercontent!["phoneNumber"]
+            .toString());
     super.initState();
   }
 
@@ -507,8 +511,12 @@ Widget bottomsheet(context, {required Map commandes}) {
         context,
         text: "Prendre la course",
         onTap: () {
-          BlocProvider.of<DriverCubit>(context)
-              .onConfirmeCommande(context, commande: commandes);
+          BlocProvider.of<DriverCubit>(context).onConfirmeCommande(context,
+              commande: commandes,
+              driverRef: BlocProvider.of<LoginProcessCubit>(context)
+                  .state
+                  .usercontent!["phoneNumber"]
+                  .toString());
         },
         bkgColor: Theme.of(context).colorScheme.primary,
         textColor: Colors.white,
@@ -571,7 +579,13 @@ Widget awaitForCommandes(context) {
               .map((commande) => ListTile(
                     title: Text("Course + ${commande["id"] ?? "DefaultID"}"),
                     onTap: () => BlocProvider.of<DriverCubit>(context)
-                        .onConfirmeCommande(context, commande: commande),
+                        .onConfirmeCommande(context,
+                            commande: commande,
+                            driverRef:
+                                BlocProvider.of<LoginProcessCubit>(context)
+                                    .state
+                                    .usercontent!["phoneNumber"]
+                                    .toString()),
                   ))
               .toList(),
         );

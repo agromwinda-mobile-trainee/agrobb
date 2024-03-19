@@ -11,5 +11,6 @@ Map initialState() {
     'currentPosition': {},
     'commandes': [],
     'acceptedCommande': null,
+    'checkDriverAvailability': false,
   };
 }
